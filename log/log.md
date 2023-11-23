@@ -1,0 +1,18 @@
+# Project Log
+
+## Nov 21, 2023
+
+- Learn about prolog 0.75
+- Setup swipl and watch tutorials on YouTube 1.0
+- Find and install VS Code extensions for Prolog, so that it can be developed across operating systems. 1
+- Using VSC-Prolog by arthurwang for syntax highlighting
+- Install swipl for running prolog from the terminal: use “swipl <filename>” to run the script from the terminal
+
+Total: 2.75  
+
+## Oct 1, 2023
+
+- Test and implement position related predicates
+  - Position_to_string, string_to_position, up_position, down_position, left_position, right_position 2.0
+- Copy and paste serialization files 0.5
+  - Prof's serialization files used ; instead of % for comments, so replaced it
