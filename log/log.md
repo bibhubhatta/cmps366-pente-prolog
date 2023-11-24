@@ -16,3 +16,5 @@ Total: 2.75
   - Position_to_string, string_to_position, up_position, down_position, left_position, right_position 2.0
 - Copy and paste serialization files 0.5
   - Prof's serialization files used ; instead of % for comments, so replaced it
+- Test and implement predicates to load and save the game state 0.5
+- Test and implement predicates to get the constituent parts of the game state 0.5
