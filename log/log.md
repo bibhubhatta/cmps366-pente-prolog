@@ -18,3 +18,4 @@ Total: 2.75
   - Prof's serialization files used ; instead of % for comments, so replaced it
 - Test and implement predicates to load and save the game state 0.5
 - Test and implement predicates to get the constituent parts of the game state 0.5
+- Test and implement predicates to get the current player and stone 0.5

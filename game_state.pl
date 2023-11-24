@@ -51,3 +51,25 @@ get_current_player_stone(GameState, CurrentPlayerStone) :-
     atom_chars(CurrentPlayerStoneString, CurrentPlayerStoneChars),
     nth0(0, CurrentPlayerStoneChars, CurrentPlayerStone).
 
+% Predicate to get the other player's stone
+other_stone('w', 'b').
+other_stone('b', 'w').
+other_stone('black', 'white').
+other_stone('white', 'black').
+
+% Predicate to get the other player
+other_player('human', 'computer').
+other_player('computer', 'human').
+
+% Predicate to get the stone that the player is playing
+get_stone_from_player(GameState, Player, Stone) :-
+    get_current_player(GameState, CurrentPlayer),
+    get_current_player_stone(GameState, CurrentPlayerStone),
+    (Player = CurrentPlayer -> Stone = CurrentPlayerStone ; other_stone(CurrentPlayerStone, Stone)).
+
+% Predicate to get the player that is playing the stone
+get_player_from_stone(GameState, Stone, Player) :-
+    get_current_player(GameState, CurrentPlayer),
+    get_current_player_stone(GameState, CurrentPlayerStone),
+    (Stone = CurrentPlayerStone -> Player = CurrentPlayer ; other_player(CurrentPlayer, Player)).
+
