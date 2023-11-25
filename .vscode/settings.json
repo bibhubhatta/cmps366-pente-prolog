@@ -1,0 +1,6 @@
+{
+    // "prolog.executablePath": "/usr/bin/swipl",
+    "prolog.executablePath": "C:\\Users\\bibhu\\scoop\\shims\\swipl.exe",
+    "prolog.terminal.runtimeArgs": [],
+    "files.autoSave": "afterDelay"
+}
