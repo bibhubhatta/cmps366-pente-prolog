@@ -12,3 +12,10 @@ get_empty_board(NoRows, NoCols, Board) :-
 get_empty_row(NoCols, Row) :-
     length(Row, NoCols),
     maplist(=('o'), Row).
+
+% Predicate to get a row of the board
+% get_row(+Board, +RowNum, -Row)
+% The RowNum is the number displayed on the left of the board, and not the index of the row
+get_row(Board, RowNum, Row) :-
+    RowIndex is 19 - RowNum,
+    nth0(RowIndex, Board, Row).
