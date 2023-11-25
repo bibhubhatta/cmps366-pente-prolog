@@ -32,3 +32,4 @@ Total: 2.75
 - Test and implement predicate to get column 0.5
 - Test and implement predicate to mark column characters at the end 1.0
 - Test and implement predicate to mark row numbers 0.75
+- Refactor mark_rows so there are no choice points 0.5

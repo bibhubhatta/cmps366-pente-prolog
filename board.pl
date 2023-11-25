@@ -60,8 +60,6 @@ mark_columns(Board, NewBoard) :-
 % Predicate to mark the rows of a board
 % mark_rows(+Board, -MarkedBoard)
 mark_rows([], []).
-mark_rows(Board, ResultingBoard) :- 
-    length(Board, N),
-    [Head|Tail] = Board,
-    mark_rows(Tail, MarkedTail),
-    ResultingBoard = [[N|Head]|MarkedTail].
+mark_rows([Head|Tail], [[N|Head]|MarkedTail]) :-
+    length([Head|Tail], N),
+    mark_rows(Tail, MarkedTail).
