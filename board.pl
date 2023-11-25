@@ -11,7 +11,8 @@
     get_stones/3,
     set_stone/4,
     convert_to_sequences/2,
-    get_empty_positions/2
+    get_empty_positions/2,
+    get_no_stones_on_board/2
 ]).
 
 :- use_module(library(lists)).
@@ -219,3 +220,19 @@ get_empty_positions(Board, Positions) :-
             (member(Position, AllPositions),
             get_stone(Board, Position, 'o')),
             Positions).
+
+% get_no_stones_on_board(+Board, -NoStones)
+% Purpose: Get the number of stones on the board
+% https://www.swi-prolog.org/pldoc/doc_for?object=flatten/2
+% https://www.swi-prolog.org/pldoc/man?predicate=include/3
+get_no_stones_on_board(Board, NoStones) :-
+    % Unravel Board
+    flatten(Board, FlatBoard),
+    % Count the number of stones
+    include(is_stone, FlatBoard, Stones),
+    length(Stones, NoStones).
+
+% is_stone(+Stone)
+% Purpose: Check if the given atom is a stone
+is_stone(Stone) :-
+    Stone = 'b' ; Stone = 'w'; Stone = 'black'; Stone = 'white'.

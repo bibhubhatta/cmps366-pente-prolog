@@ -54,3 +54,5 @@ Total: 3.5
 - Test and implement predicate to get_empty_positions 1
 - Test and update set_stone when using 'white', 'black', and 'empty' instead of 'w', 'b', and 'o' 0.5
   - This uses cut so that the Prolog interpreter doesn't think that the predicate has multiple solutions
+- Test and implement get_no_stones_on_board 0.5
+  - Uses is_stone as a helper predicate
