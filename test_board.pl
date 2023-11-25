@@ -95,6 +95,22 @@ test(set_stone) :-
     get_stone(NewBoard4, 'd2', Stone_d2),
     assertion(Stone_d2 == o).
 
+test(convert_to_sequences) :-
+      TestSequence1 = [o, o, o, o, o, o, o, o, o, o, o, o, o, o, o]
+    , ExpectedSequence1 = [[o, o, o, o, o, o, o, o, o, o, o, o, o, o, o]]
+    , convert_to_sequences(TestSequence1, ConvertedSequence1)
+    , assertion(ConvertedSequence1 == ExpectedSequence1)
+    , TestSequence2 = [o, o, o, o, o, o, o, o, o, o, o, o, o, o, o, w, w, b]
+    , ExpectedSequence2 = [[o, o, o, o, o, o, o, o, o, o, o, o, o, o, o], [w, w], [b]]
+    , convert_to_sequences(TestSequence2, ConvertedSequence2)
+    , assertion(ConvertedSequence2 == ExpectedSequence2)
+    , TestSequence3 = [o,o,b,b,b,b,b,b,w,w,w,b,b,o,w,w]
+    , ExpectedSequence3 = [[o,o], [b,b,b,b,b,b], [w,w,w], [b,b], [o], [w,w]]
+    , convert_to_sequences(TestSequence3, ConvertedSequence3)
+    , assertion(ConvertedSequence3 == ExpectedSequence3)
+    . 
+
+
 :-end_tests(board).
 
 :- run_tests(board).

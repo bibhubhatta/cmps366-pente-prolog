@@ -9,7 +9,8 @@
     print_board/1,
     get_stone/3,
     get_stones/3,
-    set_stone/4
+    set_stone/4,
+    convert_to_sequences/2
 ]).
 
 :- use_module(library(lists)).
@@ -164,3 +165,15 @@ set_stone(Board, Position, Stone, NewBoard) :-
     nth0(ColIndex, NewRow, Stone, Row),
     nth0(RowIndex, NewBoard, NewRow).
 
+
+% convert_to_sequences(+List, -Sequences)
+% Purpose: Convert the list of stones to a list of sequences
+% A sequence is a list of stones of the same color
+% The list of sequences is a list of lists of stones
+convert_to_sequences([], [[]]).
+convert_to_sequences([X], [[X]]).
+convert_to_sequences([X, X|Tail], [[X|SubSeq]|Sequences]) :-
+    convert_to_sequences([X|Tail], [SubSeq|Sequences]).
+convert_to_sequences([X, Y|Tail], [[X]|Sequences]) :-
+    dif(X, Y),
+    convert_to_sequences([Y|Tail], Sequences).

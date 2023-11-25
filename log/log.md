@@ -50,3 +50,4 @@ Total: 3.5
 - Test and implement predicate to get stone at position 0.75
 - Test and implement predicate to get a list of stones from the position list 0.25
 - Test and implement predicate to set stone at position 0.5
+- Test and implement predicate to convert a board sequence to a sequence of stones, i.e. list of lists 0.5
