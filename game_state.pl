@@ -62,6 +62,7 @@ other_player('human', 'computer').
 other_player('computer', 'human').
 
 % Predicate to get the stone that the player is playing
+% https://www.cs.bham.ac.uk/research/projects/poplog/prolog/help/conditional
 get_stone_from_player(GameState, Player, Stone) :-
     get_current_player(GameState, CurrentPlayer),
     get_current_player_stone(GameState, CurrentPlayerStone),
