@@ -63,3 +63,18 @@ mark_rows([], []).
 mark_rows([Head|Tail], [[N|Head]|MarkedTail]) :-
     length([Head|Tail], N),
     mark_rows(Tail, MarkedTail).
+
+% cartesian_board(+UnmarkedBoard, -MarkedBoard)
+% Purpose: Get board with position indicators for each row and column
+% Return : The board -- a list of lists
+cartesian_board(UnmarkedBoard, MarkedBoard) :-
+    mark_columns(UnmarkedBoard, MarkedColumnsBoard),
+    mark_rows(UnmarkedBoard, MarkedRowsBoard),
+    % Extract the last row of the marked columns board
+    length(MarkedColumnsBoard, NoRows),
+    nth1(NoRows, MarkedColumnsBoard, LastRow),
+    % Add a a blank space in the beginning of the last row
+    append([' '], LastRow, LastRowWithSpace),
+    % Append the last row to the marked rows board
+    append(MarkedRowsBoard, [LastRowWithSpace], MarkedBoard).
+    

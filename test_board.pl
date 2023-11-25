@@ -40,6 +40,11 @@ test(mark_row) :-
     mark_rows(TestBoard, NewBoard),
     assertion(NewBoard == [[3, o,o,o], [2, o,o,o], [1, o,o,o]]).
 
+test(cartesian_board) :-
+    TestBoard = [[o,o,o], [o,o,o], [o,o,o]],
+    cartesian_board(TestBoard, NewBoard),
+    assertion(NewBoard == [[3, o,o,o], [2, o,o,o], [1, o,o,o], [' ', 'A', 'B', 'C'] ]).
+
 :-end_tests(board).
 
 :- run_tests(board).

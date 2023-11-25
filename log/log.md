@@ -22,10 +22,14 @@ Total: 2.75
 - Test and implement predicates to get the player's tournament score, captured pairs, as well as to check if the stone is valid, to set the captures and tournament scores 0.75
 - Test and implement predicates to set the current player and stone and switch the turn 0.5
 
+Total: 5.25
+
 ## Nov 23, 2023
 
 - Test and implement predicate to get initial game state 1.0
 - Test and implement predicate to get the capture sequence for a stone 0.25
+
+Total: 1.25
 
 ## Nov 24, 2023
 - Test and implement predicate to get row 0.25
@@ -33,3 +37,6 @@ Total: 2.75
 - Test and implement predicate to mark column characters at the end 1.0
 - Test and implement predicate to mark row numbers 0.75
 - Refactor mark_rows so there are no choice points 0.5
+- Test and implement predicate to mark the board 0.5
+
+Total: 3.5
