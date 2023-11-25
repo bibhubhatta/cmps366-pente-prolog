@@ -72,6 +72,29 @@ test(get_stones) :-
     get_stones(Board, Postions, Stones),
     assertion(Stones == [o, w, o, w, b]).
 
+test(set_stone) :-
+    read_game_state('serials/4.pl', GameState),
+    get_board(GameState, Board),
+    get_stone(Board, 'A1', OldStoneA1),
+    assertion(OldStoneA1 == o),
+    set_stone(Board, 'A1', w, NewBoard),
+    get_stone(NewBoard, 'A1', StoneA1),
+    assertion(StoneA1 == w),
+    get_stone(Board, 'D2', OldStoneD2),
+    assertion(OldStoneD2 == w),
+    set_stone(Board, 'D2', o, NewBoard2),
+    get_stone(NewBoard2, 'D2', StoneD2),
+    assertion(StoneD2 == o),
+    \+ set_stone(Board, 'T19', o, _),
+    \+ set_stone(Board, 'A20', o, _),
+    \+ set_stone(Board, 'T0', o, _),
+    set_stone(Board, 'a1', w, NewBoard3),
+    get_stone(NewBoard3, 'a1', Stone_a1),
+    assertion(Stone_a1 == w),
+    set_stone(Board, 'd2', o, NewBoard4),
+    get_stone(NewBoard4, 'd2', Stone_d2),
+    assertion(Stone_d2 == o).
+
 :-end_tests(board).
 
 :- run_tests(board).

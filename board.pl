@@ -8,11 +8,19 @@
     cartesian_board/2,
     print_board/1,
     get_stone/3,
-    get_stones/3
+    get_stones/3,
+    set_stone/4
 ]).
 
 :- use_module(library(lists)).
 :- use_module(position).
+
+% Predicate to get the size of the board
+% get_board_size(+Board, -NoRows, -NoCols)
+get_board_size(Board, NoRows, NoCols) :-
+    length(Board, NoRows),
+    nth0(0, Board, FirstRow),
+    length(FirstRow, NoCols).
 
 % Predicate to get an empty board
 % get_empty_board(+NoRows, +NoCols, -Board)
@@ -140,3 +148,19 @@ get_stones(_, [], []).
 get_stones(Board, [Head|Tail], [Stone|Stones]) :-
     get_stone(Board, Head, Stone),
     once(get_stones(Board, Tail, Stones)).
+
+% set_stone(+Board, +Position, +Stone, -NewBoard)
+% Purpose: Set the stone at a position on the board
+set_stone(Board, Position, Stone, NewBoard) :-
+    string_to_position(Position, RowIndex, ColIndex),
+    get_board_size(Board, NoRows, NoCols),
+    % Check if the position is valid
+    RowIndex >= 0,
+    RowIndex < NoRows,
+    ColIndex >= 0,
+    ColIndex < NoCols,
+    % Set the stone
+    nth0(RowIndex, Board, Row),
+    nth0(ColIndex, NewRow, Stone, Row),
+    nth0(RowIndex, NewBoard, NewRow).
+

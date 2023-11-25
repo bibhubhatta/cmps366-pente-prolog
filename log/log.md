@@ -49,3 +49,4 @@ Total: 3.5
   - Using modules because consult leads to problems when the same file is consulted multiple times
 - Test and implement predicate to get stone at position 0.75
 - Test and implement predicate to get a list of stones from the position list 0.25
+- Test and implement predicate to set stone at position 0.5
