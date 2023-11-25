@@ -182,13 +182,20 @@ set_stone(Board, Position, Stone, NewBoard) :-
 % Purpose: Convert the list of stones to a list of sequences
 % A sequence is a list of stones of the same color
 % The list of sequences is a list of lists of stones
+% Code was initially written without cut, but it makes the interpreter think it has multiple solutions
+% even though it is deterministic. This makes it cleaner to test and use.
 convert_to_sequences([], [[]]).
 convert_to_sequences([X], [[X]]).
 convert_to_sequences([X, X|Tail], [[X|SubSeq]|Sequences]) :-
-    convert_to_sequences([X|Tail], [SubSeq|Sequences]).
+    convert_to_sequences([X|Tail], [SubSeq|Sequences])
+    % .
+    , !.
+
 convert_to_sequences([X, Y|Tail], [[X]|Sequences]) :-
     dif(X, Y),
-    convert_to_sequences([Y|Tail], Sequences).
+    convert_to_sequences([Y|Tail], Sequences)
+    % .
+    , !.
 
 % get_all_positions(+Board, -Positions)
 % Purpose: Get all the positions on the board
