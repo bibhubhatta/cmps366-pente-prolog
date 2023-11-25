@@ -40,3 +40,6 @@ Total: 1.25
 - Test and implement predicate to mark the board 0.5
 
 Total: 3.5
+
+## Nov 25, 2023
+- Test and implement predicate to print the board 1

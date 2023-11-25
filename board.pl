@@ -78,3 +78,33 @@ cartesian_board(UnmarkedBoard, MarkedBoard) :-
     % Append the last row to the marked rows board
     append(MarkedRowsBoard, [LastRowWithSpace], MarkedBoard).
     
+% print_board_cell(+Cell)
+% Purpose: Print a cell of the board
+% https://apps.nms.kcl.ac.uk/reactome-pengine/documentation/man?section=format
+print_board_cell(Cell) :-
+    % if the cell is a number, it is a row marker, so print it as two digits for alignment
+    (   number(Cell) -> format('~|~` t~d~2+', Cell)
+    ;   % if the cell is ' ', it is the beginning of a row marker, so print two spaces for alignment
+        (   Cell = ' ' -> write('  ')
+        ;   % otherwise, print the character
+            write(Cell)
+        )
+    ),
+    % print a space for readability
+    write(' ').
+
+% print_row(+Row)
+% Purpose: Print a row of the board
+print_row([]) :-
+    % print a newline to separate rows
+    nl.
+print_row([Head|Tail]) :-
+    print_board_cell(Head),
+    print_row(Tail).
+
+% print_board(+Board)
+% Purpose: Print the board
+print_board([]).
+print_board([Head|Tail]) :-
+    print_row(Head),
+    print_board(Tail).
