@@ -50,6 +50,21 @@ test(print_board) :-
     cartesian_board(Board, NewBoard),
     print_board(NewBoard).
 
+test(get_stone) :-
+    read_game_state('serials/4.pl', GameState),
+    get_board(GameState, Board),
+    get_stone(Board, 'A1', StoneA1),
+    assertion(StoneA1 == o),
+    get_stone(Board, 'D2', StoneD2),
+    assertion(StoneD2 == w),
+    \+ get_stone(Board, 'T19', _),
+    \+ get_stone(Board, 'A20', _),
+    \+ get_stone(Board, 'T0', _),
+    get_stone(Board, 'a1', Stone_a1),
+    assertion(Stone_a1 == o),
+    get_stone(Board, 'd2', Stone_d2),
+    assertion(Stone_d2 == w).
+
 :-end_tests(board).
 
 :- run_tests(board).

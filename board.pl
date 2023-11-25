@@ -123,3 +123,11 @@ print_board([]).
 print_board([Head|Tail]) :-
     print_row(Head),
     print_board(Tail).
+
+% get_stone(+Board, +Position, -Stone)
+% Purpose: Get the stone at a position on the board
+get_stone(Board, Position, Stone) :-
+    consult('position.pl'),
+    string_to_position(Position, RowIndex, ColIndex),
+    nth0(RowIndex, Board, Row),
+    nth0(ColIndex, Row, Stone).

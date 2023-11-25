@@ -31,8 +31,10 @@ position_to_string(RowIndex, ColIndex, PositionString) :-
 % https://www.swi-prolog.org/pldoc/doc_for?object=sub_atom/5
 % https://www.swi-prolog.org/pldoc/doc_for?object=atom_number/2
 string_to_position(PositionString, NumRows, RowIndex, ColIndex) :-
+    % Convert PositionString to uppercase
+    upcase_atom(PositionString, UpperCasePositionString),
     % Convert column character to corresponding ASCII value (A=65, B=66, ...)
-    sub_atom(PositionString, 0, 1, _, ColDisplayChar),
+    sub_atom(UpperCasePositionString, 0, 1, _, ColDisplayChar),
     char_code(ColDisplayChar, ColDisplayCharVal),
     ColIndex is ColDisplayCharVal - 64 - 1,
 
