@@ -174,6 +174,11 @@ test(get_initial_state) :-
     get_board(GameState, Board),
     assertion(Board == [[o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o],[o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o],[o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o],[o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o],[o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o],[o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o],[o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o],[o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o],[o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o],[o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o],[o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o],[o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o],[o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o],[o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o],[o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o],[o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o],[o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o],[o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o],[o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o]]).
 
+test(get_capture_sequence) :-
+    get_capture_sequence('w', WCaptureSequence),
+    assertion(WCaptureSequence == [w, b, b, w]),
+    get_capture_sequence('b', BCaptureSequence),
+    assertion(BCaptureSequence == [b, w, w, b]).
 
 
 :-end_tests(game_state).

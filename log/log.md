@@ -25,3 +25,5 @@ Total: 2.75
 ## Nov 23, 2023
 
 - Test and implement predicate to get initial game state 1.0
+- Test and implement predicate to get the capture sequence for a stone 0.25
+-

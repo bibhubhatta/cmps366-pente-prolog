@@ -142,3 +142,8 @@ switch_turn(GameState, NewGameState) :-
 get_initial_state(GameState) :-
     get_empty_board(19, 19, Board),
     GameState = [Board, 0, 0, 0, 0, '_', 'white'].
+
+% Predicate to get the capture sequence of a stone
+get_capture_sequence(Stone, CaptureSequence) :-
+    other_stone(Stone, OtherStone),
+    CaptureSequence = [Stone, OtherStone, OtherStone, Stone].
