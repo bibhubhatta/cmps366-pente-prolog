@@ -153,6 +153,17 @@ get_stones(Board, [Head|Tail], [Stone|Stones]) :-
 
 % set_stone(+Board, +Position, +Stone, -NewBoard)
 % Purpose: Set the stone at a position on the board
+% Note: Uses cut (!), otherwise the Prolog interpreter will think it has multiple solutions
+% even though it is deterministic. This makes it cleaner to test and use.
+set_stone(Board, Position, black, NewBoard) :-
+    set_stone(Board, Position, b, NewBoard), !.
+
+set_stone(Board, Position, white, NewBoard) :-
+    set_stone(Board, Position, w, NewBoard), !.
+
+set_stone(Board, Position, empty, NewBoard) :-
+    set_stone(Board, Position, o, NewBoard), !.
+
 set_stone(Board, Position, Stone, NewBoard) :-
     string_to_position(Position, RowIndex, ColIndex),
     get_board_size(Board, NoRows, NoCols),

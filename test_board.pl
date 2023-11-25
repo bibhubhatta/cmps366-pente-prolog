@@ -93,7 +93,17 @@ test(set_stone) :-
     assertion(Stone_a1 == w),
     set_stone(Board, 'd2', o, NewBoard4),
     get_stone(NewBoard4, 'd2', Stone_d2),
-    assertion(Stone_d2 == o).
+    assertion(Stone_d2 == o),
+    set_stone(Board, 'p5', black, NewBoard5),
+    get_stone(NewBoard5, 'p5', Stone_p5),
+    assertion(Stone_p5 == b),
+    set_stone(Board, 'p5', white, NewBoard6),
+    get_stone(NewBoard6, 'p5', Stone_p5_2),
+    assertion(Stone_p5_2 == w),
+    set_stone(Board, 'p5', empty, NewBoard7),
+    get_stone(NewBoard7, 'p5', Stone_p5_3),
+    assertion(Stone_p5_3 == o).
+    
 
 test(convert_to_sequences) :-
       TestSequence1 = [o, o, o, o, o, o, o, o, o, o, o, o, o, o, o]

@@ -52,4 +52,5 @@ Total: 3.5
 - Test and implement predicate to set stone at position 0.5
 - Test and implement predicate to convert a board sequence to a sequence of stones, i.e. list of lists 0.5
 - Test and implement predicate to get_empty_positions 1
-- 
+- Test and update set_stone when using 'white', 'black', and 'empty' instead of 'w', 'b', and 'o' 0.5
+  - This uses cut so that the Prolog interpreter doesn't think that the predicate has multiple solutions
