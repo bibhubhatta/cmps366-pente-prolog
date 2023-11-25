@@ -35,6 +35,10 @@ test(mark_col) :-
     mark_columns(TestBoard, NewBoard),
     assertion(NewBoard == [[o,o,o], [o,o,o], [o,o,o], ['A', 'B', 'C']]).
 
+test(mark_row) :-
+    TestBoard = [[o,o,o], [o,o,o], [o,o,o]],
+    mark_rows(TestBoard, NewBoard),
+    assertion(NewBoard == [[3, o,o,o], [2, o,o,o], [1, o,o,o]]).
 
 :-end_tests(board).
 
