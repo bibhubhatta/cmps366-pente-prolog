@@ -107,3 +107,25 @@ set_player_captures(GameState, Player, Captures, NewGameState) :-
 % Predicate to set the tournament score of a player
 set_player_tournament_score(GameState, Player, TournamentScore, NewGameState) :-
     (Player = 'human' -> set_human_tournament_score(GameState, TournamentScore, NewGameState) ; set_computer_tournament_score(GameState, TournamentScore, NewGameState)).
+
+% Predicate to set the current player
+set_current_player([Board, HumanCaptures, HumanTournamentScore, ComputerCaptures, ComputerTournamentScore, _, CurrentPlayerStone], CurrentPlayer, [Board, HumanCaptures, HumanTournamentScore, ComputerCaptures, ComputerTournamentScore, CurrentPlayer, CurrentPlayerStone]).
+% Predicate to set the current player stone
+set_current_player_stone([Board, HumanCaptures, HumanTournamentScore, ComputerCaptures, ComputerTournamentScore, CurrentPlayer, _], CurrentPlayerStone, [Board, HumanCaptures, HumanTournamentScore, ComputerCaptures, ComputerTournamentScore, CurrentPlayer, CurrentPlayerStone]).
+
+% Predicate to switch the current player
+switch_player(GameState, NewGameState) :-
+    get_current_player(GameState, CurrentPlayer),
+    other_player(CurrentPlayer, OtherPlayer),
+    set_current_player(GameState, OtherPlayer, NewGameState).
+
+% Predicate to switch the current player stone
+switch_player_stone(GameState, NewGameState) :-
+    get_current_player_stone(GameState, CurrentPlayerStone),
+    other_stone(CurrentPlayerStone, OtherPlayerStone),
+    set_current_player_stone(GameState, OtherPlayerStone, NewGameState).
+
+% Predicate to switch the current turn
+switch_turn(GameState, NewGameState) :-
+    switch_player(GameState, SwitchedPlayerGameState),
+    switch_player_stone(SwitchedPlayerGameState, NewGameState).

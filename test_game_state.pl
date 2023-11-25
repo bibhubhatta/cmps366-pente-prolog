@@ -126,6 +126,36 @@ test(set_player_tournament_score) :-
     get_player_tournament_score(NewGameState2, 'computer', ComputerTournamentScore2),
     assertion(ComputerTournamentScore2 == 5).
 
+test(set_current_player) :-
+    read_game_state('serials/4.pl', GameState),
+    set_current_player(GameState, 'human', NewGameState),
+    get_current_player(NewGameState, CurrentPlayer),
+    assertion(CurrentPlayer == 'human'),
+    set_current_player(GameState, 'computer', NewGameState2),
+    get_current_player(NewGameState2, CurrentPlayer2),
+    assertion(CurrentPlayer2 == 'computer').
+
+test(set_current_player_stone) :-
+    read_game_state('serials/4.pl', GameState),
+    set_current_player_stone(GameState, 'w', NewGameState),
+    get_current_player_stone(NewGameState, CurrentPlayerStone),
+    assertion(CurrentPlayerStone == 'w'),
+    set_current_player_stone(GameState, 'b', NewGameState2),
+    get_current_player_stone(NewGameState2, CurrentPlayerStone2),
+    assertion(CurrentPlayerStone2 == 'b').
+
+test(switch_turn) :-
+    read_game_state('serials/4.pl', GameState),
+    get_current_player(GameState, CurrentPlayer),
+    assertion(CurrentPlayer == 'computer'),
+    get_current_player_stone(GameState, CurrentPlayerStone),
+    assertion(CurrentPlayerStone == 'w'),
+    switch_turn(GameState, NewGameState),
+    get_current_player(NewGameState, NewCurrentPlayer),
+    assertion(NewCurrentPlayer == 'human'),
+    get_current_player_stone(NewGameState, NewCurrentPlayerStone),
+    assertion(NewCurrentPlayerStone == 'b').
+
 
 
 :-end_tests(game_state).

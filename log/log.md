@@ -10,7 +10,7 @@
 
 Total: 2.75  
 
-## Oct 1, 2023
+## Nov 22, 2023
 
 - Test and implement position related predicates
   - Position_to_string, string_to_position, up_position, down_position, left_position, right_position 2.0
@@ -20,3 +20,5 @@ Total: 2.75
 - Test and implement predicates to get the constituent parts of the game state 0.5
 - Test and implement predicates to get the current player and stone 0.5
 - Test and implement predicates to get the player's tournament score, captured pairs, as well as to check if the stone is valid, to set the captures and tournament scores 0.75
+- Test and implement predicates to set the current player and stone and switch the turn 0.5
+- 
