@@ -1,3 +1,9 @@
+% Game state related predicates
+
+:- consult('board.pl').
+
+
+
 % Predicate to read game state from file
 % The game state is a list
 % [Board, HumanCaptures, HumanTournamentScore, ComputerCaptures, ComputerTournamentScore, CurrentPlayer, CurrentPlayerStone]
@@ -129,3 +135,10 @@ switch_player_stone(GameState, NewGameState) :-
 switch_turn(GameState, NewGameState) :-
     switch_player(GameState, SwitchedPlayerGameState),
     switch_player_stone(SwitchedPlayerGameState, NewGameState).
+
+% Predicate to get the initial game state
+% The initial game state is a list
+% [Board, HumanCaptures, HumanTournamentScore, ComputerCaptures, ComputerTournamentScore, CurrentPlayer, CurrentPlayerStone]
+get_initial_state(GameState) :-
+    get_empty_board(19, 19, Board),
+    GameState = [Board, 0, 0, 0, 0, '_', 'white'].

@@ -156,6 +156,24 @@ test(switch_turn) :-
     get_current_player_stone(NewGameState, NewCurrentPlayerStone),
     assertion(NewCurrentPlayerStone == 'b').
 
+test(get_initial_state) :-
+    get_initial_state(GameState),
+    get_player_captures(GameState, 'human', HumanCaptures),
+    assertion(HumanCaptures == 0),
+    get_player_captures(GameState, 'computer', ComputerCaptures),
+    assertion(ComputerCaptures == 0),
+    get_player_tournament_score(GameState, 'human', HumanTournamentScore),
+    assertion(HumanTournamentScore == 0),
+    get_player_tournament_score(GameState, 'computer', ComputerTournamentScore),
+    assertion(ComputerTournamentScore == 0),
+    get_current_player(GameState, CurrentPlayer),
+    % The current player should not be assigned in the initial state
+    assertion(CurrentPlayer == '_'),
+    get_current_player_stone(GameState, CurrentPlayerStone),
+    assertion(CurrentPlayerStone == 'w'),
+    get_board(GameState, Board),
+    assertion(Board == [[o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o],[o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o],[o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o],[o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o],[o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o],[o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o],[o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o],[o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o],[o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o],[o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o],[o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o],[o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o],[o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o],[o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o],[o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o],[o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o],[o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o],[o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o],[o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o]]).
+
 
 
 :-end_tests(game_state).
