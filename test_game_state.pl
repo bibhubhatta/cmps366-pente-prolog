@@ -43,7 +43,9 @@ test(read_save_read_game_state) :-
     read_game_state('serials/4.pl', GameState),
     write_game_state('serials/4_test_read_save.pl', GameState),
     read_game_state('serials/4_test_read_save.pl', GameState2),
-    assertion(GameState == GameState2).
+    assertion(GameState == GameState2),
+    % Delete the test file
+    delete_file('serials/4_test_read_save.pl').
 
 test(other_stone) :-
     other_stone('w', OtherStone1),
