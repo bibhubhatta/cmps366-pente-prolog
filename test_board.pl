@@ -136,6 +136,14 @@ test(get_no_stones_on_board) :-
     get_no_stones_on_board(Board1, NoStones1),
     assertion(NoStones1 == 15).
 
+test(get_all_board_columns) :-
+    TestBoard1 = [[a,b,c], [d,e,f], [g,h,i]],
+    get_all_board_columns(TestBoard1, AllBoardColumns1),
+    assertion(AllBoardColumns1 == [[a,d,g], [b,e,h], [c,f,i]]),
+    TestBoard2 = [[a,b,c], [d,e,f], [g,h,i], [j,k,l]],
+    get_all_board_columns(TestBoard2, AllBoardColumns2),
+    assertion(AllBoardColumns2 == [[a,d,g,j], [b,e,h,k], [c,f,i,l]]).
+
 :-end_tests(board).
 
 :- run_tests(board).

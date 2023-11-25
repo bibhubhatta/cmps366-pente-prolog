@@ -12,7 +12,8 @@
     set_stone/4,
     convert_to_sequences/2,
     get_empty_positions/2,
-    get_no_stones_on_board/2
+    get_no_stones_on_board/2,
+    get_all_board_columns/2
 ]).
 
 :- use_module(library(lists)).
@@ -236,3 +237,12 @@ get_no_stones_on_board(Board, NoStones) :-
 % Purpose: Check if the given atom is a stone
 is_stone(Stone) :-
     Stone = 'b' ; Stone = 'w'; Stone = 'black'; Stone = 'white'.
+
+
+% get_all_board_columns(+Board, -Columns)
+% Purpose: Get all the columns of the board
+% The columns are a list of lists of stones
+get_all_board_columns(Board, Columns) :-
+    get_board_size(Board, _, NoCols),
+    get_char_list(NoCols, CharList),
+    maplist(get_col(Board), CharList, Columns).
