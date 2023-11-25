@@ -57,3 +57,5 @@ Total: 3.5
 - Test and implement get_no_stones_on_board 0.5
   - Uses is_stone as a helper predicate
 - Test and implement predicate to get_all_board_columns 0.5
+- Test and implement predicate to get diagonal positions 0.5
+  - Implement bound checking for up, down, left, and right positions

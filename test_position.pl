@@ -65,6 +65,38 @@ test(right_position) :-
     right_position('F6', RightPosition2),
     assertion(RightPosition2 == 'G6').
 
+test(up_left_position) :-
+    up_left_position('B2', UpLeftPosition),
+    assertion(UpLeftPosition == 'A3'),
+    up_left_position('F6', UpLeftPosition2),
+    assertion(UpLeftPosition2 == 'E7'),
+    % Test that it doesn't go out of bounds
+    \+ up_left_position('A19', _).
+
+test(up_right_position) :-
+    up_right_position('B2', UpRightPosition),
+    assertion(UpRightPosition == 'C3'),
+    up_right_position('F6', UpRightPosition2),
+    assertion(UpRightPosition2 == 'G7'),
+    % Test that it doesn't go out of bounds
+    \+ up_right_position('S1', _).
+
+test(down_left_position) :-
+    down_left_position('B2', DownLeftPosition),
+    assertion(DownLeftPosition == 'A1'),
+    down_left_position('F6', DownLeftPosition2),
+    assertion(DownLeftPosition2 == 'E5'),
+    % Test that it doesn't go out of bounds
+    \+ down_left_position('A1', _).
+
+test(down_right_position) :-
+    down_right_position('B2', DownRightPosition),
+    assertion(DownRightPosition == 'C1'),
+    down_right_position('F6', DownRightPosition2),
+    assertion(DownRightPosition2 == 'G5'),
+    % Test that it doesn't go out of bounds
+    \+ down_right_position('S1', _).
+
 
 :- end_tests(position).
 

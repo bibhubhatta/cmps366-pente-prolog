@@ -6,7 +6,12 @@
     up_position/2,
     down_position/2,
     left_position/2,
-    right_position/2]).
+    right_position/2,
+    up_left_position/2,
+    up_right_position/2,
+    down_left_position/2,
+    down_right_position/2
+    ]).
 
 % Predicate to convert position to string representation
 % Assistance: https://www.swi-prolog.org/pldoc/man?predicate=char_code/2
@@ -57,26 +62,49 @@ string_to_position(PositionString, RowIndex, ColIndex) :-
 up_position(PositionString, UpPositionString) :-
     string_to_position(PositionString, RowIndex, ColIndex),
     UpRowIndex is RowIndex - 1,
+    UpRowIndex >= 0,
     position_to_string(UpRowIndex, ColIndex, UpPositionString).
 
 % Predicate to get the position below the given position
 down_position(PositionString, DownPositionString) :-
     string_to_position(PositionString, RowIndex, ColIndex),
     DownRowIndex is RowIndex + 1,
+    DownRowIndex < 19,
     position_to_string(DownRowIndex, ColIndex, DownPositionString).
 
 % Predicate to get the position to the left of the given position
 left_position(PositionString, LeftPositionString) :-
     string_to_position(PositionString, RowIndex, ColIndex),
     LeftColIndex is ColIndex - 1,
+    LeftColIndex >= 0,
     position_to_string(RowIndex, LeftColIndex, LeftPositionString).
 
 % Predicate to get the position to the right of the given position
 right_position(PositionString, RightPositionString) :-
     string_to_position(PositionString, RowIndex, ColIndex),
     RightColIndex is ColIndex + 1,
+    RightColIndex < 19,
     position_to_string(RowIndex, RightColIndex, RightPositionString).
 
 
+% Predicate to get the position above and to the left of the given position
+up_left_position(PositionString, UpLeftPositionString) :-
+    up_position(PositionString, UpPositionString),
+    left_position(UpPositionString, UpLeftPositionString).
+
+% Predicate to get the position above and to the right of the given position
+up_right_position(PositionString, UpRightPositionString) :-
+    up_position(PositionString, UpPositionString),
+    right_position(UpPositionString, UpRightPositionString).
+
+% Predicate to get the position below and to the left of the given position
+down_left_position(PositionString, DownLeftPositionString) :-
+    down_position(PositionString, DownPositionString),
+    left_position(DownPositionString, DownLeftPositionString).
+
+% Predicate to get the position below and to the right of the given position
+down_right_position(PositionString, DownRightPositionString) :-
+    down_position(PositionString, DownPositionString),
+    right_position(DownPositionString, DownRightPositionString).
 
 
