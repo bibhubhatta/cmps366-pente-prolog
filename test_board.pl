@@ -1,8 +1,7 @@
 :- begin_tests(board).
 
-% Consult board.pl
-:- consult(board).
-:- consult(game_state).
+:-use_module(board).
+:-use_module(game_state).
 
 test(get_row) :-
     read_game_state('serials/4.pl', GameState),

@@ -1,6 +1,35 @@
 % Game state related predicates
 
-:- consult('board.pl').
+:- module(game_state,
+    [
+        read_game_state/2,
+        write_game_state/2,
+        get_board/2,
+        get_human_captures/2,
+        get_human_tournament_score/2,
+        get_computer_captures/2,
+        get_computer_tournament_score/2,
+        get_current_player/2,
+        get_current_player_stone/2,
+        get_stone_from_player/3,
+        get_player_from_stone/3,
+        other_stone/2,
+        other_player/2,
+        get_player_tournament_score/3,
+        is_stone/1,
+        get_player_captures/3,
+        set_player_captures/4,
+        set_player_tournament_score/4,
+        set_current_player/3,
+        set_current_player_stone/3,
+        switch_player/2,
+        switch_player_stone/2,
+        switch_turn/2,
+        get_initial_state/1,
+        get_capture_sequence/2
+    ]).
+
+:- use_module(board).
 
 
 

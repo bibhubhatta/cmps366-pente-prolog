@@ -1,3 +1,18 @@
+:- module(board, [
+    get_empty_board/3,
+    get_row/3,
+    get_col/3,
+    get_char_list/2,
+    mark_columns/2,
+    mark_rows/2,
+    cartesian_board/2,
+    print_board/1,
+    get_stone/3
+]).
+
+:- use_module(library(lists)).
+:- use_module(position).
+
 % Predicate to get an empty board
 % get_empty_board(+NoRows, +NoCols, -Board)
 % https://www.swi-prolog.org/pldoc/doc_for?object=length/2

@@ -1,3 +1,13 @@
+:- module(position, [
+    position_to_string/3,
+    position_to_string/4,
+    string_to_position/4,
+    string_to_position/3,
+    up_position/2,
+    down_position/2,
+    left_position/2,
+    right_position/2]).
+
 % Predicate to convert position to string representation
 % Assistance: https://www.swi-prolog.org/pldoc/man?predicate=char_code/2
 % https://www.swi-prolog.org/pldoc/doc_for?object=atom_concat/3

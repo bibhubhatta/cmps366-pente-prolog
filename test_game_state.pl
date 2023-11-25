@@ -1,7 +1,6 @@
 :- begin_tests(game_state).
 
-% Consult game_state.pl
-:- consult(game_state).
+:- use_module(game_state).
 
 test(read_game_state) :-
     read_game_state('serials/4.pl', GameState),

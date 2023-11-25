@@ -32,6 +32,7 @@ Total: 5.25
 Total: 1.25
 
 ## Nov 24, 2023
+
 - Test and implement predicate to get row 0.25
 - Test and implement predicate to get column 0.5
 - Test and implement predicate to mark column characters at the end 1.0
@@ -42,4 +43,7 @@ Total: 1.25
 Total: 3.5
 
 ## Nov 25, 2023
+
 - Test and implement predicate to print the board 1
+- Refactor to use modules 2
+  - Using modules because consult leads to problems when the same file is consulted multiple times

@@ -1,7 +1,6 @@
 :- begin_tests(position).
 
-% Consult position.pl
-:- consult(position).
+:- use_module(position).
 
 test(position_to_string) :-
     position_to_string(0, 0, 19, PosString),
