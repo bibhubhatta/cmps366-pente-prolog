@@ -7,7 +7,8 @@
     mark_rows/2,
     cartesian_board/2,
     print_board/1,
-    get_stone/3
+    get_stone/3,
+    get_stones/3
 ]).
 
 :- use_module(library(lists)).
@@ -127,7 +128,15 @@ print_board([Head|Tail]) :-
 % get_stone(+Board, +Position, -Stone)
 % Purpose: Get the stone at a position on the board
 get_stone(Board, Position, Stone) :-
-    consult('position.pl'),
     string_to_position(Position, RowIndex, ColIndex),
     nth0(RowIndex, Board, Row),
     nth0(ColIndex, Row, Stone).
+
+% get_stones(+Board, +Positions, -Stones)
+% Purpose: Get the stones at a list of positions on the board
+% Using once to prevent multiple solutions even though it is deterministic
+% https://www.swi-prolog.org/pldoc/man?predicate=once/1
+get_stones(_, [], []).
+get_stones(Board, [Head|Tail], [Stone|Stones]) :-
+    get_stone(Board, Head, Stone),
+    once(get_stones(Board, Tail, Stones)).
