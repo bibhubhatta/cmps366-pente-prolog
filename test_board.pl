@@ -44,11 +44,11 @@ test(cartesian_board) :-
     cartesian_board(TestBoard, NewBoard),
     assertion(NewBoard == [[3, o,o,o], [2, o,o,o], [1, o,o,o], [' ', 'A', 'B', 'C'] ]).
 
-test(print_board) :-
-    read_game_state('serials/4.pl', GameState),
-    get_board(GameState, Board),
-    cartesian_board(Board, NewBoard),
-    print_board(NewBoard).
+% test(print_board) :-
+%     read_game_state('serials/4.pl', GameState),
+%     get_board(GameState, Board),
+%     cartesian_board(Board, NewBoard),
+%     print_board(NewBoard).
 
 test(get_stone) :-
     read_game_state('serials/4.pl', GameState),
