@@ -6,7 +6,7 @@
 - Setup swipl and watch tutorials on YouTube 1.0
 - Find and install VS Code extensions for Prolog, so that it can be developed across operating systems. 1
 - Using VSC-Prolog by arthurwang for syntax highlighting
-- Install swipl for running prolog from the terminal: use “swipl <filename>” to run the script from the terminal
+- Install swipl for running prolog from the terminal: use “swipl \<filename>” to run the script from the terminal
 
 Total: 2.75  
 
