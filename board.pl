@@ -31,3 +31,28 @@ get_col(Board, ColChar, Col) :-
     ColIndex is ColCode - 65,
     % Get the column
     maplist(nth0(ColIndex), Board, Col).
+
+
+% Predicate to get a list of characters for the bottom of the board
+% get_char_list(+NoCols, -CharList)
+% Assistance: https://stackoverflow.com/questions/40711908/what-is-a-test-succeeded-with-choicepoint-warning-in-pl-unit-and-how-do-i-fix
+get_char_list(NoCols, CharList) :-
+    % Base case
+    % get_char_list(0, []) is not used because it would make it non-deterministic
+    % even if it is deterministic
+    NoCols =:= 0 -> CharList = [];
+    NoCols > 0,
+    NoCols1 is NoCols - 1,
+    get_char_list(NoCols1, CharList1),
+    CharCode is NoCols + 64,
+    char_code(Char, CharCode),
+    append(CharList1, [Char], CharList).
+    
+
+% Predicate to mark the columns of a board
+% mark_columns(+Board, -MarkedBoard)
+mark_columns(Board, NewBoard) :-
+    nth0(0, Board, FirstRow),
+    length(FirstRow, NoCols),
+    get_char_list(NoCols, CharList),
+    append(Board, [CharList], NewBoard).
