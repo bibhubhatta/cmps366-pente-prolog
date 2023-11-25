@@ -10,7 +10,8 @@
     get_stone/3,
     get_stones/3,
     set_stone/4,
-    convert_to_sequences/2
+    convert_to_sequences/2,
+    get_empty_positions/2
 ]).
 
 :- use_module(library(lists)).
@@ -177,3 +178,26 @@ convert_to_sequences([X, X|Tail], [[X|SubSeq]|Sequences]) :-
 convert_to_sequences([X, Y|Tail], [[X]|Sequences]) :-
     dif(X, Y),
     convert_to_sequences([Y|Tail], Sequences).
+
+% get_all_positions(+Board, -Positions)
+% Purpose: Get all the positions on the board
+% The position is a string of the form 'A1'
+% https://www.swi-prolog.org/pldoc/man?predicate=findall/3
+% https://www.swi-prolog.org/pldoc/man?predicate=bagof/3
+% https://www.cse.unsw.edu.au/~billw/dictionaries/prolog/findall.html
+get_all_positions(Board, Positions) :-
+    get_board_size(Board, NoRows, NoCols),
+    findall(Position,
+            (between(0, NoRows, RowIndex), 
+            between(0, NoCols, ColIndex),
+            position_to_string(RowIndex, ColIndex, Position)), 
+            Positions).
+
+% get_empty_positions(+Board, -Positions)
+% Purpose: Get the empty positions on the board
+get_empty_positions(Board, Positions) :-
+    get_all_positions(Board, AllPositions),
+    findall(Position,
+            (member(Position, AllPositions),
+            get_stone(Board, Position, 'o')),
+            Positions).
