@@ -15,6 +15,14 @@ test(get_row) :-
     assertion(Row19 == [ o, o, o, o, o, o, o, o, o, o, o, o, o, o, o, o, o, o, o ]).
 
 
+test(get_col) :-
+    read_game_state('serials/4.pl', GameState),
+    get_board(GameState, Board),
+    get_col(Board, d, ColD),
+    assertion(ColD ==  [o, b, b, w, o, o, o, o, o, o, o, o, o, o, o, o, w, w, b]),
+    get_col(Board, g, ColG),
+    assertion(ColG == [o,  o,  o,  w,  o,  o,  o,  o,  o,  o,  o,  o,  o,  o,  o,  b,  o,  o,  o]).
+
 :-end_tests(board).
 
 :- run_tests(board).

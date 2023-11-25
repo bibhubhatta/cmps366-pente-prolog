@@ -29,3 +29,4 @@ Total: 2.75
 
 ## Nov 24, 2023
 - Test and implement predicate to get row 0.25
+- Test and implement predicate to get column 0.5

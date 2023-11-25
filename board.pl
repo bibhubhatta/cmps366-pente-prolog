@@ -19,3 +19,15 @@ get_empty_row(NoCols, Row) :-
 get_row(Board, RowNum, Row) :-
     RowIndex is 19 - RowNum,
     nth0(RowIndex, Board, Row).
+
+% Predicate to get a column of the board
+% get_col(+Board, +ColChar, -Col)
+% The ColChar is the letter displayed on the bottom of the board
+get_col(Board, ColChar, Col) :-
+    % Convert ColChar to uppercase to get consistent results
+    upcase_atom(ColChar, ColCharUpper),
+    % Get the index of the column
+    char_code(ColCharUpper, ColCode),
+    ColIndex is ColCode - 65,
+    % Get the column
+    maplist(nth0(ColIndex), Board, Col).
