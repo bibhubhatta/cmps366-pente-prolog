@@ -74,3 +74,36 @@ get_player_from_stone(GameState, Stone, Player) :-
     get_current_player_stone(GameState, CurrentPlayerStone),
     (Stone = CurrentPlayerStone -> Player = CurrentPlayer ; other_player(CurrentPlayer, Player)).
 
+
+% Predicate to get the tournament score of a player
+get_player_tournament_score(GameState, Player, TournamentScore) :-
+    (Player = 'human' -> get_human_tournament_score(GameState, TournamentScore) ; get_computer_tournament_score(GameState, TournamentScore)).
+
+% Predicates to check if the stone is a valid stone
+is_stone('w').
+is_stone('b').
+is_stone('white').
+is_stone('black').
+
+% Predicate to get the no. captures of a player
+get_player_captures(GameState, Player, Captures) :-
+    (Player = 'human' -> get_human_captures(GameState, Captures) ; get_computer_captures(GameState, Captures)).
+
+% Predicate to set the number of captures of the human player
+set_human_captures([Board, _, HumanTournamentScore, ComputerCaptures, ComputerTournamentScore, CurrentPlayer, CurrentPlayerStone], Captures, [Board, Captures, HumanTournamentScore, ComputerCaptures, ComputerTournamentScore, CurrentPlayer, CurrentPlayerStone]).
+% Predicate to set the number of captures of the computer player
+set_computer_captures([Board, HumanCaptures, HumanTournamentScore, _, ComputerTournamentScore, CurrentPlayer, CurrentPlayerStone], Captures, [Board, HumanCaptures, HumanTournamentScore, Captures, ComputerTournamentScore, CurrentPlayer, CurrentPlayerStone]).
+
+% Predicate to set the tournament score of the human player
+set_human_tournament_score([Board, HumanCaptures, _, ComputerCaptures, ComputerTournamentScore, CurrentPlayer, CurrentPlayerStone], TournamentScore, [Board, HumanCaptures, TournamentScore, ComputerCaptures, ComputerTournamentScore, CurrentPlayer, CurrentPlayerStone]).
+% Predicate to set the tournament score of the computer player
+set_computer_tournament_score([Board, HumanCaptures, HumanTournamentScore, ComputerCaptures, _, CurrentPlayer, CurrentPlayerStone], TournamentScore, [Board, HumanCaptures, HumanTournamentScore, ComputerCaptures, TournamentScore, CurrentPlayer, CurrentPlayerStone]).
+
+
+% Predicate to set the no. captures of a player
+set_player_captures(GameState, Player, Captures, NewGameState) :-
+    (Player = 'human' -> set_human_captures(GameState, Captures, NewGameState) ; set_computer_captures(GameState, Captures, NewGameState)).
+
+% Predicate to set the tournament score of a player
+set_player_tournament_score(GameState, Player, TournamentScore, NewGameState) :-
+    (Player = 'human' -> set_human_tournament_score(GameState, TournamentScore, NewGameState) ; set_computer_tournament_score(GameState, TournamentScore, NewGameState)).

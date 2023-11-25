@@ -80,6 +80,52 @@ test(get_player_from_stone) :-
     assertion(get_player_from_stone(GameState, 'w', 'human')),
     assertion(get_player_from_stone(GameState, 'b', 'computer')).
     
+test(get_player_tournament_score) :-
+    read_game_state('serials/4.pl', GameState),
+    get_player_tournament_score(GameState, 'human', HumanTournamentScore),
+    assertion(HumanTournamentScore == 6),
+    get_player_tournament_score(GameState, 'computer', ComputerTournamentScore),
+    assertion(ComputerTournamentScore == 2).
+
+test(is_stone) :-
+    assertion(is_stone('w')),
+    assertion(is_stone('b')),
+    assertion(is_stone('white')),
+    assertion(is_stone('black')),
+    assertion(\+ is_stone('o')),
+    assertion(\+ is_stone('human')),
+    assertion(\+ is_stone('computer')),
+    assertion(\+ is_stone('human')).
+
+test(get_player_captures) :-
+    read_game_state('serials/4.pl', GameState),
+    get_player_captures(GameState, 'human', HumanCaptures),
+    assertion(HumanCaptures == 3),
+    get_player_captures(GameState, 'computer', ComputerCaptures),
+    assertion(ComputerCaptures == 0).
+
+test(set_player_captures) :-
+    read_game_state('serials/4.pl', GameState),
+    set_player_captures(GameState, 'human', 5, NewGameState),
+    get_player_captures(NewGameState, 'human', HumanCaptures),
+    assertion(HumanCaptures == 5),
+    get_player_captures(NewGameState, 'computer', ComputerCaptures),
+    assertion(ComputerCaptures == 0),
+    set_player_captures(GameState, 'computer', 5, NewGameState2),
+    get_player_captures(NewGameState2, 'computer', ComputerCaptures2),
+    assertion(ComputerCaptures2 == 5).
+
+test(set_player_tournament_score) :-
+    read_game_state('serials/4.pl', GameState),
+    set_player_tournament_score(GameState, 'human', 5, NewGameState),
+    get_player_tournament_score(NewGameState, 'human', HumanTournamentScore),
+    assertion(HumanTournamentScore == 5),
+    get_player_tournament_score(NewGameState, 'computer', ComputerTournamentScore),
+    assertion(ComputerTournamentScore == 2),
+    set_player_tournament_score(GameState, 'computer', 5, NewGameState2),
+    get_player_tournament_score(NewGameState2, 'computer', ComputerTournamentScore2),
+    assertion(ComputerTournamentScore2 == 5).
+
 
 
 :-end_tests(game_state).

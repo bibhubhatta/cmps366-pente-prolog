@@ -19,3 +19,4 @@ Total: 2.75
 - Test and implement predicates to load and save the game state 0.5
 - Test and implement predicates to get the constituent parts of the game state 0.5
 - Test and implement predicates to get the current player and stone 0.5
+- Test and implement predicates to get the player's tournament score, captured pairs, as well as to check if the stone is valid, to set the captures and tournament scores 0.75
