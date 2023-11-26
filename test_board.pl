@@ -318,6 +318,14 @@ test(get_center) :-
     get_center(EmptyBoard2, Center2),
     assertion(Center2 == 'B2').
 
+test(get_positions_3_away_from_center) :-
+    get_empty_board(19, 19, EmptyBoard),
+    get_positions_3_away_from_center(EmptyBoard, Positions3AwayFromCenter),
+    ExpectedPositions3AwayFromCenter = ['G10','G11','G12','G13','G7','G8','G9','H13','H7','I13','I7','J13','J7','K13','K7','L13','L7','M10','M11','M12','M13','M7','M8','M9'],
+    sort(Positions3AwayFromCenter, SortedPositions3AwayFromCenter),
+    sort(ExpectedPositions3AwayFromCenter, SortedExpectedPositions3AwayFromCenter),
+    assertion(SortedPositions3AwayFromCenter == SortedExpectedPositions3AwayFromCenter).
+
 :-end_tests(board).
 
 :- run_tests(board).

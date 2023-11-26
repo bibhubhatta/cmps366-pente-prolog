@@ -34,7 +34,8 @@
     get_all_stone_sequences/3,
     contains_stone/2,
     get_board_size/3,
-    get_center/2
+    get_center/2,
+    get_positions_3_away_from_center/2
 ]).
 
 :- use_module(library(lists)).
@@ -495,3 +496,15 @@ get_center(Board, Center) :-
     RowIndex is NoRows // 2,
     ColIndex is NoCols // 2,
     position_to_string(RowIndex, ColIndex, NoRows, Center).
+
+% get_positions_3_away_from_center(+Board, -Positions)
+% Predicate to get all the positions that are 3 away from the center
+% Positions is a list of position strings
+get_positions_3_away_from_center(Board, Positions) :-
+    get_all_positions(Board, AllPositions),
+    get_center(Board, Center),
+    findall(Position,
+            (member(Position, AllPositions),
+            get_distance(Position, Center, Distance),
+            Distance =:= 3),
+            Positions).
