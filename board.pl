@@ -35,7 +35,9 @@
     contains_stone/2,
     get_board_size/3,
     get_center/2,
-    get_positions_3_away_from_center/2
+    get_positions_3_away_from_center/2,
+    is_first_move/1,
+    is_third_move/1
 ]).
 
 :- use_module(library(lists)).
@@ -196,10 +198,24 @@ set_stone(Board, Position, Stone, NewBoard) :-
     RowIndex < NoRows,
     ColIndex >= 0,
     ColIndex < NoCols,
-    % Set the stone
+    % Get the row
     nth0(RowIndex, Board, Row),
-    nth0(ColIndex, NewRow, Stone, Row),
-    nth0(RowIndex, NewBoard, NewRow).
+    % Replace the stone
+    replace(Row, ColIndex, Stone, NewRow),
+    % Replace the row
+    replace(Board, RowIndex, NewRow, NewBoard).
+
+% replace(+List, +Index, +Element, -NewList)
+% Purpose: Replace an element in a list
+% Note: Uses cut (!), otherwise the Prolog interpreter will think it has multiple solutions
+% even though it is deterministic. This makes it cleaner to test and use.
+replace([_|Tail], 0, Element, [Element|Tail]) :- !.
+replace([Head|Tail], Index, Element, [Head|NewTail]) :-
+    Index > 0,
+    Index1 is Index - 1,
+    replace(Tail, Index1, Element, NewTail)
+    % .
+    , !.
 
 
 % convert_to_sequences(+List, -Sequences)
@@ -254,6 +270,22 @@ get_no_stones_on_board(Board, NoStones) :-
     % Count the number of stones
     include(is_stone, FlatBoard, Stones),
     length(Stones, NoStones).
+
+% get_no_stones_on_board(+Board, +Stone, -NoStones)
+% Purpose: Get the number of stones of a specific color on the board
+get_no_stones_on_board(Board, Stone, NoStones) :-
+    % Unravel Board
+    flatten(Board, FlatBoard),
+    % Count the number of stones
+    include(=(Stone), FlatBoard, Stones),
+    length(Stones, NoStones).
+
+get_no_stones_on_board(Board, 'white', NoStones) :-
+    get_no_stones_on_board(Board, 'w', NoStones).
+get_no_stones_on_board(Board, 'black', NoStones) :-
+    get_no_stones_on_board(Board, 'b', NoStones).
+get_no_stones_on_board(Board, 'empty', NoStones) :-
+    get_no_stones_on_board(Board, 'o', NoStones).
 
 % is_stone(+Stone)
 % Purpose: Check if the given atom is a stone
@@ -508,3 +540,17 @@ get_positions_3_away_from_center(Board, Positions) :-
             get_distance(Position, Center, Distance),
             Distance =:= 3),
             Positions).
+
+% is_first_move(+Board)
+% Predicate to check if the first move hasn't been made
+% Succeeds if the next move is the first move, fails otherwise
+is_first_move(Board) :-
+    get_no_stones_on_board(Board, TotalStones),
+    TotalStones =:= 0.
+
+% is_third_move(+Board)
+% Predicate to check if the third move hasn't been made
+% Succeeds if the next move is the third move, fails otherwise
+is_third_move(Board) :-
+    get_no_stones_on_board(Board, TotalStones),
+    TotalStones =:= 2.

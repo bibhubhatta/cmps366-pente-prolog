@@ -326,6 +326,22 @@ test(get_positions_3_away_from_center) :-
     sort(ExpectedPositions3AwayFromCenter, SortedExpectedPositions3AwayFromCenter),
     assertion(SortedPositions3AwayFromCenter == SortedExpectedPositions3AwayFromCenter).
 
+
+test(is_first_move) :-
+    get_empty_board(19, 19, EmptyBoard),
+    assertion(is_first_move(EmptyBoard)),
+    set_stone(EmptyBoard, 'J10', 'white', Board1),
+    assertion(\+ is_first_move(Board1)).
+
+test(is_third_move) :-
+    get_empty_board(19, 19, EmptyBoard),
+    assertion(\+ is_third_move(EmptyBoard)),
+    set_stone(EmptyBoard, 'J10', 'white', Board1),
+    assertion(\+ is_third_move(Board1)),
+    set_stone(Board1, 'J11', 'black', Board2),
+    assertion(is_third_move(Board2)).
+
+
 :-end_tests(board).
 
 :- run_tests(board).
