@@ -62,3 +62,4 @@ Total: 3.5
 - Test and implement predicates to get_neighbors 0.75
   - Bound validation for up, down, left, and right positions are removed because valid_position now checks for bounds; this makes it easy to get the neighbors of a position
 - Test and implement predicate to get_neighboring_stones 0.5
+- Test and implement predicate to get diagonals 1.5

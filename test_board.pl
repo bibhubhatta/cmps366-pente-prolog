@@ -156,6 +156,54 @@ test(get_neighboring_stones) :-
     get_neighboring_stones(Board, 'd18', NeighboringStonesD18),
     assertion(NeighboringStonesD18 == [b,b]).
 
+test(get_up_right_diagonal) :-
+    read_game_state('serials/4.pl', GameState),
+    get_board(GameState, Board),
+    get_up_right_diagonal(Board, 'A19', UpRightDiagonalA1),
+    assertion(UpRightDiagonalA1 == []),
+    get_up_right_diagonal(Board, 'C16', UpRightDiagonalC16),
+    assertion(UpRightDiagonalC16 == [b,b,o]),
+    get_up_right_diagonal(Board, 'g7', UpRightDiagonalG7),
+    assertion(UpRightDiagonalG7 == [w,w,w,o,w,o,o,o,o,o,o,o]).
+
+test(get_up_left_diagonal) :-
+    read_game_state('serials/4.pl', GameState),
+    get_board(GameState, Board),
+    get_up_left_diagonal(Board, 'A19', UpLeftDiagonalA1),
+    assertion(UpLeftDiagonalA1 == []),
+    get_up_left_diagonal(Board, 'H15', UpLeftDiagonalH15),
+    assertion(UpLeftDiagonalH15 == [w,b,b,o]).
+
+test(get_down_right_diagonal) :-
+    read_game_state('serials/4.pl', GameState),
+    get_board(GameState, Board),
+    get_down_right_diagonal(Board, 'C3', DownRightDiagonalC3),
+    assertion(DownRightDiagonalC3 == [w,o]).
+
+test(get_down_left_diagonal) :-
+    read_game_state('serials/4.pl', GameState),
+    get_board(GameState, Board),
+    get_down_left_diagonal(Board, 'F19', DownLeftDiagonalF19),
+    assertion(DownLeftDiagonalF19 == [b,b, o,o,o]).
+
+test(get_positive_diagonal) :-
+    read_game_state('serials/4.pl', GameState),
+    get_board(GameState, Board),
+    get_positive_diagonal(Board, 'J10', PositiveDiagonalJ10),
+    assertion(PositiveDiagonalJ10 == [o,o,o,o,o,o,o,w,w,w,o,w,o,o,o,o,o,o,o]),
+    get_positive_diagonal(Board, 'A19', PositiveDiagonalA19),
+    assertion(PositiveDiagonalA19 == [o]).
+
+test(get_negative_diagonal) :-
+    read_game_state('serials/4.pl', GameState),
+    get_board(GameState, Board),
+    get_negative_diagonal(Board, 'J10', NegativeDiagonalJ10),
+    assertion(NegativeDiagonalJ10 == [o,o,o,w,o,o,o,o,o,w,o,o,o,o,o,o,o,o,o]),
+    get_negative_diagonal(Board, 'A19', NegativeDiagonalA19),
+    assertion(NegativeDiagonalA19 == NegativeDiagonalJ10),
+    get_negative_diagonal(Board, 'A1', NegativeDiagonalA1),
+    assertion(NegativeDiagonalA1 == [o]).
+
 :-end_tests(board).
 
 :- run_tests(board).

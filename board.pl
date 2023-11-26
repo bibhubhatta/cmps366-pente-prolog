@@ -14,7 +14,13 @@
     get_empty_positions/2,
     get_no_stones_on_board/2,
     get_all_board_columns/2,
-    get_neighboring_stones/3
+    get_neighboring_stones/3,
+    get_up_right_diagonal/3,
+    get_up_left_diagonal/3,
+    get_down_right_diagonal/3,
+    get_down_left_diagonal/3,
+    get_positive_diagonal/3,
+    get_negative_diagonal/3
 ]).
 
 :- use_module(library(lists)).
@@ -259,3 +265,86 @@ get_neighboring_stones(Board, PositionString, NeighboringStones) :-
     get_stones(Board, Neighbors, NeighboringStonesWithEmpty),
     % Filter out empty stones
     include(is_stone, NeighboringStonesWithEmpty, NeighboringStones).
+
+% get_up_right_diagonal(+Board, +PositionString, -UpRightDiagonal)
+% Predicate to get all the stones on the up right diagonal of the given position
+% UpRightDiagonal is a list of all the stones on the up right diagonal of the given position
+% The position is a string of the form 'A1'
+% The up right diagonal is a list of atoms
+get_up_right_diagonal(Board, PositionString, UpRightDiagonal) :-
+    up_right_position(PositionString, NewPositionString),
+    (valid_position(NewPositionString) ->
+        get_stone(Board, NewPositionString, Stone),
+        get_up_right_diagonal(Board, NewPositionString, RestOfDiagonal),
+        UpRightDiagonal = [Stone|RestOfDiagonal]
+    ;   UpRightDiagonal = []
+    ).
+
+% get_up_left_diagonal(+Board, +PositionString, -UpLeftDiagonal)
+% Predicate to get all the stones on the up left diagonal of the given position
+% UpLeftDiagonal is a list of all the stones on the up left diagonal of the given position
+% The position is a string of the form 'A1'
+% The up left diagonal is a list of atoms
+get_up_left_diagonal(Board, PositionString, UpLeftDiagonal) :-
+    up_left_position(PositionString, NewPositionString),
+    (valid_position(NewPositionString) ->
+        get_stone(Board, NewPositionString, Stone),
+        get_up_left_diagonal(Board, NewPositionString, RestOfDiagonal),
+        UpLeftDiagonal = [Stone|RestOfDiagonal]
+    ;   UpLeftDiagonal = []
+    ).
+
+% get_down_right_diagonal(+Board, +PositionString, -DownRightDiagonal)
+% Predicate to get all the stones on the down right diagonal of the given position
+% DownRightDiagonal is a list of all the stones on the down right diagonal of the given position
+% The position is a string of the form 'A1'
+% The down right diagonal is a list of atoms
+get_down_right_diagonal(Board, PositionString, DownRightDiagonal) :-
+    down_right_position(PositionString, NewPositionString),
+    (valid_position(NewPositionString) ->
+        get_stone(Board, NewPositionString, Stone),
+        get_down_right_diagonal(Board, NewPositionString, RestOfDiagonal),
+        DownRightDiagonal = [Stone|RestOfDiagonal]
+    ;   DownRightDiagonal = []
+    ).
+
+% get_down_left_diagonal(+Board, +PositionString, -DownLeftDiagonal)
+% Predicate to get all the stones on the down left diagonal of the given position
+% DownLeftDiagonal is a list of all the stones on the down left diagonal of the given position
+% The position is a string of the form 'A1'
+% The down left diagonal is a list of atoms
+get_down_left_diagonal(Board, PositionString, DownLeftDiagonal) :-
+    down_left_position(PositionString, NewPositionString),
+    (valid_position(NewPositionString) ->
+        get_stone(Board, NewPositionString, Stone),
+        get_down_left_diagonal(Board, NewPositionString, RestOfDiagonal),
+        DownLeftDiagonal = [Stone|RestOfDiagonal]
+    ;   DownLeftDiagonal = []
+    ).
+
+% get_positive_diagonal(+Board, +PositionString, -PositiveDiagonal)
+% Predicate to get all the stones on the positive diagonal of the given position
+% PositiveDiagonal is a list of all the stones on the positive diagonal of the given position
+% The position is a string of the form 'A1'
+% The positive diagonal is a list of atoms
+% https://www.swi-prolog.org/pldoc/man?predicate=reverse/2
+get_positive_diagonal(Board, PositionString, PositiveDiagonal) :-
+    get_down_left_diagonal(Board, PositionString, DownLeftDiagonal),
+    % Reverse the down left diagonal to get the diagonal in the correct order
+    reverse(DownLeftDiagonal, DownLeftReversed),
+    get_stone(Board, PositionString, Stone),
+    get_up_right_diagonal(Board, PositionString, UpRightDiagonal),
+    append(DownLeftReversed, [Stone|UpRightDiagonal], PositiveDiagonal).
+    
+% get_negative_diagonal(+Board, +PositionString, -NegativeDiagonal)
+% Predicate to get all the stones on the negative diagonal of the given position
+% NegativeDiagonal is a list of all the stones on the negative diagonal of the given position
+% The position is a string of the form 'A1'
+% The negative diagonal is a list of atoms
+get_negative_diagonal(Board, PositionString, NegativeDiagonal) :-
+    get_up_left_diagonal(Board, PositionString, UpLeftDiagonal),
+    % Reverse the up left diagonal to get the diagonal in the correct order
+    reverse(UpLeftDiagonal, UpLeftReversed),
+    get_stone(Board, PositionString, Stone),
+    get_down_right_diagonal(Board, PositionString, DownRightDiagonal),
+    append(UpLeftReversed, [Stone|DownRightDiagonal], NegativeDiagonal).

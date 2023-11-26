@@ -11,7 +11,8 @@
     up_right_position/2,
     down_left_position/2,
     down_right_position/2,
-    get_neighbors/2
+    get_neighbors/2,
+    valid_position/1
     ]).
 
 % Predicate to convert position to string representation
