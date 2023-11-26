@@ -301,6 +301,15 @@ test(get_all_stone_sequences) :-
     sort(ExpectedSequence2, SortedExpectedSequence2),
     assertion(SortedAllStoneSequences2 == SortedExpectedSequence2).
 
+test(get_empty_board) :-
+    get_empty_board(19, 19, EmptyBoard),
+    get_board_size(EmptyBoard, NoRows, NoCols),
+    assertion(NoRows == 19),
+    assertion(NoCols == 19),
+    flatten(EmptyBoard, FlatEmptyBoard),
+    sort(FlatEmptyBoard, SortedFlatEmptyBoard),
+    assertion(SortedFlatEmptyBoard == ['o']).
+
 :-end_tests(board).
 
 :- run_tests(board).

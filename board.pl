@@ -32,7 +32,8 @@
     get_all_board_sequences/2,
     convert_board_sequences_to_stone_sequences/3,
     get_all_stone_sequences/3,
-    contains_stone/2
+    contains_stone/2,
+    get_board_size/3
 ]).
 
 :- use_module(library(lists)).
