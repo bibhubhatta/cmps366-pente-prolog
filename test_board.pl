@@ -144,6 +144,18 @@ test(get_all_board_columns) :-
     get_all_board_columns(TestBoard2, AllBoardColumns2),
     assertion(AllBoardColumns2 == [[a,d,g,j], [b,e,h,k], [c,f,i,l]]).
 
+test(get_neighboring_stones) :-
+    read_game_state('serials/4.pl', GameState),
+    get_board(GameState, Board),
+    get_neighboring_stones(Board, 'A1', NeighboringStonesA1),
+    assertion(NeighboringStonesA1 == []),
+    get_neighboring_stones(Board, 'D4', NeighboringStonesD2),
+    assertion(NeighboringStonesD2 == [w,w]),
+    get_neighboring_stones(Board, 'F3', NeighboringStonesF3),
+    assertion(NeighboringStonesF3 == [w,b,w]),
+    get_neighboring_stones(Board, 'd18', NeighboringStonesD18),
+    assertion(NeighboringStonesD18 == [b,b]).
+
 :-end_tests(board).
 
 :- run_tests(board).

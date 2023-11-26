@@ -13,7 +13,8 @@
     convert_to_sequences/2,
     get_empty_positions/2,
     get_no_stones_on_board/2,
-    get_all_board_columns/2
+    get_all_board_columns/2,
+    get_neighboring_stones/3
 ]).
 
 :- use_module(library(lists)).
@@ -246,3 +247,15 @@ get_all_board_columns(Board, Columns) :-
     get_board_size(Board, _, NoCols),
     get_char_list(NoCols, CharList),
     maplist(get_col(Board), CharList, Columns).
+
+
+% get_neighboring_stones(+Board, +PositionString, -NeighboringStones)
+% Predicate to get all the neighboring stones of the given position
+% NeighboringStones is a list of all the neighboring stones of the given position in clockwise order starting from the top
+% The position is a string of the form 'A1'
+% The neighboring stones are a list of atoms
+get_neighboring_stones(Board, PositionString, NeighboringStones) :-
+    get_neighbors(PositionString, Neighbors),
+    get_stones(Board, Neighbors, NeighboringStonesWithEmpty),
+    % Filter out empty stones
+    include(is_stone, NeighboringStonesWithEmpty, NeighboringStones).
