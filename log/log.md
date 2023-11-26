@@ -39,14 +39,14 @@ Total: 1.25
 - Test and implement predicate to mark row numbers 0.75
 - Refactor mark_rows so there are no choice points 0.5
 - Test and implement predicate to mark the board 0.5
-
-Total: 3.5
-
-## Nov 25, 2023
-
 - Test and implement predicate to print the board 1
 - Refactor to use modules 2
   - Using modules because consult leads to problems when the same file is consulted multiple times
+
+Total: 6.5
+
+## Nov 25, 2023
+
 - Test and implement predicate to get stone at position 0.75
 - Test and implement predicate to get a list of stones from the position list 0.25
 - Test and implement predicate to set stone at position 0.5
@@ -73,4 +73,4 @@ Total: 3.5
 - Test and implement get_available_moves 1.5
 - Test and implement get_sequence_score 1.5
 
-Total: 18.25
+Total: 15.25
