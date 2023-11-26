@@ -341,6 +341,43 @@ test(is_third_move) :-
     set_stone(Board1, 'J11', 'black', Board2),
     assertion(is_third_move(Board2)).
 
+test(get_available_moves_first) :-
+    get_empty_board(19, 19, EmptyBoard),
+    get_available_moves(EmptyBoard, EmptyAvailableMoves),
+    ExpectedEmptyAvailableMoves = ['J10'],
+    sort(EmptyAvailableMoves, SortedEmptyAvailableMoves),
+    sort(ExpectedEmptyAvailableMoves, SortedExpectedEmptyAvailableMoves),
+    assertion(SortedEmptyAvailableMoves == SortedExpectedEmptyAvailableMoves).
+
+test(get_available_moves_second) :-
+    get_empty_board(19, 19, EmptyBoard),
+    set_stone(EmptyBoard, 'J10', 'white', Board1),
+    get_available_moves(Board1, AvailableMoves),
+    get_all_positions(EmptyBoard, AllPositions),
+    % Remove J10 from all positions
+    delete(AllPositions, 'J10', ExpectedAvailableMoves),
+    sort(AvailableMoves, SortedAvailableMoves),
+    sort(ExpectedAvailableMoves, SortedExpectedAvailableMoves),
+    assertion(SortedAvailableMoves == SortedExpectedAvailableMoves),
+    LispCopiedAvailableMoves = ['A1','A10','A11','A12','A13','A14','A15','A16','A17','A18','A19','A2','A3','A4','A5','A6','A7','A8','A9','B1','B10','B11','B12','B13','B14','B15','B16','B17','B18','B19','B2','B3','B4','B5','B6','B7','B8','B9','C1','C10','C11','C12','C13','C14','C15','C16','C17','C18','C19','C2','C3','C4','C5','C6','C7','C8','C9','D1','D10','D11','D12','D13','D14','D15','D16','D17','D18','D19','D2','D3','D4','D5','D6','D7','D8','D9','E1','E10','E11','E12','E13','E14','E15','E16','E17','E18','E19','E2','E3','E4','E5','E6','E7','E8','E9','F1','F10','F11','F12','F13','F14','F15','F16','F17','F18','F19','F2','F3','F4','F5','F6','F7','F8','F9','G1','G10','G11','G12','G13','G14','G15','G16','G17','G18','G19','G2','G3','G4','G5','G6','G7','G8','G9','H1','H10','H11','H12','H13','H14','H15','H16','H17','H18','H19','H2','H3','H4','H5','H6','H7','H8','H9','I1','I10','I11','I12','I13','I14','I15','I16','I17','I18','I19','I2','I3','I4','I5','I6','I7','I8','I9','J1','J11','J12','J13','J14','J15','J16','J17','J18','J19','J2','J3','J4','J5','J6','J7','J8','J9','K1','K10','K11','K12','K13','K14','K15','K16','K17','K18','K19','K2','K3','K4','K5','K6','K7','K8','K9','L1','L10','L11','L12','L13','L14','L15','L16','L17','L18','L19','L2','L3','L4','L5','L6','L7','L8','L9','M1','M10','M11','M12','M13','M14','M15','M16','M17','M18','M19','M2','M3','M4','M5','M6','M7','M8','M9','N1','N10','N11','N12','N13','N14','N15','N16','N17','N18','N19','N2','N3','N4','N5','N6','N7','N8','N9','O1','O10','O11','O12','O13','O14','O15','O16','O17','O18','O19','O2','O3','O4','O5','O6','O7','O8','O9','P1','P10','P11','P12','P13','P14','P15','P16','P17','P18','P19','P2','P3','P4','P5','P6','P7','P8','P9','Q1','Q10','Q11','Q12','Q13','Q14','Q15','Q16','Q17','Q18','Q19','Q2','Q3','Q4','Q5','Q6','Q7','Q8','Q9','R1','R10','R11','R12','R13','R14','R15','R16','R17','R18','R19','R2','R3','R4','R5','R6','R7','R8','R9','S1','S10','S11','S12','S13','S14','S15','S16','S17','S18','S19','S2','S3','S4','S5','S6','S7','S8','S9'],
+    sort(LispCopiedAvailableMoves, SortedLispCopiedAvailableMoves),
+    length(SortedLispCopiedAvailableMoves, LispCopiedAvailableMovesLength),
+    length(ExpectedAvailableMoves, ExpectedAvailableMovesLength),
+    assertion(LispCopiedAvailableMovesLength == ExpectedAvailableMovesLength),
+    assertion(SortedLispCopiedAvailableMoves == SortedExpectedAvailableMoves).
+
+
+test(get_available_moves_third) :-
+    get_empty_board(19, 19, EmptyBoard),
+    set_stone(EmptyBoard, 'J10', 'white', Board1),
+    set_stone(Board1, 'J11', 'black', Board2),
+    
+    ExpectedAvailableMoves = ['S19', 'R19', 'Q19', 'P19', 'O19', 'N19', 'M19', 'L19', 'K19', 'J19', 'I19', 'H19', 'G19', 'F19', 'E19', 'D19', 'C19', 'B19', 'A19', 'S18', 'R18', 'Q18', 'P18', 'O18', 'N18', 'M18', 'L18', 'K18', 'J18', 'I18', 'H18', 'G18', 'F18', 'E18', 'D18', 'C18', 'B18', 'A18', 'S17', 'R17', 'Q17', 'P17', 'O17', 'N17', 'M17', 'L17', 'K17', 'J17', 'I17', 'H17', 'G17', 'F17', 'E17', 'D17', 'C17', 'B17', 'A17', 'S16', 'R16', 'Q16', 'P16', 'O16', 'N16', 'M16', 'L16', 'K16', 'J16', 'I16', 'H16', 'G16', 'F16', 'E16', 'D16', 'C16', 'B16', 'A16', 'S15', 'R15', 'Q15', 'P15', 'O15', 'N15', 'M15', 'L15', 'K15', 'J15', 'I15', 'H15', 'G15', 'F15', 'E15', 'D15', 'C15', 'B15', 'A15', 'S14', 'R14', 'Q14', 'P14', 'O14', 'N14', 'M14', 'L14', 'K14', 'J14', 'I14', 'H14', 'G14', 'F14', 'E14', 'D14', 'C14', 'B14', 'A14', 'S13', 'R13', 'Q13', 'P13', 'O13', 'N13', 'M13', 'L13', 'K13', 'J13', 'I13', 'H13', 'G13', 'F13', 'E13', 'D13', 'C13', 'B13', 'A13', 'S12', 'R12', 'Q12', 'P12', 'O12', 'N12', 'M12', 'G12', 'F12', 'E12', 'D12', 'C12', 'B12', 'A12', 'S11', 'R11', 'Q11', 'P11', 'O11', 'N11', 'M11', 'G11', 'F11', 'E11', 'D11', 'C11', 'B11', 'A11', 'S10', 'R10', 'Q10', 'P10', 'O10', 'N10', 'M10', 'G10', 'F10', 'E10', 'D10', 'C10', 'B10', 'A10', 'S9', 'R9', 'Q9', 'P9', 'O9', 'N9', 'M9', 'G9', 'F9', 'E9', 'D9', 'C9', 'B9', 'A9', 'S8', 'R8', 'Q8', 'P8', 'O8', 'N8', 'M8', 'G8', 'F8', 'E8', 'D8', 'C8', 'B8', 'A8', 'S7', 'R7', 'Q7', 'P7', 'O7', 'N7', 'M7', 'L7', 'K7', 'J7', 'I7', 'H7', 'G7', 'F7', 'E7', 'D7', 'C7', 'B7', 'A7', 'S6', 'R6', 'Q6', 'P6', 'O6', 'N6', 'M6', 'L6', 'K6', 'J6', 'I6', 'H6', 'G6', 'F6', 'E6', 'D6', 'C6', 'B6', 'A6', 'S5', 'R5', 'Q5', 'P5', 'O5', 'N5', 'M5', 'L5', 'K5', 'J5', 'I5', 'H5', 'G5', 'F5', 'E5', 'D5', 'C5', 'B5', 'A5', 'S4', 'R4', 'Q4', 'P4', 'O4', 'N4', 'M4', 'L4', 'K4', 'J4', 'I4', 'H4', 'G4', 'F4', 'E4', 'D4', 'C4', 'B4', 'A4', 'S3', 'R3', 'Q3', 'P3', 'O3', 'N3', 'M3', 'L3', 'K3', 'J3', 'I3', 'H3', 'G3', 'F3', 'E3', 'D3', 'C3', 'B3', 'A3', 'S2', 'R2', 'Q2', 'P2', 'O2', 'N2', 'M2', 'L2', 'K2', 'J2', 'I2', 'H2', 'G2', 'F2', 'E2', 'D2', 'C2', 'B2', 'A2', 'S1', 'R1', 'Q1', 'P1', 'O1', 'N1', 'M1', 'L1', 'K1', 'J1', 'I1', 'H1', 'G1', 'F1', 'E1', 'D1', 'C1', 'B1', 'A1'],
+    get_available_moves(Board2, AvailableMoves),
+    sort(AvailableMoves, SortedAvailableMoves),
+    sort(ExpectedAvailableMoves, SortedExpectedAvailableMoves),
+    assertion(SortedAvailableMoves == SortedExpectedAvailableMoves).
+
 
 :-end_tests(board).
 

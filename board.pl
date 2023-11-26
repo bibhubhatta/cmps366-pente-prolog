@@ -37,7 +37,9 @@
     get_center/2,
     get_positions_3_away_from_center/2,
     is_first_move/1,
-    is_third_move/1
+    is_third_move/1,
+    get_available_moves/2,
+    get_all_positions/2
 ]).
 
 :- use_module(library(lists)).
@@ -245,10 +247,12 @@ convert_to_sequences([X, Y|Tail], [[X]|Sequences]) :-
 % https://www.cse.unsw.edu.au/~billw/dictionaries/prolog/findall.html
 get_all_positions(Board, Positions) :-
     get_board_size(Board, NoRows, NoCols),
+    MaxRowIndex is NoRows - 1,
+    MaxColIndex is NoCols - 1,
     findall(Position,
-            (between(0, NoRows, RowIndex), 
-            between(0, NoCols, ColIndex),
-            position_to_string(RowIndex, ColIndex, Position)), 
+            (between(0, MaxRowIndex, RowIndex), 
+            between(0, MaxColIndex, ColIndex),
+            position_to_string(RowIndex, ColIndex, NoRows, Position)), 
             Positions).
 
 % get_empty_positions(+Board, -Positions)
@@ -554,3 +558,28 @@ is_first_move(Board) :-
 is_third_move(Board) :-
     get_no_stones_on_board(Board, TotalStones),
     TotalStones =:= 2.
+
+% get_available_moves(+Board, -Moves)
+% Predicate to get the available moves on the board
+% Returns the available moves -- a list of positions
+get_available_moves(Board, Moves) :-
+    get_no_stones_on_board(Board, TotalStones),
+    (   TotalStones =:= 0
+    ->  get_center(Board, Center),
+        Moves = [Center]
+    ;   TotalStones =:= 2
+    ->  get_positions_3_or_more_away_from_center(Board, Moves)
+    ;   get_empty_positions(Board, Moves)
+    ).
+
+% get_positions_3_or_more_away_from_center(+Board, -Positions)
+% Predicate to get all the positions that are 3 or more away from the center
+% Positions is a list of position strings
+get_positions_3_or_more_away_from_center(Board, Positions) :-
+    get_all_positions(Board, AllPositions),
+    get_center(Board, Center),
+    findall(Position,
+            (member(Position, AllPositions),
+            get_distance(Position, Center, Distance),
+            Distance >= 3),
+            Positions).
