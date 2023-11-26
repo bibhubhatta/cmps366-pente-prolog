@@ -206,13 +206,15 @@ test(handle_capture_when_no_capture) :-
 test(get_winner) :-
     read_game_state('serials/capture_test.pl', GameState),
     \+ get_winner(GameState, _),
+    \+ is_game_over(GameState),
     make_move(GameState, 'J10', NewGameState),
     findall(Winner2, get_winner(NewGameState, Winner2), Winners2),
     assertion(Winners2 == ['human']),
     switch_player(GameState, GameState2),
     make_move(GameState2, 'J10', NewGameState2),
     findall(Winner3, get_winner(NewGameState2, Winner3), Winners3),
-    assertion(Winners3 == ['computer']).
+    assertion(Winners3 == ['computer']),
+    is_game_over(NewGameState2).
 
 
 :-end_tests(game_state).

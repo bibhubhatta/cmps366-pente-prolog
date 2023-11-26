@@ -30,7 +30,9 @@
         handle_capture_in_direction/4,
         print_game_state/1,
         make_move/3,
-        get_winner/2
+        get_winner/2,
+        is_game_drawn/1,
+        is_game_over/1
     ]).
 
 :- use_module(board).
@@ -253,6 +255,22 @@ get_winner(GameState, Winner) :-
     (get_player_captures(GameState, computer, NoCaptures), NoCaptures >= 5, Winner = computer);
     (get_all_stone_sequences(GameState, human, Sequences), member(Sequence, Sequences), length(Sequence, Length), Length >= 5, Winner = human);
     (get_all_stone_sequences(GameState, computer, Sequences), member(Sequence, Sequences), length(Sequence, Length), Length >= 5, Winner = computer).
+
+
+% Predicate to check if the game is drawn
+% Returns true if the game is drawn, false otherwise
+is_game_drawn(GameState) :-
+    get_board(GameState, Board),
+    get_available_moves(Board, AvailableMoves),
+    (AvailableMoves = [] -> true ; false).
+
+% Predicate to check if the game is over
+% Returns true if the game is over, false otherwise
+% The game is over if there is a winner or if the game is drawn
+is_game_over(GameState) :-
+    findall(Winner, get_winner(GameState, Winner), Winners),
+    (Winners = [] -> is_game_drawn(GameState) ; true).
+
 
 % Predicate to print the game state
 print_game_state(GameState) :-
