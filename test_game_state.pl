@@ -1,6 +1,7 @@
 :- begin_tests(game_state).
 
 :- use_module(game_state).
+:- use_module(board).
 
 test(read_game_state) :-
     read_game_state('serials/4.pl', GameState),
@@ -180,6 +181,25 @@ test(get_capture_sequence) :-
     assertion(WCaptureSequence == [w, b, b, w]),
     get_capture_sequence('b', BCaptureSequence),
     assertion(BCaptureSequence == [b, w, w, b]).
+
+test(handle_capture) :-
+    read_game_state('serials/capture_test.pl', GameState),
+    CapturedPositions = ['J11', 'J12', 'K11', 'L12', 'K10', 'L10', 'K9', 'L8', 'J9', 'J8', 'I9', 'H8', 'I10', 'H10', 'H12', 'I11'],
+    get_board(GameState, BoardBefore),
+    % Find cells occupied by black
+    % get_all_positions(BoardBefore, AllPositions),
+    % findall(Position, (member(Position, AllPositions), get_stone(BoardBefore, Position, 'b')), BlackPositions),
+    get_stones(BoardBefore, CapturedPositions, CapturedPositionStonesBefore),
+    sort(CapturedPositionStonesBefore, CapturedPositionStonesBeforeSorted),
+    assertion(CapturedPositionStonesBeforeSorted == ['b']),
+    make_move(GameState, 'J10', NewGameState),
+    get_board(NewGameState, BoardAfter),
+    get_stones(BoardAfter, CapturedPositions, CapturedPositionStonesAfter),
+    sort(CapturedPositionStonesAfter, CapturedPositionStonesAfterSorted),
+    assertion(CapturedPositionStonesAfterSorted == ['o']).
+
+test(handle_capture_)
+
 
 
 :-end_tests(game_state).

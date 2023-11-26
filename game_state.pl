@@ -26,10 +26,14 @@
         switch_player_stone/2,
         switch_turn/2,
         get_initial_state/1,
-        get_capture_sequence/2
+        get_capture_sequence/2,
+        handle_capture_in_direction/4,
+        print_game_state/1,
+        make_move/3
     ]).
 
 :- use_module(board).
+:- use_module(position).
 
 
 
@@ -148,6 +152,10 @@ set_current_player([Board, HumanCaptures, HumanTournamentScore, ComputerCaptures
 % Predicate to set the current player stone
 set_current_player_stone([Board, HumanCaptures, HumanTournamentScore, ComputerCaptures, ComputerTournamentScore, CurrentPlayer, _], CurrentPlayerStone, [Board, HumanCaptures, HumanTournamentScore, ComputerCaptures, ComputerTournamentScore, CurrentPlayer, CurrentPlayerStone]).
 
+% set_board(+GameState, +Board, -NewGameState)
+% Predicate to set the board of the game state
+set_board([_, HumanCaptures, HumanTournamentScore, ComputerCaptures, ComputerTournamentScore, CurrentPlayer, CurrentPlayerStone], Board, [Board, HumanCaptures, HumanTournamentScore, ComputerCaptures, ComputerTournamentScore, CurrentPlayer, CurrentPlayerStone]).
+
 % Predicate to switch the current player
 switch_player(GameState, NewGameState) :-
     get_current_player(GameState, CurrentPlayer),
@@ -176,3 +184,77 @@ get_initial_state(GameState) :-
 get_capture_sequence(Stone, CaptureSequence) :-
     other_stone(Stone, OtherStone),
     CaptureSequence = [Stone, OtherStone, OtherStone, Stone].
+
+% handle_capture_in_direction(+GameState, +Move, +DirectionFunction, -NewGameState)
+% Predicate to handle the capture in a direction
+handle_capture_in_direction(GameState, Move, DirectionFunction, NewGameState) :-
+    get_board(GameState, Board),
+    get_current_player_stone(GameState, CurrentPlayerStone),
+    get_capture_sequence(CurrentPlayerStone, CaptureSequence),
+    % Get the cells in the direction
+    call(DirectionFunction, Move, OneAwayCell),
+    call(DirectionFunction, OneAwayCell, TwoAwayCell),
+    call(DirectionFunction, TwoAwayCell, ThreeAwayCell),
+    % Check if the cells have the capture sequence
+    get_stone(Board, Move, ZeroAwayCellStone),
+    get_stone(Board, OneAwayCell, OneAwayCellStone),
+    get_stone(Board, TwoAwayCell, TwoAwayCellStone),
+    get_stone(Board, ThreeAwayCell, ThreeAwayCellStone),
+    Sequence = [ZeroAwayCellStone, OneAwayCellStone, TwoAwayCellStone, ThreeAwayCellStone],
+    Sequence = CaptureSequence,
+    % % Update the board
+    set_stone(Board, OneAwayCell, 'o', NewBoard),
+    set_stone(NewBoard, TwoAwayCell, 'o', NewNewBoard),
+    set_board(GameState, NewNewBoard, BoardUpdatedGameState),
+    % % Calculate the new captures
+    get_player_from_stone(GameState, ZeroAwayCellStone, Player),
+    get_player_captures(GameState, Player, Captures),
+    NewCaptures is Captures + 1,
+    set_player_captures(BoardUpdatedGameState, Player, NewCaptures, NewGameState)
+    .
+
+% make_move(+GameState, +Move, -NewGameState)
+% Predicate to make a move
+make_move(GameState, Move, NewGameState) :-
+    get_board(GameState, Board),
+    get_current_player_stone(GameState, CurrentPlayerStone),
+    % Check if the move is valid
+    valid_position(Board, Move),
+    get_stone(Board, Move, 'o'),
+    % Update the board
+    set_stone(Board, Move, CurrentPlayerStone, NewBoard),
+    set_board(GameState, NewBoard, BoardUpdatedGameState),
+    % Check if there is a capture in all direction, go clockwise
+    handle_capture_in_direction(BoardUpdatedGameState, Move, up_position, UpGameState),
+    handle_capture_in_direction(UpGameState, Move, up_right_position, UpRightGameState),
+    handle_capture_in_direction(UpRightGameState, Move, right_position, RightGameState),
+    handle_capture_in_direction(RightGameState, Move, down_right_position, DownRightGameState),
+    handle_capture_in_direction(DownRightGameState, Move, down_position, DownGameState),
+    handle_capture_in_direction(DownGameState, Move, down_left_position, DownLeftGameState),
+    handle_capture_in_direction(DownLeftGameState, Move, left_position, LeftGameState),
+    handle_capture_in_direction(LeftGameState, Move, up_left_position, UpLeftGameState),
+    % Switch the turn
+    switch_turn(UpLeftGameState, NewGameState).
+
+
+% Predicate to print the game state
+print_game_state(GameState) :-
+    nl,
+    write('Board:'), nl,
+    get_board(GameState, Board),
+    cartesian_board(Board, CartesianBoard),
+    print_board(CartesianBoard),
+    nl,
+    get_player_captures(GameState, human, HumanCaptures),
+    format('Human captures: ~w~n', [HumanCaptures]),
+    get_player_captures(GameState, computer, ComputerCaptures),
+    format('Computer captures: ~w~n', [ComputerCaptures]),
+    get_player_tournament_score(GameState, human, HumanScore),
+    format('Human tournament score: ~w~n', [HumanScore]),
+    get_player_tournament_score(GameState, computer, ComputerScore),
+    format('Computer tournament score: ~w~n', [ComputerScore]),
+    get_current_player(GameState, CurrentPlayer),
+    format('Current player: ~w~n', [CurrentPlayer]),
+    get_current_player_stone(GameState, CurrentStone),
+    format('Current stone: ~w~n', [CurrentStone]),
+    nl.

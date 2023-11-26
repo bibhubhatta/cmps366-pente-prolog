@@ -74,3 +74,7 @@ Total: 6.5
 - Test and implement get_sequence_score 1.5
 
 Total: 15.25
+
+## Nov 26, 2023
+
+- Test and handle captures in all eight directions when captured 1.0
