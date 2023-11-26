@@ -29,7 +29,10 @@
     get_all_positive_diagonals/2,
     get_all_negative_diagonals/2,
     get_all_diagonals/2,
-    get_all_board_sequences/2
+    get_all_board_sequences/2,
+    convert_board_sequences_to_stone_sequences/3,
+    get_all_stone_sequences/3,
+    contains_stone/2
 ]).
 
 :- use_module(library(lists)).
@@ -447,4 +450,37 @@ get_all_board_sequences(Board, Sequences) :-
     get_all_diagonals(Board, Diagonals),
     append(Board, Columns, RowsAndColumns),
     append(RowsAndColumns, Diagonals, Sequences).
-  
+
+
+% convert_board_sequences_to_stone_sequences(+Board, +BoardSequences, -StoneSequences)
+% Predicate to convert the board sequences to stone sequences
+% StoneSequences is a list of lists
+convert_board_sequences_to_stone_sequences(_, [], []).
+convert_board_sequences_to_stone_sequences(Board, [Head|Tail], StoneSequences) :-
+    convert_to_sequences(Head, ConvertedHead),
+    convert_board_sequences_to_stone_sequences(Board, Tail, ConvertedTail),
+    append(ConvertedHead, ConvertedTail, StoneSequences)
+    % .
+    , !.
+
+% get_all_stone_sequences(+Board, +Stone, -Sequences)
+% Predicate to get all the sequences of the board that contain the stone
+% Sequences is a list of lists
+get_all_stone_sequences(Board, 'white', Sequences) :-
+    get_all_stone_sequences(Board, 'w', Sequences),
+    % .
+    !.
+get_all_stone_sequences(Board, 'black', Sequences) :-
+    get_all_stone_sequences(Board, 'b', Sequences),
+    % .
+    !.
+
+get_all_stone_sequences(Board, Stone, Sequences) :-
+    get_all_board_sequences(Board, BoardSequences),
+    convert_board_sequences_to_stone_sequences(Board, BoardSequences, StoneSequences),
+    include(contains_stone(Stone), StoneSequences, Sequences).
+
+% contains_stone(+Stone, +Sequence)
+% Helper predicate to check if a sequence contains a specific stone
+contains_stone(Stone, Sequence) :-
+    member(Stone, Sequence).

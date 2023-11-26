@@ -281,6 +281,26 @@ test(get_all_board_sequences) :-
     sort(ExpectedSequences1, SortedExpectedSequences1),
     assertion(SortedAllBoardSequences1 == SortedExpectedSequences1).
 
+test(get_all_stone_sequences) :-
+    read_game_state('serials/4.pl', GameState),
+    get_board(GameState, Board),
+    get_all_stone_sequences(Board, 'white', AllStoneSequences1),
+    ExpectedSequences = [['w'], ['w'], ['w'], ['w'], ['w'], ['w'], ['w','w'], ['w'], ['w'], ['w'], ['w','w'], ['w'], ['w'], ['w'], ['w'], ['w'], ['w'], ['w'], ['w'], ['w'], ['w','w'], ['w'], ['w'], ['w','w','w'], ['w'], ['w'], ['w'], ['w'], ['w'], ['w'], ['w'], ['w'], ['w'], ['w'], ['w']] ,
+    length(AllStoneSequences1, ActualLength),
+    length(ExpectedSequences, ExpectedLength),
+    assertion(ActualLength == ExpectedLength),
+    sort(AllStoneSequences1, SortedAllStoneSequences1),
+    sort(ExpectedSequences, SortedExpectedSequences),
+    assertion(SortedAllStoneSequences1 == SortedExpectedSequences),
+    get_all_stone_sequences(Board, 'black', AllStoneSequences2),
+    ExpectedSequence2 = [['b','b'], ['b'], ['b'], ['b'], ['b'], ['b'], ['b'], ['b'], ['b','b'], ['b'], ['b'], ['b'], ['b'], ['b'], ['b','b'], ['b'], ['b'], ['b'], ['b'], ['b'], ['b','b'], ['b'], ['b'], ['b','b'], ['b'], ['b'], ['b'], ['b'], ['b'], ['b'], ['b']] ,
+    length(AllStoneSequences2, ActualLength2),
+    length(ExpectedSequence2, ExpectedLength2),
+    assertion(ActualLength2 == ExpectedLength2),
+    sort(AllStoneSequences2, SortedAllStoneSequences2),
+    sort(ExpectedSequence2, SortedExpectedSequence2),
+    assertion(SortedAllStoneSequences2 == SortedExpectedSequence2).
+
 :-end_tests(board).
 
 :- run_tests(board).
