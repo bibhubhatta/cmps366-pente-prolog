@@ -28,7 +28,8 @@
     get_last_row_positions/2,
     get_all_positive_diagonals/2,
     get_all_negative_diagonals/2,
-    get_all_diagonals/2
+    get_all_diagonals/2,
+    get_all_board_sequences/2
 ]).
 
 :- use_module(library(lists)).
@@ -436,3 +437,14 @@ get_all_diagonals(Board, Diagonals) :-
     get_all_positive_diagonals(Board, PositiveDiagonals),
     get_all_negative_diagonals(Board, NegativeDiagonals),
     append(PositiveDiagonals, NegativeDiagonals, Diagonals).
+
+% get_all_board_sequences(+Board, -Sequences)
+% Predicate to get all the sequences of the board
+% A sequence is a list of stones of the same color
+% The list of sequences is a list of lists of stones
+get_all_board_sequences(Board, Sequences) :-
+    get_all_board_columns(Board, Columns),
+    get_all_diagonals(Board, Diagonals),
+    append(Board, Columns, RowsAndColumns),
+    append(RowsAndColumns, Diagonals, Sequences).
+  
