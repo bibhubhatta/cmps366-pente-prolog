@@ -40,7 +40,8 @@
     is_third_move/1,
     get_available_moves/2,
     get_all_positions/2,
-    get_sequence_score/3
+    get_sequence_score/3,
+    valid_position/2
 ]).
 
 :- use_module(library(lists)).
@@ -611,3 +612,13 @@ length_greater_than_or_equal_to(N, List) :-
 % Predicate to check if the length of List is equal to N
 length_equal_to(N, List) :-
     length(List, N).
+
+% valid_position(+Board, +Position)
+% Predicate to check if the position is valid
+valid_position(Board, Position) :-
+    get_board_size(Board, NoRows, NoCols),
+    string_to_position(Position, RowIndex, ColIndex),
+    RowIndex >= 0,
+    RowIndex < NoRows,
+    ColIndex >= 0,
+    ColIndex < NoCols.
