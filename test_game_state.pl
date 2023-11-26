@@ -208,7 +208,11 @@ test(get_winner) :-
     \+ get_winner(GameState, _),
     make_move(GameState, 'J10', NewGameState),
     findall(Winner2, get_winner(NewGameState, Winner2), Winners2),
-    assertion(Winners2 == ['human']).
+    assertion(Winners2 == ['human']),
+    switch_player(GameState, GameState2),
+    make_move(GameState2, 'J10', NewGameState2),
+    findall(Winner3, get_winner(NewGameState2, Winner3), Winners3),
+    assertion(Winners3 == ['computer']).
 
 
 :-end_tests(game_state).
