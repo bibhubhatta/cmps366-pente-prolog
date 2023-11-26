@@ -222,8 +222,8 @@ make_move(GameState, Move, NewGameState) :-
     get_board(GameState, Board),
     get_current_player_stone(GameState, CurrentPlayerStone),
     % Check if the move is valid
-    valid_position(Board, Move),
-    get_stone(Board, Move, 'o'),
+    get_available_moves(Board, AvailableMoves),
+    member(Move, AvailableMoves),
     % Update the board
     set_stone(Board, Move, CurrentPlayerStone, NewBoard),
     set_board(GameState, NewBoard, BoardUpdatedGameState),
