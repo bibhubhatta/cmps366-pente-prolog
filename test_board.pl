@@ -204,6 +204,75 @@ test(get_negative_diagonal) :-
     get_negative_diagonal(Board, 'A1', NegativeDiagonalA1),
     assertion(NegativeDiagonalA1 == [o]).
 
+test(get_first_row_positions) :-
+    read_game_state('serials/4.pl', GameState),
+    get_board(GameState, Board),
+    get_first_row_positions(Board, FirstRowPositions),
+    ExpectedFirstRowPositions = ['A1', 'B1', 'C1', 'D1', 'E1', 'F1', 'G1', 'H1', 'I1', 'J1', 'K1', 'L1', 'M1', 'N1', 'O1', 'P1', 'Q1', 'R1', 'S1'],
+    sort(FirstRowPositions, SortedFirstRowPositions),
+    sort(ExpectedFirstRowPositions, SortedExpectedFirstRowPositions),
+    assertion(SortedFirstRowPositions == SortedExpectedFirstRowPositions).
+
+test(get_first_column_positions) :-
+    read_game_state('serials/4.pl', GameState),
+    get_board(GameState, Board),
+    get_first_column_positions(Board, FirstColumnPositions),
+    ExpectedFirstColumnPositions = ['A1', 'A2', 'A3', 'A4', 'A5', 'A6', 'A7', 'A8'
+    , 'A9', 'A10', 'A11', 'A12', 'A13', 'A14', 'A15', 'A16', 'A17', 'A18'
+    , 'A19'],
+    sort(FirstColumnPositions, SortedFirstColumnPositions),
+    sort(ExpectedFirstColumnPositions, SortedExpectedFirstColumnPositions),
+    assertion(SortedFirstColumnPositions == SortedExpectedFirstColumnPositions).
+
+
+test(get_all_positive_diagonal_starts) :-
+    read_game_state('serials/4.pl', GameState),
+    get_board(GameState, Board),
+    get_all_positive_diagonal_starts(Board, AllPositiveDiagonalStarts1),
+    ExpectedPositiveDiagonalStarts1 = ['S1', 'R1', 'Q1', 'P1', 'O1', 'N1', 'M1', 'L1', 'K1', 'J1', 'I1', 'H1', 'G1', 'F1', 'E1'
+    , 'D1', 'C1', 'B1', 'A19', 'A18', 'A17', 'A16', 'A15', 'A14', 'A13', 'A12', 'A11', 'A10',
+    'A9', 'A8', 'A7', 'A6', 'A5', 'A4', 'A3', 'A2', 'A1'],
+    sort(AllPositiveDiagonalStarts1, SortedAllPositiveDiagonalStarts1),
+    sort(ExpectedPositiveDiagonalStarts1, SortedExpectedPositiveDiagonalStarts1),
+    assertion(SortedAllPositiveDiagonalStarts1 == SortedExpectedPositiveDiagonalStarts1).
+
+test(get_all_negative_diagonal_starts) :-
+    read_game_state('serials/4.pl', GameState),
+    get_board(GameState, Board),
+    get_all_negative_diagonal_starts(Board, AllNegativeDiagonalStarts1),
+    ExpectedNegativeDiagonalStarts1 = ['S19', 'R19', 'Q19', 'P19', 'O19', 'N19', 'M19', 'L19', 'K19', 'J19', 'I19', 'H19', 'G19', 'F19', 'E19', 'D19', 'C19', 'B19', 'A19', 'A18', 'A17', 'A16', 'A15', 'A14', 'A13', 'A12', 'A11', 'A10', 'A9', 'A8', 'A7', 'A6', 'A5', 'A4', 'A3', 'A2', 'A1'],
+    sort(AllNegativeDiagonalStarts1, SortedAllNegativeDiagonalStarts1),
+    sort(ExpectedNegativeDiagonalStarts1, SortedExpectedNegativeDiagonalStarts1),
+    assertion(SortedAllNegativeDiagonalStarts1 == SortedExpectedNegativeDiagonalStarts1).
+
+test(get_all_positive_diagonals) :-
+    read_game_state('serials/4.pl', GameState),
+    get_board(GameState, Board),
+    get_all_positive_diagonals(Board, AllPositiveDiagonals1),
+    ExpectedPositiveDiagonals1 = [['o'], ['o', 'o'], ['o', 'o', 'o'], ['o', 'o', 'o', 'o'], ['o', 'o', 'o', 'o', 'o'], ['o', 'o', 'o', 'o', 'o', 'o'], ['o', 'o', 'o', 'o', 'o', 'o', 'o'], ['o', 'o', 'o', 'o', 'b', 'o', 'o', 'o'], ['o', 'o', 'o', 'o', 'o', 'b', 'o', 'o', 'o'], ['o', 'o', 'o', 'o', 'o', 'o', 'o', 'o', 'o', 'o'], ['o', 'o', 'o', 'o', 'o', 'o', 'o', 'o', 'o', 'o', 'o'], ['o', 'o', 'o', 'o', 'o', 'o', 'o', 'o', 'o', 'o', 'o', 'o'], ['o', 'o', 'o', 'o', 'o', 'o', 'o', 'o', 'o', 'o', 'o', 'o', 'o'], ['o', 'o', 'o', 'o', 'o', 'o', 'o', 'o', 'o', 'o', 'o', 'o', 'o', 'o'], ['o', 'o', 'o', 'o', 'o', 'o', 'o', 'o', 'o', 'o', 'o', 'o', 'o', 'o', 'o'], ['b', 'o', 'o', 'b', 'o', 'o', 'o', 'o', 'o', 'o', 'o', 'o', 'o', 'o', 'o', 'o'], ['o', 'w', 'o', 'w', 'o', 'o', 'o', 'o', 'o', 'o', 'o', 'o', 'o', 'o', 'o', 'o', 'o'], ['o', 'o', 'w', 'w', 'o', 'o', 'o', 'o', 'o', 'o', 'o', 'o', 'o', 'o', 'o', 'o', 'o', 'o'], ['o'], ['o', 'o'], ['o', 'o', 'o'], ['o', 'o', 'o', 'o'], ['o', 'o', 'o', 'b', 'o'], ['o', 'o', 'o', 'b', 'b', 'o'], ['o', 'o', 'o', 'w', 'o', 'o', 'o'], ['o', 'o', 'o', 'o', 'o', 'b', 'o', 'o'], ['o', 'o', 'o', 'o', 'o', 'o', 'o', 'o', 'o'], ['o', 'o', 'o', 'o', 'o', 'b', 'w', 'o', 'o', 'o'], ['o', 'o', 'o', 'o', 'o', 'o', 'o', 'o', 'o', 'o', 'o'], ['o', 'o', 'o', 'o', 'o', 'o', 'o', 'o', 'o', 'o', 'o', 'o'], ['o', 'o', 'o', 'o', 'o', 'o', 'o', 'o', 'o', 'o', 'o', 'o', 'o'], ['o', 'o', 'o', 'o', 'o', 'o', 'o', 'o', 'o', 'o', 'o', 'o', 'o', 'o'], ['o', 'o', 'o', 'o', 'o', 'o', 'o', 'o', 'o', 'o', 'o', 'o', 'o', 'o', 'o'], ['o', 'o', 'o', 'o', 'o', 'o', 'o', 'o', 'o', 'o', 'o', 'o', 'o', 'o', 'o', 'o'], ['o', 'o', 'o', 'o', 'o', 'o', 'o', 'o', 'o', 'o', 'o', 'o', 'o', 'o', 'o', 'o', 'o'], ['o', 'o', 'o', 'o', 'o', 'o', 'o', 'o', 'o', 'o', 'o', 'o', 'o', 'o', 'o', 'o', 'o', 'o'], ['o', 'o', 'o', 'o', 'o', 'o', 'o', 'w', 'w', 'w', 'o', 'w', 'o', 'o', 'o', 'o', 'o', 'o', 'o']],
+    sort(AllPositiveDiagonals1, SortedAllPositiveDiagonals1),
+    sort(ExpectedPositiveDiagonals1, SortedExpectedPositiveDiagonals1),
+    assertion(SortedAllPositiveDiagonals1 == SortedExpectedPositiveDiagonals1).
+
+test(get_all_negative_diagonals) :-
+    read_game_state('serials/4.pl', GameState),
+    get_board(GameState, Board),
+    get_all_negative_diagonals(Board, AllNegativeDiagonals1),
+    ExpectedNegativeDiagonals1 = [['o'], ['o','o'], ['o','o','o'], ['o','o','o','o'], ['o','o','o','o','o'], ['o','o','o','o','o','o'], ['o','o','o','o','o','o','o'], ['o','o','o','o','o','o','o','o'], ['o','o','o','o','o','o','o','o','o'], ['o','o','o','o','o','o','o','o','o','o'], ['o','o','o','o','o','o','o','o','o','o','o'], ['o','o','o','o','o','o','o','o','o','o','o','o'], ['o','o','o','o','o','o','o','o','o','o','o','o','o'], ['o','o','o','o','o','o','o','o','o','o','o','o','o','o'], ['o','o','o','o','o','o','o','w','o','o','o','o','o','o','o'], ['o','b','b','w','o','o','o','o','o','o','o','o','o','o','o','o'], ['o','b','o','o','o','o','o','o','o','o','o','o','o','b','o','o','o'], ['o','o','b','o','b','o','o','o','o','o','o','o','o','o','b','o','o','o'], ['o','o','o','w','o','o','o','o','o','w','o','o','o','o','o','o','o','o','o'], ['o','o','o','o','o','o','o','o','o','o','o','o','o','o','o','o','o','o'], ['o','o','o','o','o','o','o','o','w','o','o','o','o','o','o','o','o'], ['o','o','o','o','o','o','o','o','o','o','o','o','o','o','o','o'], ['o','o','o','o','o','o','o','w','o','o','o','o','o','o','o'], ['o','o','o','o','o','o','o','o','o','o','o','o','o','o'], ['o','o','o','o','o','o','o','o','o','o','o','o','o'], ['o','o','o','o','o','o','o','o','o','o','o','o'], ['o','o','o','o','o','o','o','o','o','o','o'], ['o','o','o','o','o','o','b','o','o','o'], ['o','o','o','o','o','w','o','o','o'], ['o','o','o','o','w','o','o','o'], ['o','o','o','o','o','o','o'], ['o','o','o','w','o','o'], ['o','o','o','w','o'], ['o','o','o','b'], ['o','o','o'], ['o','o'], ['o']],
+    sort(AllNegativeDiagonals1, SortedAllNegativeDiagonals1),
+    sort(ExpectedNegativeDiagonals1, SortedExpectedNegativeDiagonals1),
+    assertion(SortedAllNegativeDiagonals1 == SortedExpectedNegativeDiagonals1).
+
+test(get_all_diagonals) :-
+    read_game_state('serials/4.pl', GameState),
+    get_board(GameState, Board),
+    get_all_diagonals(Board, AllDiagonals1),
+    ExpectedDiagonals1 = [['o'], ['o','o'], ['o','o','o'], ['o','o','o','o'], ['o','o','o','o','o'], ['o','o','o','o','o','o'], ['o','o','o','o','o','o','o'], ['o','o','o','o','b','o','o','o'], ['o','o','o','o','o','b','o','o','o'], ['o','o','o','o','o','o','o','o','o','o'], ['o','o','o','o','o','o','o','o','o','o','o'], ['o','o','o','o','o','o','o','o','o','o','o','o'], ['o','o','o','o','o','o','o','o','o','o','o','o','o'], ['o','o','o','o','o','o','o','o','o','o','o','o','o','o'], ['o','o','o','o','o','o','o','o','o','o','o','o','o','o','o'], ['b','o','o','b','o','o','o','o','o','o','o','o','o','o','o','o'], ['o','w','o','w','o','o','o','o','o','o','o','o','o','o','o','o','o'], ['o','o','w','w','o','o','o','o','o','o','o','o','o','o','o','o','o','o'], ['o'], ['o','o'], ['o','o','o'], ['o','o','o','o'], ['o','o','o','b','o'], ['o','o','o','b','b','o'], ['o','o','o','w','o','o','o'], ['o','o','o','o','o','b','o','o'], ['o','o','o','o','o','o','o','o','o'], ['o','o','o','o','o','b','w','o','o','o'], ['o','o','o','o','o','o','o','o','o','o','o'], ['o','o','o','o','o','o','o','o','o','o','o','o'], ['o','o','o','o','o','o','o','o','o','o','o','o','o'], ['o','o','o','o','o','o','o','o','o','o','o','o','o','o'], ['o','o','o','o','o','o','o','o','o','o','o','o','o','o','o'], ['o','o','o','o','o','o','o','o','o','o','o','o','o','o','o','o'], ['o','o','o','o','o','o','o','o','o','o','o','o','o','o','o','o','o'], ['o','o','o','o','o','o','o','o','o','o','o','o','o','o','o','o','o','o'], ['o','o','o','o','o','o','o','w','w','w','o','w','o','o','o','o','o','o','o'], ['o'], ['o','o'], ['o','o','o'], ['o','o','o','o'], ['o','o','o','o','o'], ['o','o','o','o','o','o'], ['o','o','o','o','o','o','o'], ['o','o','o','o','o','o','o','o'], ['o','o','o','o','o','o','o','o','o'], ['o','o','o','o','o','o','o','o','o','o'], ['o','o','o','o','o','o','o','o','o','o','o'], ['o','o','o','o','o','o','o','o','o','o','o','o'], ['o','o','o','o','o','o','o','o','o','o','o','o','o'], ['o','o','o','o','o','o','o','o','o','o','o','o','o','o'], ['o','o','o','o','o','o','o','w','o','o','o','o','o','o','o'], ['o','b','b','w','o','o','o','o','o','o','o','o','o','o','o','o'], ['o','b','o','o','o','o','o','o','o','o','o','o','o','b','o','o','o'], ['o','o','b','o','b','o','o','o','o','o','o','o','o','o','b','o','o','o'], ['o','o','o','w','o','o','o','o','o','w','o','o','o','o','o','o','o','o','o'], ['o','o','o','o','o','o','o','o','o','o','o','o','o','o','o','o','o','o'], ['o','o','o','o','o','o','o','o','w','o','o','o','o','o','o','o','o'], ['o','o','o','o','o','o','o','o','o','o','o','o','o','o','o','o'], ['o','o','o','o','o','o','o','w','o','o','o','o','o','o','o'], ['o','o','o','o','o','o','o','o','o','o','o','o','o','o'], ['o','o','o','o','o','o','o','o','o','o','o','o','o'], ['o','o','o','o','o','o','o','o','o','o','o','o'], ['o','o','o','o','o','o','o','o','o','o','o'], ['o','o','o','o','o','o','b','o','o','o'], ['o','o','o','o','o','w','o','o','o'], ['o','o','o','o','w','o','o','o'], ['o','o','o','o','o','o','o'], ['o','o','o','w','o','o'], ['o','o','o','w','o'], ['o','o','o','b'], ['o','o','o'], ['o','o'], ['o']],
+    sort(AllDiagonals1, SortedAllDiagonals1),
+    sort(ExpectedDiagonals1, SortedExpectedDiagonals1),
+    assertion(SortedAllDiagonals1 == SortedExpectedDiagonals1).
+
+
 :-end_tests(board).
 
 :- run_tests(board).

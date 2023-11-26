@@ -20,7 +20,15 @@
     get_down_right_diagonal/3,
     get_down_left_diagonal/3,
     get_positive_diagonal/3,
-    get_negative_diagonal/3
+    get_negative_diagonal/3,
+    get_all_positive_diagonal_starts/2,
+    get_all_negative_diagonal_starts/2,
+    get_first_row_positions/2,
+    get_first_column_positions/2,
+    get_last_row_positions/2,
+    get_all_positive_diagonals/2,
+    get_all_negative_diagonals/2,
+    get_all_diagonals/2
 ]).
 
 :- use_module(library(lists)).
@@ -348,3 +356,83 @@ get_negative_diagonal(Board, PositionString, NegativeDiagonal) :-
     get_stone(Board, PositionString, Stone),
     get_down_right_diagonal(Board, PositionString, DownRightDiagonal),
     append(UpLeftReversed, [Stone|DownRightDiagonal], NegativeDiagonal).
+
+
+
+% get_first_column_positions(+Board, -Positions)
+% Predicate to get all the positions of the first column
+% Positions is a list of position strings
+get_first_column_positions(Board, Positions) :-
+    get_board_size(Board, NoRows, NoCols),
+    % Get the range of the column numbers
+    MaxColIndex is NoCols - 1,
+    findall(N, between(0, MaxColIndex, N), RowNumbers),
+    % Generate a position string for each row number with position_to_string
+    findall(Position, (member(RowNumber, RowNumbers), position_to_string(RowNumber, 0, NoRows, Position)), Positions).
+
+% get_first_row_positions(+Board, -Positions)
+% Predicate to get all the positions of the first row
+% Positions is a list of position strings
+get_first_row_positions(Board, FirsRowPositions) :-
+    get_board_size(Board, NoRows, NoCols),
+    % Get the range of the row numbers
+    FirstRowIndex is NoRows - 1,
+    MaxColIndex is NoCols - 1,
+    findall(N, between(0, MaxColIndex, N), ColNumbers),
+    % Generate a position string for each column number with position_to_string
+    findall(Position, (member(ColNumber, ColNumbers), position_to_string(FirstRowIndex, ColNumber, NoRows, Position)), Positions),
+    sort(Positions, FirsRowPositions).
+
+
+% get_last_row_positions(+Board, -Positions)
+% Predicate to get all the positions of the last row
+% Positions is a list of position strings
+get_last_row_positions(Board, Positions) :-
+    get_board_size(Board, NoRows, NoCols),
+    % Get the range of the row numbers
+    LastRowIndex is 0,
+    MaxColIndex is NoCols - 1,
+    findall(N, between(0, MaxColIndex, N), ColNumbers),
+    % Generate a position string for each column number with position_to_string
+    findall(Position, (member(ColNumber, ColNumbers), position_to_string(LastRowIndex, ColNumber, NoRows, Position)), Positions).
+
+% get_all_positive_diagonal_starts(+Board, -Starts)
+% Predicate to get all the positive diagonal starts of the board
+% Starts is a list of position strings
+get_all_positive_diagonal_starts(Board, Starts) :-
+    get_first_row_positions(Board, RowPositions),
+    get_first_column_positions(Board, ColumnPositions),
+    append(RowPositions, ColumnPositions, Temp),
+    sort(Temp, Starts).
+
+% get_all_negative_diagonal_starts(+Board, -Starts)
+% Predicate to get all the negative diagonal starts of the board
+% Starts is a list of position strings
+get_all_negative_diagonal_starts(Board, Starts) :-
+    get_last_row_positions(Board, RowPositions),
+    get_first_column_positions(Board, ColumnPositions),
+    append(RowPositions, ColumnPositions, Temp),
+    sort(Temp, Starts).
+    
+
+% get_all_positive_diagonals(+Board, -Diagonals)
+% Predicate to get all the positive diagonals of the board
+% Diagonals is a list of lists of atoms
+get_all_positive_diagonals(Board, Diagonals) :-
+    get_all_positive_diagonal_starts(Board, Starts),
+    maplist(get_positive_diagonal(Board), Starts, Diagonals).
+
+% get_all_negative_diagonals(+Board, -Diagonals)
+% Predicate to get all the negative diagonals of the board
+% Diagonals is a list of lists of atoms
+get_all_negative_diagonals(Board, Diagonals) :-
+    get_all_negative_diagonal_starts(Board, Starts),
+    maplist(get_negative_diagonal(Board), Starts, Diagonals).
+
+% get_all_diagonals(+Board, -Diagonals)
+% Predicate to get all the diagonals of the board
+% Diagonals is a list of lists of atoms
+get_all_diagonals(Board, Diagonals) :-
+    get_all_positive_diagonals(Board, PositiveDiagonals),
+    get_all_negative_diagonals(Board, NegativeDiagonals),
+    append(PositiveDiagonals, NegativeDiagonals, Diagonals).
