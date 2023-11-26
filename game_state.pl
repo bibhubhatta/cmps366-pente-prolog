@@ -218,6 +218,8 @@ handle_capture_in_direction(GameState, Move, DirectionFunction, NewGameState) :-
 
 % make_move(+GameState, +Move, -NewGameState)
 % Predicate to make a move
+% Cut is used to prevent the interpreter from thinking that there are other solutions
+% There is only one solution for a valid move
 make_move(GameState, Move, NewGameState) :-
     get_board(GameState, Board),
     get_current_player_stone(GameState, CurrentPlayerStone),
@@ -237,7 +239,9 @@ make_move(GameState, Move, NewGameState) :-
     handle_capture_in_direction(DownLeftGameState, Move, left_position, LeftGameState),
     handle_capture_in_direction(LeftGameState, Move, up_left_position, UpLeftGameState),
     % Switch the turn
-    switch_turn(UpLeftGameState, NewGameState).
+    switch_turn(UpLeftGameState, NewGameState)
+    % .
+    , !.
 
 
 % Predicate to print the game state
