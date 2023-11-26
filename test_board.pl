@@ -310,6 +310,14 @@ test(get_empty_board) :-
     sort(FlatEmptyBoard, SortedFlatEmptyBoard),
     assertion(SortedFlatEmptyBoard == ['o']).
 
+test(get_center) :-
+    get_empty_board(19, 19, EmptyBoard),
+    get_center(EmptyBoard, Center),
+    assertion(Center == 'J10'),
+    get_empty_board(3, 3, EmptyBoard2),
+    get_center(EmptyBoard2, Center2),
+    assertion(Center2 == 'B2').
+
 :-end_tests(board).
 
 :- run_tests(board).

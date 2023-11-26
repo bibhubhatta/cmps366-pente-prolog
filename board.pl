@@ -33,7 +33,8 @@
     convert_board_sequences_to_stone_sequences/3,
     get_all_stone_sequences/3,
     contains_stone/2,
-    get_board_size/3
+    get_board_size/3,
+    get_center/2
 ]).
 
 :- use_module(library(lists)).
@@ -485,3 +486,12 @@ get_all_stone_sequences(Board, Stone, Sequences) :-
 % Helper predicate to check if a sequence contains a specific stone
 contains_stone(Stone, Sequence) :-
     member(Stone, Sequence).
+
+% get_center(+Board, -Center)
+% Predicate to get the center of the board
+% Center is a position string
+get_center(Board, Center) :-
+    get_board_size(Board, NoRows, NoCols),
+    RowIndex is NoRows // 2,
+    ColIndex is NoCols // 2,
+    position_to_string(RowIndex, ColIndex, NoRows, Center).
