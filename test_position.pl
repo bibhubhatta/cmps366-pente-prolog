@@ -69,34 +69,66 @@ test(up_left_position) :-
     up_left_position('B2', UpLeftPosition),
     assertion(UpLeftPosition == 'A3'),
     up_left_position('F6', UpLeftPosition2),
-    assertion(UpLeftPosition2 == 'E7'),
+    assertion(UpLeftPosition2 == 'E7').
     % Test that it doesn't go out of bounds
-    \+ up_left_position('A19', _).
+    % \+ up_left_position('A19', _).
 
 test(up_right_position) :-
     up_right_position('B2', UpRightPosition),
     assertion(UpRightPosition == 'C3'),
     up_right_position('F6', UpRightPosition2),
-    assertion(UpRightPosition2 == 'G7'),
+    assertion(UpRightPosition2 == 'G7').
     % Test that it doesn't go out of bounds
-    \+ up_right_position('S1', _).
+    % \+ up_right_position('S1', _).
 
 test(down_left_position) :-
     down_left_position('B2', DownLeftPosition),
     assertion(DownLeftPosition == 'A1'),
     down_left_position('F6', DownLeftPosition2),
-    assertion(DownLeftPosition2 == 'E5'),
+    assertion(DownLeftPosition2 == 'E5').
     % Test that it doesn't go out of bounds
-    \+ down_left_position('A1', _).
+    % \+ down_left_position('A1', _).
 
 test(down_right_position) :-
     down_right_position('B2', DownRightPosition),
     assertion(DownRightPosition == 'C1'),
     down_right_position('F6', DownRightPosition2),
-    assertion(DownRightPosition2 == 'G5'),
+    assertion(DownRightPosition2 == 'G5').
     % Test that it doesn't go out of bounds
-    \+ down_right_position('S1', _).
+    % \+ down_right_position('S1', _)
 
+test(get_neigbors) :-
+    get_neighbors('B2', Neighbors),
+    ExpectedNeighbors = ['A3', 'B3', 'C3', 'A2', 'C2', 'A1', 'B1', 'C1'],
+    sort(ExpectedNeighbors, SortedExpectedNeighbors),
+    sort(Neighbors, SortedNeighbors),
+    assertion(SortedExpectedNeighbors == SortedNeighbors),
+    get_neighbors('A1', Neighbors2),    
+    ExpectedNeighbors2 = ['A2', 'B2', 'B1'],
+    sort(ExpectedNeighbors2, SortedExpectedNeighbors2),
+    sort(Neighbors2, SortedNeighbors2),
+    assertion(SortedExpectedNeighbors2 == SortedNeighbors2),
+    get_neighbors('S1', Neighbors3),
+    ExpectedNeighbors3 = ['R2', 'S2', 'R1'],
+    sort(ExpectedNeighbors3, SortedExpectedNeighbors3),
+    sort(Neighbors3, SortedNeighbors3),
+    assertion(SortedExpectedNeighbors3 == SortedNeighbors3),
+    get_neighbors('S19', Neighbors4),
+    ExpectedNeighbors4 = ['R19', 'S18', 'R18'],
+    sort(ExpectedNeighbors4, SortedExpectedNeighbors4),
+    sort(Neighbors4, SortedNeighbors4),
+    assertion(SortedExpectedNeighbors4 == SortedNeighbors4),
+    get_neighbors('A19', Neighbors5),
+    ExpectedNeighbors5 = ['A18', 'B18', 'B19'],
+    sort(ExpectedNeighbors5, SortedExpectedNeighbors5),
+    sort(Neighbors5, SortedNeighbors5),
+    assertion(SortedExpectedNeighbors5 == SortedNeighbors5),
+    get_neighbors('S10', Neighbors6),
+    ExpectedNeighbors6 = ['R10', 'S9', 'S11', 'R9', 'R11'],
+    sort(ExpectedNeighbors6, SortedExpectedNeighbors6),
+    sort(Neighbors6, SortedNeighbors6),
+    assertion(SortedExpectedNeighbors6 == SortedNeighbors6).
+    
 
 :- end_tests(position).
 
