@@ -71,3 +71,6 @@ Total: 3.5
 - Test and implement predicate to get_positions_3_away_from_center 0.25
 - Test and implement check is_first_move and is_third_move 0.5
 - Test and implement get_available_moves 1.5
+- Test and implement get_sequence_score 1.5
+
+Total: 18.25

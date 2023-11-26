@@ -378,6 +378,40 @@ test(get_available_moves_third) :-
     sort(ExpectedAvailableMoves, SortedExpectedAvailableMoves),
     assertion(SortedAvailableMoves == SortedExpectedAvailableMoves).
 
+test(get_sequence_score) :-
+    read_game_state('serials/4.pl', GameState),
+    get_board(GameState, Board4),
+    get_sequence_score(Board4, 'white', SeqScore4White1),
+    assertion(SeqScore4White1 == 0),
+    get_sequence_score(Board4, 'black', SeqScore4Black1),
+    assertion(SeqScore4Black1 == 0),
+    set_stone(Board4, 'K11', 'white', Board4White2),
+    get_sequence_score(Board4White2, 'white', SeqScore4White2),
+    assertion(SeqScore4White2 == 5).
+
+test(get_sequence_score_serial_3) :-
+    read_game_state('serials/3.pl', GameState),
+    get_board(GameState, Board3),
+    get_sequence_score(Board3, 'white', SeqScore3White1),
+    assertion(SeqScore3White1 == 0),
+    get_sequence_score(Board3, 'black', SeqScore3Black1),
+    assertion(SeqScore3Black1 == 0),
+    set_stone(Board3, 'H5', 'b', Board3Black2),
+    set_stone(Board3Black2, 'I5', 'b', Board3Black3),
+    get_sequence_score(Board3Black3, 'black', SeqScore3Black2),    
+    assertion(SeqScore3Black2 == 5),
+    set_stone(Board3Black3, 'F2', 'w', Board3White2),
+    set_stone(Board3White2, 'G2', 'w', Board3White3),
+    get_sequence_score(Board3White3, 'white', SeqScore3White2),
+    assertion(SeqScore3White2 == 1),
+    set_stone(Board3White3, 'F1', 'w', Board3White4),
+    get_sequence_score(Board3White4, 'white', SeqScore3White3),
+    assertion(SeqScore3White3 == 2),
+    set_stone(Board3White4, 'H2', 'w', Board3White5),
+    get_sequence_score(Board3White5, 'white', SeqScore3White4),
+    assertion(SeqScore3White4 == 6).
+
+
 
 :-end_tests(board).
 

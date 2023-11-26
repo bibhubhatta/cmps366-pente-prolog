@@ -39,7 +39,8 @@
     is_first_move/1,
     is_third_move/1,
     get_available_moves/2,
-    get_all_positions/2
+    get_all_positions/2,
+    get_sequence_score/3
 ]).
 
 :- use_module(library(lists)).
@@ -583,3 +584,30 @@ get_positions_3_or_more_away_from_center(Board, Positions) :-
             get_distance(Position, Center, Distance),
             Distance >= 3),
             Positions).
+        
+
+% get_sequence_score(+Board, +Stone, -Score)
+% Predicate to get the score of the stone sequences
+% Board is a list of lists without the row/column markers,
+% Stone is the stone to be checked, it is either 'O', 'W', or 'B'
+% Score is the calculated score -- a number
+get_sequence_score(Board, Stone, Score) :-
+    get_all_stone_sequences(Board, Stone, AllStoneSequences),
+
+    include(length_equal_to(4), AllStoneSequences, FourSequences),
+    include(length_greater_than_or_equal_to(5), AllStoneSequences, FiveOrMoreSequences),
+
+    length(FiveOrMoreSequences, NumFiveOrMore),
+    length(FourSequences, NumFour),
+    Score is NumFiveOrMore * 5 + NumFour.
+
+% length_greater_than_or_equal_to(+N, +List)
+% Predicate to check if the length of List is greater than or equal to N
+length_greater_than_or_equal_to(N, List) :-
+    length(List, Length),
+    Length >= N.
+
+% length_equal_to(+N, +List)
+% Predicate to check if the length of List is equal to N
+length_equal_to(N, List) :-
+    length(List, N).
