@@ -66,3 +66,4 @@ Total: 3.5
 - Test and implement predicates to get_all_diagonals 2.0
 - Test and implement predicates to get_all_board_sequences 0.75
 - Test and implement predicate to get_all_stone_sequences 0.5
+- Test and implement predicate to calculate distance between two positions 0.25

@@ -128,6 +128,14 @@ test(get_neigbors) :-
     sort(ExpectedNeighbors6, SortedExpectedNeighbors6),
     sort(Neighbors6, SortedNeighbors6),
     assertion(SortedExpectedNeighbors6 == SortedNeighbors6).
+
+test(get_distance) :-
+    get_distance('A1', 'A1', Distance),
+    assertion(Distance == 0),
+    get_distance('A1', 'A2', Distance2),
+    assertion(Distance2 == 1),
+    get_distance('J10', 'K13', Distance3),
+    assertion(Distance3 == 3).
     
 
 :- end_tests(position).

@@ -12,7 +12,8 @@
     down_left_position/2,
     down_right_position/2,
     get_neighbors/2,
-    valid_position/1
+    valid_position/1,
+    get_distance/3
     ]).
 
 % Predicate to convert position to string representation
@@ -136,3 +137,11 @@ valid_position(PositionString) :-
     RowIndex < 19,
     ColIndex >= 0,
     ColIndex < 19.
+
+% get_distance(+Position1, +Position2, -Distance)
+% Predicate to get the distance between two positions
+% Distance is the number of positions between the two positions
+get_distance(Position1, Position2, Distance) :-
+    string_to_position(Position1, Row1, Col1),
+    string_to_position(Position2, Row2, Col2),
+    Distance is max(abs(Row1 - Row2), abs(Col1 - Col2)).
