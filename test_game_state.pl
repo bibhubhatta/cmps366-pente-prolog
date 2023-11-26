@@ -203,9 +203,6 @@ test(handle_capture_when_no_capture) :-
     set_current_player(InitialGameState, 'human', GameState),
     make_move(GameState, 'J10', _).
 
-test(handle_capture_)
-
-
 
 :-end_tests(game_state).
 
