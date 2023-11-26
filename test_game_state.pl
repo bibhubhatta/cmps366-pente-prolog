@@ -198,6 +198,11 @@ test(handle_capture) :-
     sort(CapturedPositionStonesAfter, CapturedPositionStonesAfterSorted),
     assertion(CapturedPositionStonesAfterSorted == ['o']).
 
+test(handle_capture_when_no_capture) :-
+    get_initial_state(InitialGameState),
+    set_current_player(InitialGameState, 'human', GameState),
+    make_move(GameState, 'J10', _).
+
 test(handle_capture_)
 
 

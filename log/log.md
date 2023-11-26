@@ -78,3 +78,4 @@ Total: 15.25
 ## Nov 26, 2023
 
 - Test and handle captures in all eight directions when captured 1.0
+- Test and fix crash when there are no captures 0.75

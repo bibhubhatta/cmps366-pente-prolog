@@ -188,7 +188,8 @@ get_capture_sequence(Stone, CaptureSequence) :-
 % handle_capture_in_direction(+GameState, +Move, +DirectionFunction, -NewGameState)
 % Predicate to handle the capture in a direction
 handle_capture_in_direction(GameState, Move, DirectionFunction, NewGameState) :-
-    get_board(GameState, Board),
+    % capture happens -> update the board and the captures
+    (get_board(GameState, Board),
     get_current_player_stone(GameState, CurrentPlayerStone),
     get_capture_sequence(CurrentPlayerStone, CaptureSequence),
     % Get the cells in the direction
@@ -201,16 +202,18 @@ handle_capture_in_direction(GameState, Move, DirectionFunction, NewGameState) :-
     get_stone(Board, TwoAwayCell, TwoAwayCellStone),
     get_stone(Board, ThreeAwayCell, ThreeAwayCellStone),
     Sequence = [ZeroAwayCellStone, OneAwayCellStone, TwoAwayCellStone, ThreeAwayCellStone],
-    Sequence = CaptureSequence,
-    % % Update the board
-    set_stone(Board, OneAwayCell, 'o', NewBoard),
-    set_stone(NewBoard, TwoAwayCell, 'o', NewNewBoard),
-    set_board(GameState, NewNewBoard, BoardUpdatedGameState),
-    % % Calculate the new captures
-    get_player_from_stone(GameState, ZeroAwayCellStone, Player),
-    get_player_captures(GameState, Player, Captures),
-    NewCaptures is Captures + 1,
-    set_player_captures(BoardUpdatedGameState, Player, NewCaptures, NewGameState)
+    Sequence = CaptureSequence) ->
+                                    (% % Update the board
+                                    set_stone(Board, OneAwayCell, 'o', NewBoard),
+                                    set_stone(NewBoard, TwoAwayCell, 'o', NewNewBoard),
+                                    set_board(GameState, NewNewBoard, BoardUpdatedGameState),
+                                    % % Calculate the new captures
+                                    get_player_from_stone(GameState, ZeroAwayCellStone, Player),
+                                    get_player_captures(GameState, Player, Captures),
+                                    NewCaptures is Captures + 1,
+                                    set_player_captures(BoardUpdatedGameState, Player, NewCaptures, NewGameState)) ;
+    % No capture happened
+    NewGameState = GameState
     .
 
 % make_move(+GameState, +Move, -NewGameState)
