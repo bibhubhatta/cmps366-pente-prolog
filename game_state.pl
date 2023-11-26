@@ -29,7 +29,8 @@
         get_capture_sequence/2,
         handle_capture_in_direction/4,
         print_game_state/1,
-        make_move/3
+        make_move/3,
+        get_winner/2
     ]).
 
 :- use_module(board).
@@ -243,6 +244,15 @@ make_move(GameState, Move, NewGameState) :-
     % .
     , !.
 
+
+% get_winner(+GameState, -Winner)
+% Predicate to get the winner of the game
+% Returns 'human', 'computer', or 'nil' if the game is not over
+get_winner(GameState, Winner) :-
+    (get_player_captures(GameState, human, NoCaptures), NoCaptures >= 5, Winner = human);
+    (get_player_captures(GameState, computer, NoCaptures), NoCaptures >= 5, Winner = computer);
+    (get_all_stone_sequences(GameState, human, Sequences), member(Sequence, Sequences), length(Sequence, Length), Length >= 5, Winner = human);
+    (get_all_stone_sequences(GameState, computer, Sequences), member(Sequence, Sequences), length(Sequence, Length), Length >= 5, Winner = computer).
 
 % Predicate to print the game state
 print_game_state(GameState) :-

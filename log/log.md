@@ -79,3 +79,4 @@ Total: 15.25
 
 - Test and handle captures in all eight directions when captured 1.0
 - Test and fix crash when there are no captures 0.75
+- Test and implement predicate to get the winner 0.75
