@@ -8,7 +8,8 @@
         human_wants_to_play_again/0,
         human_wins_toss/0,
         human_wants_to_load_game/0,
-        ask_save_game/1
+        ask_save_game/1,
+        load_game_state_from_human_input/1
     ]).
 
 :- use_module(game_state).
@@ -111,3 +112,24 @@ ask_yes_no_question(Question, Response) :-
 ask_save_game(GameState) :-
     ask_yes_no_question('Do you want to save the game?', WantsToSave),
     (WantsToSave -> save_and_quit(GameState); true).
+
+
+% load_game_state_from_human_input(-GameState)
+% Asks the user for the file name to load the game from.
+% If the file name is invalid, it will ask the user to enter a new file name.
+% If the file name is valid, it will return the game state.
+% https://eu.swi-prolog.org/pldoc/man?section=exception
+load_game_state_from_human_input(GameState) :-
+    format('Enter the file name to load the game: ~n', []),
+    read_line_to_string(user_input, FileName),
+    (
+        catch(
+            read_game_state(FileName, GameState),
+            Error,
+            (
+                print_message(error, Error),
+                format('Could not load file. Please try again.~n', []),
+                load_game_state_from_human_input(GameState)
+            )
+        )
+    ).
