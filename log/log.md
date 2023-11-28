@@ -92,3 +92,4 @@ Total: 3.0
 - Implement predicates for the human player to play round 2.0
 - Make the computer play random moves 0.25
 - Enable playing tournament 0.75
+- Copy Lisp un-optimized algorithm 2.0
