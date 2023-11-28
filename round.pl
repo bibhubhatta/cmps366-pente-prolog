@@ -26,7 +26,10 @@ conduct_round(GameState, FinalGameState) :-
 % announce_round_result(+GameState)
 % Predicate to announce the result of a round.
 announce_round_result(GameState) :-
-    print_round_state(GameState),
+    % Print the final board state.
+    get_board(GameState, Board),
+    cartesian_board(Board, CartesianBoard),
+    print_board(CartesianBoard),
     nl,
     nl,
     format('---------- Round Results ----------~n'),
