@@ -6,9 +6,10 @@
 :- nl.
 :- nl.
 
-:- ensure_loaded('round.pl').
+:- use_module(tournament).
+:- use_module(game_state).
 
 :- read_game_state('serials/1.pl', GameState),
-    conduct_round(GameState, NewGameState).
+    play_tournament(GameState).
 
 :- halt.

@@ -34,7 +34,8 @@
         is_game_drawn/1,
         is_game_over/1,
         get_round_score/3,
-        initialize_round/2
+        initialize_round/2,
+        update_tournament_score/2
     ]).
 
 :- use_module(board).
@@ -151,6 +152,19 @@ set_player_captures(GameState, Player, Captures, NewGameState) :-
 % Predicate to set the tournament score of a player
 set_player_tournament_score(GameState, Player, TournamentScore, NewGameState) :-
     (Player = 'human' -> set_human_tournament_score(GameState, TournamentScore, NewGameState) ; set_computer_tournament_score(GameState, TournamentScore, NewGameState)).
+
+% update_tournament_score(+GameState, -NewGameState)
+% Predicate to update the tournament score of the game state
+update_tournament_score(GameState, NewGameState) :-
+    get_round_score(GameState, human, HumanScore),
+    get_round_score(GameState, computer, ComputerScore),
+    get_player_tournament_score(GameState, human, HumanTournamentScore),
+    get_player_tournament_score(GameState, computer, ComputerTournamentScore),
+    NewHumanTournamentScore is HumanTournamentScore + HumanScore,
+    NewComputerTournamentScore is ComputerTournamentScore + ComputerScore,
+    set_player_tournament_score(GameState, human, NewHumanTournamentScore, GameState1),
+    set_player_tournament_score(GameState1, computer, NewComputerTournamentScore, NewGameState).
+
 
 % Predicate to set the current player
 set_current_player([Board, HumanCaptures, HumanTournamentScore, ComputerCaptures, ComputerTournamentScore, _, CurrentPlayerStone], CurrentPlayer, [Board, HumanCaptures, HumanTournamentScore, ComputerCaptures, ComputerTournamentScore, CurrentPlayer, CurrentPlayerStone]).
