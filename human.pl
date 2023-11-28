@@ -36,7 +36,7 @@ get_human_move(GameState, HumanMove) :-
     % MoveString = "H" -> print_help(GameState), get_human_move(GameState, Move);
     atom_string(Move, MoveString),
     is_available_move(GameState, Move) -> HumanMove = Move;
-    format('Invalid move. Please try again. ~n', []), get_human_move(GameState, Move)
+    format('Invalid move. Please try again. ~n', []), get_human_move(GameState, HumanMove)
     ).
 
 % is_available_move(+GameState, +Move)
