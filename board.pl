@@ -41,7 +41,8 @@
     get_available_moves/2,
     get_all_positions/2,
     get_sequence_score/3,
-    valid_position/2
+    valid_position/2,
+    length_greater_than_or_equal_to/2
 ]).
 
 :- use_module(library(lists)).

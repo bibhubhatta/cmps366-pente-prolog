@@ -32,7 +32,9 @@
         make_move/3,
         get_winner/2,
         is_game_drawn/1,
-        is_game_over/1
+        is_game_over/1,
+        get_round_score/3,
+        initialize_round/2
     ]).
 
 :- use_module(board).
@@ -249,13 +251,35 @@ make_move(GameState, Move, NewGameState) :-
 
 % get_winner(+GameState, -Winner)
 % Predicate to get the winner of the game
-% Returns 'human', 'computer', or 'nil' if the game is not over
-get_winner(GameState, Winner) :-
-    (get_player_captures(GameState, human, NoCaptures), NoCaptures >= 5, Winner = human);
-    (get_player_captures(GameState, computer, NoCaptures), NoCaptures >= 5, Winner = computer);
-    (get_all_stone_sequences(GameState, human, Sequences), member(Sequence, Sequences), length(Sequence, Length), Length >= 5, Winner = human);
-    (get_all_stone_sequences(GameState, computer, Sequences), member(Sequence, Sequences), length(Sequence, Length), Length >= 5, Winner = computer).
+% Returns 'human' or 'computer', and fails if the game is not over
+get_winner(GameState, Winner):-
+    is_winner(GameState, human) -> Winner = human ;
+    is_winner(GameState, computer) -> Winner = computer.
 
+% is_winner(+GameState, +Winner)
+% Predicate to check if the winner is the player that captured 5 or more stones or has a sequence of 5 or more stones
+% Returns true if the winner is the player that captured 5 or more stones or has a sequence of 5 or more stones, false otherwise
+is_winner(GameState, Winner) :-
+    is_capture_winner(GameState, Winner);
+    is_sequence_winner(GameState, Winner).
+
+% is_capture_winner(+GameState, +Winner)
+% Predicate to check if the winner is the player that captured 5 or more stones
+% Returns true if the winner is the player that captured 5 or more stones, false otherwise
+is_capture_winner(GameState, Winner) :-
+    get_player_captures(GameState, Winner, NoCaptures),
+    NoCaptures >= 5.
+
+% is_sequence_winner(+GameState, +Winner)
+% Predicate to check if the winner is the player that has a sequence of 5 or more stones
+% Returns true if the winner is the player that has a sequence of 5 or more stones, false otherwise
+is_sequence_winner(GameState, Winner):-
+    get_board(GameState, Board),
+    get_stone_from_player(GameState, Winner, Stone),
+    get_all_stone_sequences(Board, Stone, Sequences),
+    include(length_greater_than_or_equal_to(5), Sequences, FiveOrMoreSequences),
+    length(FiveOrMoreSequences, NumFiveOrMore),
+    NumFiveOrMore >= 1.
 
 % Predicate to check if the game is drawn
 % Returns true if the game is drawn, false otherwise
@@ -270,6 +294,26 @@ is_game_drawn(GameState) :-
 is_game_over(GameState) :-
     findall(Winner, get_winner(GameState, Winner), Winners),
     (Winners = [] -> is_game_drawn(GameState) ; true).
+
+% get_round_score(+GameState, +Player, -Score)
+% Predicate to get the round score of a player
+% The score is the sum of the sequence score and the number of captures
+get_round_score(GameState, Player, Score) :-
+    get_board(GameState, Board),
+    get_stone_from_player(GameState, Player, Stone),
+    get_sequence_score(Board, Stone, SequenceScore),
+    get_player_captures(GameState, Player, NoCaptures),
+    Score is SequenceScore + NoCaptures.
+
+% initialize_round(+GameState, -NewGameState)
+% Predicate to initialize the game state for a new round
+initialize_round(GameState, NewGameState) :-
+    set_player_captures(GameState, human, 0, GameState1),
+    set_player_captures(GameState1, computer, 0, GameState2),
+    get_empty_board(19, 19, EmptyBoard),
+    set_board(GameState2, EmptyBoard, GameState3),
+    set_current_player_stone(GameState3, white, GameState4),
+    set_current_player(GameState4, '_', NewGameState).
 
 
 % Predicate to print the game state

@@ -81,3 +81,13 @@ Total: 15.25
 - Test and fix crash when there are no captures 0.75
 - Test and implement predicate to get the winner 0.75
 - Test and implement is_game_over and is_game_drawn 0.5
+
+Total: 3.0
+
+## Nov 27, 2023
+
+- Test and implement predicate to get_winner 1.5
+- Implement predicate to get_round_score 0.25
+- Implement predicate to initialize the round 0.25
+- Implement predicates for the human player to play round 2.0
+- Make the computer play random moves 0.25
