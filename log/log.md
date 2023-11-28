@@ -91,3 +91,4 @@ Total: 3.0
 - Implement predicate to initialize the round 0.25
 - Implement predicates for the human player to play round 2.0
 - Make the computer play random moves 0.25
+- Enable playing tournament 0.75
