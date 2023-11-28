@@ -1,4 +1,4 @@
-: - module(round,
+:- module(round,
     [
         conduct_round/2,
         announce_round_result/1,
@@ -26,6 +26,9 @@ conduct_round(GameState, FinalGameState) :-
 % announce_round_result(+GameState)
 % Predicate to announce the result of a round.
 announce_round_result(GameState) :-
+    print_round_state(GameState),
+    nl,
+    nl,
     format('---------- Round Results ----------~n'),
     (
     get_winner(GameState, Winner) -> format('~w wins the round!~n', [Winner]);
@@ -35,7 +38,9 @@ announce_round_result(GameState) :-
     get_round_score(GameState, computer, ComputerScore),
     format('Human\'s round score: ~w~n', [HumanScore]),
     format('Computer\'s round score: ~w~n', [ComputerScore]),
-    format('-----------------------------------~n').
+    format('-----------------------------------~n'),
+    nl,
+    nl.
 
 % play_round(+GameState, -FinalGameState)
 % Predicate to play a round of the game.
