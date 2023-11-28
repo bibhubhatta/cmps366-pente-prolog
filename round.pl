@@ -77,7 +77,8 @@ get_move(GameState, Move) :-
 % NewGameState is the new state of the game with the starting player set.
 set_starting_player(GameState, NewGameState) :-
     % Do nothing if the starting player is already set.
-    get_current_player(GameState, _) -> NewGameState = GameState;
+    get_current_player(GameState, CurrentPlayer),
+    not(CurrentPlayer = '_') -> NewGameState = GameState;
     % Otherwise, set the starting player.
     get_player_tournament_score(GameState, human, HumanScore),
     get_player_tournament_score(GameState, computer, ComputerScore),
