@@ -2,13 +2,85 @@
     [
         get_best_move/2,
         get_pseudo_score/3,
-        get_pseudo_sequence_score/3
+        get_pseudo_sequence_score/3,
+        winning_move/2,
+        win_blocking_move/2,
+        capturing_move/2,
+        capture_blocking_move/2,
+        only_move/2,
+        sequence_making_move/2,
+        sequence_blocking_move/2
     ]
     ).
 
 :- use_module(game_state).
 :- use_module(board).
 
+
+% win_move(+GameState, +Move)
+% Checks if the move is a winning move
+winning_move(GameState, Move) :-
+    make_move(GameState, Move, NewGameState),
+    get_winner(NewGameState, _).
+
+% win_blocking_move(+GameState, +Move)
+% Checks if the move prevents the opponent from winning
+win_blocking_move(GameState, Move) :-
+    switch_turn(GameState, SwitchedGameState),
+    make_move(SwitchedGameState, Move, NewGameState),
+    get_winner(NewGameState, _).
+
+% capturing_move(+GameState, +Move)
+% Checks if the move captures a stone
+capturing_move(GameState, Move) :-
+    get_current_player(GameState, CurrentPlayer),
+    % other_player(CurrentPlayer, Opponent),
+    make_move(GameState, Move, GameStateAfterMove),
+    get_player_captures(GameState, CurrentPlayer, CapturesBefore),
+    get_player_captures(GameStateAfterMove, CurrentPlayer, CapturesAfter),
+    CapturesBefore \= CapturesAfter.
+
+% capture_blocking_move(+GameState, +Move)
+% Checks if the move prevents the opponent from capturing a stone
+capture_blocking_move(GameState, Move) :-
+    switch_turn(GameState, SwitchedGameState),
+    capturing_move(SwitchedGameState, Move).
+
+% only_move(+GameState, +Move)
+% Checks if the move is the only move available
+only_move(GameState, Move) :-
+    get_board(GameState, Board),
+    get_available_moves(Board, AvailableMoves),
+    length(AvailableMoves, MovesCount),
+    MovesCount =:= 1,
+    nth0(0, AvailableMoves, Move).
+
+% stone_in_list(+Stone, +List)
+% Checks if the stone is in the list
+stone_in_list(Stone, List) :-
+    (   Stone = 'white' -> stone_in_list('w', List)
+    ;   Stone = 'black' -> stone_in_list('b', List)
+    ;   Stone = 'empty' -> stone_in_list('o', List)
+    ;   member(Stone, List)
+    ).
+
+% sequence_making_move(+GameState, +Move)
+% Checks if the move creates a sequence
+sequence_making_move(GameState, Move) :-
+    get_current_player_stone(GameState, CurrentStone),
+    get_board(GameState, Board),
+    get_neighboring_stones(Board, Move, Neighbors),
+    stone_in_list(CurrentStone, Neighbors).
+
+% sequence_blocking_move(+GameState, +Move)
+% Checks if the move prevents the opponent from creating a sequence
+sequence_blocking_move(GameState, Move) :-
+    make_move(GameState, Move, GameStateAfterMove),
+    get_current_player_stone(GameState, CurrentStone),
+    other_stone(CurrentStone, OpponentStone),
+    get_board(GameStateAfterMove, Board),
+    get_neighboring_stones(Board, Move, Neighbors),
+    stone_in_list(OpponentStone, Neighbors).
 
 % get_pseudo_sequence_score(+GameState, +Player, -Score)
 % Calculates the pseudo score for the given player's sequences
