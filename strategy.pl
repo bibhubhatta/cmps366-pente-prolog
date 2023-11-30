@@ -100,6 +100,20 @@ get_pseudo_sequence_score(GameState, Player, Score) :-
     append(LengthsExponiated, [0], SquaresWithZero),
     sum_list(SquaresWithZero, Score).
 
+% get_pseudo_sequence_score_optimized(+GameState, +Position, -Score)
+% Calculates the pseudo score for the given player's sequences
+% The pseudo score is calculated by summing the square of the length of sequences that are longer than 1
+get_pseudo_sequence_score_optimized(GameState, Position, Score) :-
+    get_board(GameState, Board),
+    get_all_stone_sequences_localized(Board, Position, Sequences),
+    % format('Position: ~w~n', [Position]),
+    % format('Sequences: ~w~n', [Sequences]),
+    include(length_greater_than_or_equal_to(2), Sequences, LongSequences),
+    maplist(length, LongSequences, Lengths),
+    maplist(cube, Lengths, LengthsExponiated),
+    append(LengthsExponiated, [0], SquaresWithZero),
+    sum_list(SquaresWithZero, Score).
+
 % square(Number, Square)
 % Helper predicate to square a number
 square(Number, Square) :-
@@ -110,6 +124,19 @@ square(Number, Square) :-
 cube(Number, Cube) :-
     Cube is Number * Number * Number.
 
+
+get_round_score_optimized(GameState, Position, Score) :-
+    get_board(GameState, Board),
+    get_all_stone_sequences_localized(Board, Position, Sequences),
+    include(length_greater_than_or_equal_to(5), Sequences, FiveOrMoreSequencesSequences),
+    length(FiveOrMoreSequencesSequences, FiveOrMoreSequencesCount),
+    include(length_equal_to(4), Sequences, FourSequences),
+    length(FourSequences, FourSequencesCount),
+    SequenceScore is (FiveOrMoreSequencesCount * 5) + (FourSequencesCount * 1),
+    get_current_player(GameState, CurrentPlayer),
+    get_player_captures(GameState, CurrentPlayer, Captures),
+    Score is SequenceScore + Captures.
+
 % get_pseudo_score(+GameState, +Move, -Score)
 % Calculates the pseudo score for the given move
 % The pseudo score is calculated by adding the score for the player and the opponent if the move is played by both
@@ -119,10 +146,10 @@ get_pseudo_score(GameState, Move, Score) :-
     make_move(GameState, Move, GameStateAfterMove),
     switch_turn(GameState, GameStateIfOpponentMove),
     make_move(GameStateIfOpponentMove, Move, GameStateIfOpponentMoveAfterMove),
-    get_round_score(GameStateAfterMove, CurrentPlayer, CurrentPlayerScore),
-    get_round_score(GameStateIfOpponentMoveAfterMove, Opponent, OpponentScore),
-    get_pseudo_sequence_score(GameStateAfterMove, CurrentPlayer, CurrentPlayerPseudoScore),
-    get_pseudo_sequence_score(GameStateIfOpponentMoveAfterMove, Opponent, OpponentPseudoScore),
+    get_round_score_optimized(GameStateAfterMove, Move, CurrentPlayerScore),
+    get_round_score_optimized(GameStateIfOpponentMoveAfterMove, Move, OpponentScore),
+    get_pseudo_sequence_score_optimized(GameStateAfterMove, Move, CurrentPlayerPseudoScore),
+    get_pseudo_sequence_score_optimized(GameStateIfOpponentMoveAfterMove, Move, OpponentPseudoScore),
     get_player_captures(GameStateAfterMove, CurrentPlayer, CurrentPlayerCaptures),
     get_player_captures(GameStateIfOpponentMoveAfterMove, Opponent, OpponentCaptures),
     get_distance_from_center(GameState, Move, DistanceFromCenter),
@@ -172,9 +199,9 @@ get_best_move(GameState, BestMove) :-
     findall(Move, (member([Move, Score], Scores), Score =:= MaxScore), BestMoves),
     % Randomly select one of the best moves
     length(BestMoves, Length),
-    writeln(Length),
+    % writeln(Length),
     random(0, Length, Index),
-    nth0(Index, BestMoves, BestMove),
+    nth0(Index, BestMoves, BestMove).
     % get_random_move(GameState, BestMove).
 
 % get_move_rationale(+GameState, +Move, -Explanation)

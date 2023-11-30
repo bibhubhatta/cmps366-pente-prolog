@@ -42,7 +42,9 @@
     get_all_positions/2,
     get_sequence_score/3,
     valid_position/2,
-    length_greater_than_or_equal_to/2
+    length_greater_than_or_equal_to/2,
+    length_equal_to/2,
+    get_all_stone_sequences_localized/3
 ]).
 
 :- use_module(library(lists)).
@@ -623,3 +625,112 @@ valid_position(Board, Position) :-
     RowIndex < NoRows,
     ColIndex >= 0,
     ColIndex < NoCols.
+
+
+% get_all_stone_sequences_localized(+Board, +Position, -Sequences)
+% Predicate to get all the stone sequence from the position
+% Used for calculating pseudo scores with optimization
+get_all_stone_sequences_localized(Board, Position, Sequences) :-
+    get_row_stone_sequence(Board, Position, RowSeq),
+    get_column_stone_sequence(Board, Position, ColSeq),
+    get_positive_diagonal_stone_sequence(Board, Position, PosDiagSeq),
+    get_negative_diagonal_stone_sequence(Board, Position, NegDiagSeq),
+    Sequences = [RowSeq, ColSeq, PosDiagSeq, NegDiagSeq].
+
+
+% get_row_stone_sequence(+Board, +Position, -Sequence)
+get_row_stone_sequence(Board, Position, Sequence) :-
+    get_stone_sequence_in_direction(Board, Position, up_position, RevUpSequence),
+    reverse(RevUpSequence, UpSequence),
+    get_stone_sequence_in_direction(Board, Position, down_position, DownSequence),
+    get_stone(Board, Position, Stone),
+    append(UpSequence, [Stone|DownSequence], Sequence).
+
+% get_column_stone_sequence(+Board, +Position, -Sequence)
+get_column_stone_sequence(Board, Position, Sequence) :-
+    get_stone_sequence_in_direction(Board, Position, left_position, RevLeftSequence),
+    reverse(RevLeftSequence, LeftSequence),
+    get_stone_sequence_in_direction(Board, Position, right_position, RightSequence),
+    get_stone(Board, Position, Stone),
+    append(LeftSequence, [Stone|RightSequence], Sequence).
+
+% get_positive_diagonal_stone_sequence(+Board, +Position, -Sequence)
+get_positive_diagonal_stone_sequence(Board, Position, Sequence) :-
+    get_stone_sequence_in_direction(Board, Position, up_left_position, RevUpLeftSequence),
+    reverse(RevUpLeftSequence, UpLeftSequence),
+    get_stone_sequence_in_direction(Board, Position, down_right_position, DownRightSequence),
+    get_stone(Board, Position, Stone),
+    append(UpLeftSequence, [Stone|DownRightSequence], Sequence).
+
+% get_negative_diagonal_stone_sequence(+Board, +Position, -Sequence)
+get_negative_diagonal_stone_sequence(Board, Position, Sequence) :-
+    get_stone_sequence_in_direction(Board, Position, up_right_position, RevUpRightSequence),
+    reverse(RevUpRightSequence, UpRightSequence),
+    get_stone_sequence_in_direction(Board, Position, down_left_position, DownLeftSequence),
+    get_stone(Board, Position, Stone),
+    append(UpRightSequence, [Stone|DownLeftSequence], Sequence).
+
+% get_stone_sequence_in_direction(+Board, +Position, +DirectionFunction, -Sequence)
+% Predicate to get the stone sequence in a direction
+% DirectionFunction is a function that takes a position and returns the next position in the direction
+% Sequence is a list of stones
+get_stone_sequence_in_direction(Board, Position, DirectionFunction, Sequence) :-
+    call(DirectionFunction, Position, PositionInDirection),
+    get_stone(Board, Position, CurrentStone),
+    (
+        valid_position(Board, PositionInDirection),  
+        get_stone(Board, PositionInDirection, NextStone),
+        CurrentStone = NextStone
+    ) ->
+        (
+            get_stone_sequence_in_direction(Board, PositionInDirection, DirectionFunction, RestOfSequence),
+            Sequence = [CurrentStone|RestOfSequence]
+        );
+        Sequence = [].
+
+% :- set_prolog_flag(stack, 10000000000).
+% :- set_prolog_flag(table_space, 100000000000000000).
+% :- table get_empty_board/3.
+% :- table get_row/3.
+% :- table get_col/3.
+% :- table get_char_list/2.
+% :- table mark_columns/2.
+% :- table mark_rows/2.
+% :- table cartesian_board/2.
+% % :- table print_board/1.
+% :- table get_stone/3.
+% :- table get_stones/3.
+% :- table set_stone/4.
+% :- table convert_to_sequences/2.
+% :- table get_empty_positions/2.
+% :- table get_no_stones_on_board/2.
+% :- table get_all_board_columns/2.
+% :- table get_neighboring_stones/3.
+% :- table get_up_right_diagonal/3.
+% :- table get_up_left_diagonal/3.
+% :- table get_down_right_diagonal/3.
+% :- table get_down_left_diagonal/3.
+% :- table get_positive_diagonal/3.
+% :- table get_negative_diagonal/3.
+% :- table get_all_positive_diagonal_starts/2.
+% :- table get_all_negative_diagonal_starts/2.
+% :- table get_first_row_positions/2.
+% :- table get_first_column_positions/2.
+% :- table get_last_row_positions/2.
+% :- table get_all_positive_diagonals/2.
+% :- table get_all_negative_diagonals/2.
+% :- table get_all_diagonals/2.
+% :- table get_all_board_sequences/2.
+% :- table convert_board_sequences_to_stone_sequences/3.
+% :- table get_all_stone_sequences/3.
+% :- table contains_stone/2.
+% :- table get_board_size/3.
+% :- table get_center/2.
+% :- table get_positions_3_away_from_center/2.
+% :- table is_first_move/1.
+% :- table is_third_move/1.
+% :- table get_available_moves/2.
+% :- table get_all_positions/2.
+% :- table get_sequence_score/3.
+% :- table valid_position/2.
+% :- table length_greater_than_or_equal_to/2.
