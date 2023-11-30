@@ -139,11 +139,15 @@ get_random_move(GameState, Move):-
 % The best move is the one with the highest pseudo score. The pseudo score is calculated for available moves, and sorted to find the one with the highest score.
 % https://stackoverflow.com/questions/25124122/swi-prolog-how-to-sort-list-of-lists-by-nth-element-of-sublist-allowing-duplic
 get_best_move(GameState, BestMove) :-
+    statistics(runtime,[Start|_]),
     get_board(GameState, Board),
     get_available_moves(Board, AvailableMoves),
     get_pseudo_scores(GameState, AvailableMoves, Scores),
     sort(2, @>=, Scores, SortedScores),
-    SortedScores = [[BestMove, _]|_].
+    SortedScores = [[BestMove, _]|_],
+    statistics(runtime,[Stop|_]),
+    Runtime is Stop - Start,
+    format('Runtime: ~w ms~n', [Runtime]).
     % get_random_move(GameState, BestMove).
 
 % get_move_rationale(+GameState, +Move, -Explanation)
