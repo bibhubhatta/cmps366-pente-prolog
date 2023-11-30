@@ -18,6 +18,7 @@
 
 :- use_module(game_state).
 :- use_module(board).
+:- use_module(position).
 
 
 % win_move(+GameState, +Move)
@@ -124,12 +125,21 @@ get_pseudo_score(GameState, Move, Score) :-
     get_pseudo_sequence_score(GameStateIfOpponentMoveAfterMove, Opponent, OpponentPseudoScore),
     get_player_captures(GameStateAfterMove, CurrentPlayer, CurrentPlayerCaptures),
     get_player_captures(GameStateIfOpponentMoveAfterMove, Opponent, OpponentCaptures),
+    get_distance_from_center(GameState, Move, DistanceFromCenter),
     Score is (CurrentPlayerScore * 10000) + 
              (OpponentScore * 10000) + 
              (CurrentPlayerCaptures * 1500) +
              (OpponentCaptures * 1000) +
              (CurrentPlayerPseudoScore * 15) + 
-             (OpponentPseudoScore * 10).
+             (OpponentPseudoScore * 10) -
+             (DistanceFromCenter).
+
+% distance_from_center(+GameState, +Move, -Distance)
+% Calculates the distance of the move from the center
+get_distance_from_center(GameState, Move, Distance) :-
+    get_board(GameState, Board),
+    get_center(Board, CenterPosition),
+    get_distance(CenterPosition, Move, Distance).
 
 % get_pseudo_scores(+GameState, +Moves, -Scores)
 % Calculates the pseudo scores for the given moves
