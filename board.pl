@@ -42,7 +42,8 @@
     get_all_positions/2,
     get_sequence_score/3,
     valid_position/2,
-    length_greater_than_or_equal_to/2
+    length_greater_than_or_equal_to/2,
+    get_all_stone_sequences_localized/3
 ]).
 
 :- use_module(library(lists)).
@@ -625,6 +626,66 @@ valid_position(Board, Position) :-
     ColIndex < NoCols.
 
 
+% get_all_stone_sequences_localized(+Board, +Position, -Sequences)
+% Predicate to get all the stone sequence from the position
+% Used for calculating pseudo scores with optimization
+get_all_stone_sequences_localized(Board, Position, Sequences) :-
+    get_row_stone_sequence(Board, Position, RowSeq),
+    get_column_stone_sequence(Board, Position, ColSeq),
+    get_positive_diagonal_stone_sequence(Board, Position, PosDiagSeq),
+    get_negative_diagonal_stone_sequence(Board, Position, NegDiagSeq),
+    Sequences = [RowSeq, ColSeq, PosDiagSeq, NegDiagSeq].
+
+
+% get_row_stone_sequence(+Board, +Position, -Sequence)
+get_row_stone_sequence(Board, Position, Sequence) :-
+    get_stone_sequence_in_direction(Board, Position, up_position, RevUpSequence),
+    reverse(RevUpSequence, UpSequence),
+    get_stone_sequence_in_direction(Board, Position, down_position, DownSequence),
+    get_stone(Board, Position, Stone),
+    append(UpSequence, [Stone|DownSequence], Sequence).
+
+% get_column_stone_sequence(+Board, +Position, -Sequence)
+get_column_stone_sequence(Board, Position, Sequence) :-
+    get_stone_sequence_in_direction(Board, Position, left_position, RevLeftSequence),
+    reverse(RevLeftSequence, LeftSequence),
+    get_stone_sequence_in_direction(Board, Position, right_position, RightSequence),
+    get_stone(Board, Position, Stone),
+    append(LeftSequence, [Stone|RightSequence], Sequence).
+
+% get_positive_diagonal_stone_sequence(+Board, +Position, -Sequence)
+get_positive_diagonal_stone_sequence(Board, Position, Sequence) :-
+    get_stone_sequence_in_direction(Board, Position, up_left_position, RevUpLeftSequence),
+    reverse(RevUpLeftSequence, UpLeftSequence),
+    get_stone_sequence_in_direction(Board, Position, down_right_position, DownRightSequence),
+    get_stone(Board, Position, Stone),
+    append(UpLeftSequence, [Stone|DownRightSequence], Sequence).
+
+% get_negative_diagonal_stone_sequence(+Board, +Position, -Sequence)
+get_negative_diagonal_stone_sequence(Board, Position, Sequence) :-
+    get_stone_sequence_in_direction(Board, Position, up_right_position, RevUpRightSequence),
+    reverse(RevUpRightSequence, UpRightSequence),
+    get_stone_sequence_in_direction(Board, Position, down_left_position, DownLeftSequence),
+    get_stone(Board, Position, Stone),
+    append(UpRightSequence, [Stone|DownLeftSequence], Sequence).
+
+% get_stone_sequence_in_direction(+Board, +Position, +DirectionFunction, -Sequence)
+% Predicate to get the stone sequence in a direction
+% DirectionFunction is a function that takes a position and returns the next position in the direction
+% Sequence is a list of stones
+get_stone_sequence_in_direction(Board, Position, DirectionFunction, Sequence) :-
+    call(DirectionFunction, Position, PositionInDirection),
+    get_stone(Board, Position, CurrentStone),
+    (
+        valid_position(Board, PositionInDirection),  
+        get_stone(Board, PositionInDirection, NextStone),
+        CurrentStone = NextStone
+    ) ->
+        (
+            get_stone_sequence_in_direction(Board, PositionInDirection, DirectionFunction, RestOfSequence),
+            Sequence = [CurrentStone|RestOfSequence]
+        );
+        Sequence = [].
 
 % :- set_prolog_flag(stack, 10000000000).
 % :- set_prolog_flag(table_space, 100000000000000000).
