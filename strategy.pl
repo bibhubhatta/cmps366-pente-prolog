@@ -124,6 +124,19 @@ square(Number, Square) :-
 cube(Number, Cube) :-
     Cube is Number * Number * Number.
 
+
+get_round_score_optimized(GameState, Position, Score) :-
+    get_board(GameState, Board),
+    get_all_stone_sequences_localized(Board, Position, Sequences),
+    include(length_greater_than_or_equal_to(5), Sequences, FiveOrMoreSequencesSequences),
+    length(FiveOrMoreSequencesSequences, FiveOrMoreSequencesCount),
+    include(length_equal_to(4), Sequences, FourSequences),
+    length(FourSequences, FourSequencesCount),
+    SequenceScore is (FiveOrMoreSequencesCount * 5) + (FourSequencesCount * 1),
+    get_current_player(GameState, CurrentPlayer),
+    get_player_captures(GameState, CurrentPlayer, Captures),
+    Score is SequenceScore + Captures.
+
 % get_pseudo_score(+GameState, +Move, -Score)
 % Calculates the pseudo score for the given move
 % The pseudo score is calculated by adding the score for the player and the opponent if the move is played by both
@@ -133,8 +146,8 @@ get_pseudo_score(GameState, Move, Score) :-
     make_move(GameState, Move, GameStateAfterMove),
     switch_turn(GameState, GameStateIfOpponentMove),
     make_move(GameStateIfOpponentMove, Move, GameStateIfOpponentMoveAfterMove),
-    get_round_score(GameStateAfterMove, CurrentPlayer, CurrentPlayerScore),
-    get_round_score(GameStateIfOpponentMoveAfterMove, Opponent, OpponentScore),
+    get_round_score_optimized(GameStateAfterMove, Move, CurrentPlayerScore),
+    get_round_score_optimized(GameStateIfOpponentMoveAfterMove, Move, OpponentScore),
     get_pseudo_sequence_score_optimized(GameStateAfterMove, Move, CurrentPlayerPseudoScore),
     get_pseudo_sequence_score_optimized(GameStateIfOpponentMoveAfterMove, Move, OpponentPseudoScore),
     get_player_captures(GameStateAfterMove, CurrentPlayer, CurrentPlayerCaptures),

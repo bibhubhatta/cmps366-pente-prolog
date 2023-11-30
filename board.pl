@@ -43,6 +43,7 @@
     get_sequence_score/3,
     valid_position/2,
     length_greater_than_or_equal_to/2,
+    length_equal_to/2,
     get_all_stone_sequences_localized/3
 ]).
 
