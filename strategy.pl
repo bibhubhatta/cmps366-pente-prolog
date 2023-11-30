@@ -95,14 +95,19 @@ get_pseudo_sequence_score(GameState, Player, Score) :-
     get_all_stone_sequences(Board, Stone, Sequences),
     include(length_greater_than_or_equal_to(2), Sequences, LongSequences),
     maplist(length, LongSequences, Lengths),
-    maplist(square, Lengths, Squares),
-    append(Squares, [0], SquaresWithZero),
+    maplist(cube, Lengths, LengthsExponiated),
+    append(LengthsExponiated, [0], SquaresWithZero),
     sum_list(SquaresWithZero, Score).
 
 % square(Number, Square)
 % Helper predicate to square a number
 square(Number, Square) :-
     Square is Number * Number.
+
+% cube(Number, Cube)
+% Helper predicate to cube a number
+cube(Number, Cube) :-
+    Cube is Number * Number * Number.
 
 % get_pseudo_score(+GameState, +Move, -Score)
 % Calculates the pseudo score for the given move
@@ -117,7 +122,14 @@ get_pseudo_score(GameState, Move, Score) :-
     get_round_score(GameStateIfOpponentMoveAfterMove, Opponent, OpponentScore),
     get_pseudo_sequence_score(GameStateAfterMove, CurrentPlayer, CurrentPlayerPseudoScore),
     get_pseudo_sequence_score(GameStateIfOpponentMoveAfterMove, Opponent, OpponentPseudoScore),
-    Score is (CurrentPlayerScore * 1000) + (OpponentScore * 1000) + (CurrentPlayerPseudoScore * 10) + (OpponentPseudoScore * 10).
+    get_player_captures(GameStateAfterMove, CurrentPlayer, CurrentPlayerCaptures),
+    get_player_captures(GameStateIfOpponentMoveAfterMove, Opponent, OpponentCaptures),
+    Score is (CurrentPlayerScore * 10000) + 
+             (OpponentScore * 10000) + 
+             (CurrentPlayerCaptures * 1500) +
+             (OpponentCaptures * 1000) +
+             (CurrentPlayerPseudoScore * 15) + 
+             (OpponentPseudoScore * 10).
 
 % get_pseudo_scores(+GameState, +Moves, -Scores)
 % Calculates the pseudo scores for the given moves
