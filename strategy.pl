@@ -164,8 +164,17 @@ get_best_move(GameState, BestMove) :-
     get_board(GameState, Board),
     get_available_moves(Board, AvailableMoves),
     get_pseudo_scores(GameState, AvailableMoves, Scores),
-    sort(2, @>=, Scores, SortedScores),
-    SortedScores = [[BestMove, _]|_].
+    % Filter only the moves with the highest score
+    % Find the highest score
+    maplist(nth0(1), Scores, ScoresList),
+    max_list(ScoresList, MaxScore),
+    % Filter the moves with the highest score
+    findall(Move, (member([Move, Score], Scores), Score =:= MaxScore), BestMoves),
+    % Randomly select one of the best moves
+    length(BestMoves, Length),
+    writeln(Length),
+    random(0, Length, Index),
+    nth0(Index, BestMoves, BestMove),
     % get_random_move(GameState, BestMove).
 
 % get_move_rationale(+GameState, +Move, -Explanation)
