@@ -133,7 +133,8 @@ get_round_score_optimized(GameState, Position, Score) :-
     include(length_equal_to(4), Sequences, FourSequences),
     length(FourSequences, FourSequencesCount),
     SequenceScore is (FiveOrMoreSequencesCount * 5) + (FourSequencesCount * 1),
-    get_current_player(GameState, CurrentPlayer),
+    get_stone(Board, Position, Stone),
+    get_player_from_stone(GameState, Stone, CurrentPlayer),
     get_player_captures(GameState, CurrentPlayer, Captures),
     Score is SequenceScore + Captures.
 
