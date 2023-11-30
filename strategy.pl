@@ -9,7 +9,10 @@
         capture_blocking_move/2,
         only_move/2,
         sequence_making_move/2,
-        sequence_blocking_move/2
+        sequence_blocking_move/2,
+        get_rationale_explanation/2,
+        get_move_rationale/3,
+        get_explanation_from_rationales/2
     ]
     ).
 
@@ -142,3 +145,42 @@ get_best_move(GameState, BestMove) :-
     sort(2, @>=, Scores, SortedScores),
     SortedScores = [[BestMove, _]|_].
     % get_random_move(GameState, BestMove).
+
+% get_move_rationale(+GameState, +Move, -Explanation)
+% Gets the explanation for the given move 
+get_move_rationale(GameState, Move, Explanation) :-
+    MoveAnalysisFunctions = ['only_move', 'winning_move', 'win_blocking_move', 'capturing_move', 'capture_blocking_move', 'sequence_making_move', 'sequence_blocking_move'],
+    include(function_returns_true(GameState, Move), MoveAnalysisFunctions, RationaleList),
+    get_explanation_from_rationales(RationaleList, Explanation).
+
+% function_returns_true(+GameState, +Move, +Function)
+% Helper predicate to check if the given function returns true for the given game state and move
+function_returns_true(GameState, Move, Function) :-
+    call(Function, GameState, Move).
+
+% get_rationale_explanation(+Rationale, -Explanation)
+% Defines the explanation for the given rationale
+get_rationale_explanation(only_move, Explanation) :-
+    Explanation = "The move is the only available move. ".
+get_rationale_explanation(winning_move, Explanation) :-
+    Explanation = "The move is a winning move. ".
+get_rationale_explanation(win_blocking_move, Explanation) :-
+    Explanation = "The move prevents the opponent from winning. ".
+get_rationale_explanation(capturing_move, Explanation) :-
+    Explanation = "The move is a capturing move. ".
+get_rationale_explanation(capture_blocking_move, Explanation) :-
+    Explanation = "The move prevents the opponent from capturing. ".
+get_rationale_explanation(sequence_making_move, Explanation) :-
+    Explanation = "The move is a sequence making move. ".
+get_rationale_explanation(sequence_blocking_move, Explanation) :-
+    Explanation = "The move prevents the opponent from making a sequence. ".
+get_rationale_explanation(_, Explanation) :-
+    Explanation = "The move is a random move. ".
+
+% get_explanation_from_rationales(+Rationales, -Explanation)
+% Constructs a human readable explanation from the list of rationales
+get_explanation_from_rationales(Rationales, Explanation) :-
+    % If rationale is empty, then it is a random move, otherwise, it is a combination of rationales
+    Rationales = [] -> Explanation = "The move is a random move. ";
+    maplist(get_rationale_explanation, Rationales, ExplanationList),
+    atomic_list_concat(ExplanationList, Explanation).

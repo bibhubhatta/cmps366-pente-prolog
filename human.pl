@@ -14,6 +14,7 @@
 
 :- use_module(game_state).
 :- use_module(board).
+:-use_module(strategy).
 
 % print_help
 % print_help(GameState) :-
@@ -34,11 +35,22 @@ get_human_move(GameState, HumanMove) :-
     read_line_to_string(user_input, Input),
     string_upper(Input, MoveString),
     (MoveString = "Q" -> save_and_quit(GameState);
-    % MoveString = "H" -> print_help(GameState), get_human_move(GameState, Move);
+    MoveString = "H" -> print_help(GameState), get_human_move(GameState, HumanMove);
     atom_string(Move, MoveString),
     is_available_move(GameState, Move) -> HumanMove = Move;
     format('Invalid move. Please try again. ~n', []), get_human_move(GameState, HumanMove)
     ).
+
+% print_help(+GameState)
+% Prints the optimal move and rationale.
+print_help(GameState) :-
+    get_best_move(GameState, Move),
+    format('The best move is ~w.~n', [Move]),
+    print_rationale(GameState, Move).
+
+print_rationale(GameState, Move) :-
+    get_move_rationale(GameState, Move, Rationale),
+    format('Rationale: ~w~n', [Rationale]).
 
 % is_available_move(+GameState, +Move)
 % Checks if the move is available in the current game state.

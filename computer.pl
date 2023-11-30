@@ -10,4 +10,6 @@
 % Returns a random valid move for the computer
 get_computer_move(GameState, Move):-
     get_best_move(GameState, Move),
-    format('Computer is playing ~w~n', [Move]).
+    get_move_rationale(GameState, Move, Rationale),
+    format('Computer\'s move: ~w~n', [Move]),
+    format('Rationale: ~w~n', [Rationale]).
