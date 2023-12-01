@@ -237,14 +237,14 @@ handle_capture_in_direction(GameState, Move, DirectionFunction, NewGameState) :-
 
 % make_move(+GameState, +Move, -NewGameState)
 % Predicate to make a move
-% Cut is used to prevent the interpreter from thinking that there are other solutions
 % There is only one solution for a valid move
+% https://stackoverflow.com/questions/20935671/member-predicate
 make_move(GameState, Move, NewGameState) :-
     get_board(GameState, Board),
     get_current_player_stone(GameState, CurrentPlayerStone),
     % Check if the move is valid
     get_available_moves(Board, AvailableMoves),
-    member(Move, AvailableMoves),
+    nonvar(AvailableMoves), memberchk(Move, AvailableMoves),
     % Update the board
     set_stone(Board, Move, CurrentPlayerStone, NewBoard),
     set_board(GameState, NewBoard, BoardUpdatedGameState),
@@ -258,9 +258,7 @@ make_move(GameState, Move, NewGameState) :-
     handle_capture_in_direction(DownLeftGameState, Move, left_position, LeftGameState),
     handle_capture_in_direction(LeftGameState, Move, up_left_position, UpLeftGameState),
     % Switch the turn
-    switch_turn(UpLeftGameState, NewGameState)
-    % .
-    , !.
+    switch_turn(UpLeftGameState, NewGameState).
 
 
 % get_winner(+GameState, -Winner)
