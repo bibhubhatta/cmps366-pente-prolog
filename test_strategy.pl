@@ -34,7 +34,6 @@ test(winning_move) :-
 
 test(sequence_making_move) :-
     read_game_state('serials/4.pl', Serial1),
-    print_game_state(Serial1),
     sequence_making_move(Serial1, 'D4'),
     \+ sequence_making_move(Serial1, 'F12').
 
