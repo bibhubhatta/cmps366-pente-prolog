@@ -186,18 +186,8 @@ get_stones(Board, [Head|Tail], [Stone|Stones]) :-
 
 % set_stone(+Board, +Position, +Stone, -NewBoard)
 % Purpose: Set the stone at a position on the board
-% Note: Uses cut (!), otherwise the Prolog interpreter will think it has multiple solutions
-% even though it is deterministic. This makes it cleaner to test and use.
-set_stone(Board, Position, black, NewBoard) :-
-    set_stone(Board, Position, b, NewBoard), !.
-
-set_stone(Board, Position, white, NewBoard) :-
-    set_stone(Board, Position, w, NewBoard), !.
-
-set_stone(Board, Position, empty, NewBoard) :-
-    set_stone(Board, Position, o, NewBoard), !.
-
-set_stone(Board, Position, Stone, NewBoard) :-
+set_stone(Board, Position, Color, NewBoard) :-
+    color_symbol(Color, Symbol),
     string_to_position(Position, RowIndex, ColIndex),
     get_board_size(Board, NoRows, NoCols),
     % Check if the position is valid
@@ -208,9 +198,19 @@ set_stone(Board, Position, Stone, NewBoard) :-
     % Get the row
     nth0(RowIndex, Board, Row),
     % Replace the stone
-    replace(Row, ColIndex, Stone, NewRow),
+    replace(Row, ColIndex, Symbol, NewRow),
     % Replace the row
     replace(Board, RowIndex, NewRow, NewBoard).
+
+% color_symbol(+Color, -Symbol)
+% Purpose: Get the symbol for the stone color
+% Helper for the set_stone predicate
+color_symbol(black, b).
+color_symbol(white, w).
+color_symbol(empty, o).
+color_symbol(b, b).
+color_symbol(w, w).
+color_symbol(o, o).
 
 % replace(+List, +Index, +Element, -NewList)
 % Purpose: Replace an element in a list
