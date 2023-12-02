@@ -214,15 +214,10 @@ color_symbol(o, o).
 
 % replace(+List, +Index, +Element, -NewList)
 % Purpose: Replace an element in a list
-% Note: Uses cut (!), otherwise the Prolog interpreter will think it has multiple solutions
-% even though it is deterministic. This makes it cleaner to test and use.
-replace([_|Tail], 0, Element, [Element|Tail]) :- !.
-replace([Head|Tail], Index, Element, [Head|NewTail]) :-
-    Index > 0,
-    Index1 is Index - 1,
-    replace(Tail, Index1, Element, NewTail)
-    % .
-    , !.
+% Algo: Remove the element at the index and insert the new element
+replace(List, Index, Element, NewList) :-
+    nth0(Index, List, _, Temp),
+    nth0(Index, NewList, Element, Temp).
 
 
 % convert_to_sequences(+List, -Sequences)
