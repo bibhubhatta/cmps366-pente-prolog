@@ -551,13 +551,15 @@ is_third_move(Board) :-
 % Returns the available moves -- a list of positions
 get_available_moves(Board, Moves) :-
     get_no_stones_on_board(Board, TotalStones),
-    (   TotalStones =:= 0
-    ->  get_center(Board, Center),
-        Moves = [Center]
-    ;   TotalStones =:= 2
-    ->  get_positions_3_or_more_away_from_center(Board, Moves)
-    ;   get_empty_positions(Board, Moves)
-    ).
+    TotalStones =:= 0,
+    get_center(Board, Center),
+    Moves = [Center].
+get_available_moves(Board, Moves) :-
+    get_no_stones_on_board(Board, TotalStones),
+    TotalStones =:= 2,
+    get_positions_3_or_more_away_from_center(Board, Moves).
+get_available_moves(Board, Moves) :-
+    get_empty_positions(Board, Moves).
 
 % get_positions_3_or_more_away_from_center(+Board, -Positions)
 % Predicate to get all the positions that are 3 or more away from the center
