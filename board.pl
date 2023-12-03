@@ -656,14 +656,12 @@ get_negative_diagonal_stone_sequence(Board, Position, Sequence) :-
 get_stone_sequence_in_direction(Board, Position, DirectionFunction, Sequence) :-
     call(DirectionFunction, Position, PositionInDirection),
     get_stone(Board, Position, CurrentStone),
-    (
-        valid_position(Board, PositionInDirection),  
-        get_stone(Board, PositionInDirection, NextStone),
-        CurrentStone = NextStone
-    ) ->
-        (
-            get_stone_sequence_in_direction(Board, PositionInDirection, DirectionFunction, RestOfSequence),
-            Sequence = [CurrentStone|RestOfSequence]
-        );
+    valid_position(Board, PositionInDirection),  
+    get_stone(Board, PositionInDirection, NextStone),
+    CurrentStone = NextStone,
+    get_stone_sequence_in_direction(Board, PositionInDirection, DirectionFunction, RestOfSequence),
+    Sequence = [CurrentStone|RestOfSequence].
+
+get_stone_sequence_in_direction(_, _, _, Sequence):-
         Sequence = [].
     
