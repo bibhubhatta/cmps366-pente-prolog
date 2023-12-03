@@ -95,11 +95,10 @@ get_col(Board, ColChar, Col) :-
 % Predicate to get a list of characters for the bottom of the board
 % get_char_list(+NoCols, -CharList)
 % Assistance: https://stackoverflow.com/questions/40711908/what-is-a-test-succeeded-with-choicepoint-warning-in-pl-unit-and-how-do-i-fix
+get_char_list(NoCols, CharList):-
+    NoCols =< 0,
+    CharList = [].
 get_char_list(NoCols, CharList) :-
-    % Base case
-    % get_char_list(0, []) is not used because it would make it non-deterministic
-    % even if it is deterministic
-    NoCols =:= 0 -> CharList = [];
     NoCols > 0,
     NoCols1 is NoCols - 1,
     get_char_list(NoCols1, CharList1),
