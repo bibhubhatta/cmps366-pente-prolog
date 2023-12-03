@@ -224,20 +224,14 @@ replace(List, Index, Element, NewList) :-
 % Purpose: Convert the list of stones to a list of sequences
 % A sequence is a list of stones of the same color
 % The list of sequences is a list of lists of stones
-% Code was initially written without cut, but it makes the interpreter think it has multiple solutions
-% even though it is deterministic. This makes it cleaner to test and use.
 convert_to_sequences([], [[]]).
 convert_to_sequences([X], [[X]]).
 convert_to_sequences([X, X|Tail], [[X|SubSeq]|Sequences]) :-
-    convert_to_sequences([X|Tail], [SubSeq|Sequences])
-    % .
-    , !.
+    convert_to_sequences([X|Tail], [SubSeq|Sequences]).
 
 convert_to_sequences([X, Y|Tail], [[X]|Sequences]) :-
     dif(X, Y),
-    convert_to_sequences([Y|Tail], Sequences)
-    % .
-    , !.
+    convert_to_sequences([Y|Tail], Sequences).
 
 % get_all_positions(+Board, -Positions)
 % Purpose: Get all the positions on the board
@@ -503,19 +497,11 @@ convert_board_sequences_to_stone_sequences(Board, [Head|Tail], StoneSequences) :
 % get_all_stone_sequences(+Board, +Stone, -Sequences)
 % Predicate to get all the sequences of the board that contain the stone
 % Sequences is a list of lists
-get_all_stone_sequences(Board, 'white', Sequences) :-
-    get_all_stone_sequences(Board, 'w', Sequences),
-    % .
-    !.
-get_all_stone_sequences(Board, 'black', Sequences) :-
-    get_all_stone_sequences(Board, 'b', Sequences),
-    % .
-    !.
-
 get_all_stone_sequences(Board, Stone, Sequences) :-
+    color_symbol(Stone, StoneSymbol),
     get_all_board_sequences(Board, BoardSequences),
     convert_board_sequences_to_stone_sequences(Board, BoardSequences, StoneSequences),
-    include(contains_stone(Stone), StoneSequences, Sequences).
+    include(contains_stone(StoneSymbol), StoneSequences, Sequences).
 
 % contains_stone(+Stone, +Sequence)
 % Helper predicate to check if a sequence contains a specific stone
