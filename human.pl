@@ -8,8 +8,9 @@
         human_wants_to_play_again/0,
         human_wins_toss/0,
         human_wants_to_load_game/0,
-        ask_save_game/1,
-        load_game_state_from_human_input/1
+        load_game_state_from_human_input/1,
+        human_wants_to_save_and_quit/0,
+        save_to_human_location/1
     ]).
 
 :- use_module(game_state).
@@ -31,10 +32,10 @@
 % If the user wants to quit, it will save the game and quit.
 % If the user wants help, it will print the optimal move and rationale.
 get_human_move(GameState, HumanMove) :-
-    format('Enter your move, e.g. A10, ask help (h), or quit (q): ~n', []),
+    format('Enter your move, e.g. A10, ask help (h): ~n', []),
     read_line_to_string(user_input, Input),
     string_upper(Input, MoveString),
-    (MoveString = "Q" -> save_and_quit(GameState);
+    (
     MoveString = "H" -> print_help(GameState), get_human_move(GameState, HumanMove);
     atom_string(Move, MoveString),
     is_available_move(GameState, Move) -> HumanMove = Move;
@@ -59,13 +60,12 @@ is_available_move(GameState, Move) :-
     get_available_moves(Board, AvailableMoves),
     member(Move, AvailableMoves).
 
-% save_and_quit(+GameState)
-% Saves the game state to the user's location and quits the game.
-save_and_quit(GameState) :-
+% save_to_human_location(+GameState)
+% Saves the game state to the user's location.
+save_to_human_location(GameState) :-
     format('Enter the file name to save the game: ~n', []),
     read_line_to_string(user_input, FileName),
-    write_game_state(FileName, GameState),
-    halt.
+    write_game_state(FileName, GameState).
 
 % human_wins_toss
 % True if human wins the toss, false otherwise.
@@ -99,6 +99,12 @@ human_wants_to_load_game :-
     ask_yes_no_question('Do you want to load from file?', WantsToLoad),
     WantsToLoad.
 
+% human_wants_to_save_and_quit
+% True if human wants to save and quit, false otherwise.
+human_wants_to_save_and_quit :-
+    ask_yes_no_question('Do you want to save and quit?', WantsToSaveAndQuit),
+    WantsToSaveAndQuit.
+
 % ask_yes_no_question(+Question, -Response)
 % Asks the user a yes/no question and returns the response as a boolean.
 % If the user enters an invalid input, it will ask the user to enter a new input.
@@ -116,14 +122,6 @@ ask_yes_no_question(Question, Response) :-
     Choice = "N" ->
         Response = false
     ).
-
-% ask_save_game(+GameState, -FinalGameState)
-% Asks the user if they want to save the game and quit.
-% If the user wants to save the game, it will save the game and quit.
-% Otherwise it will do nothing
-ask_save_game(GameState) :-
-    ask_yes_no_question('Do you want to save the game?', WantsToSave),
-    (WantsToSave -> save_and_quit(GameState); true).
 
 
 % load_game_state_from_human_input(-GameState)

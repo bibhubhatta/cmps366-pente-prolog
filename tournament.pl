@@ -12,7 +12,8 @@
 play_tournament(GameState) :-
     announce_tournament_scores(GameState),
     conduct_round(GameState, AfterRoundGameState),
-    update_tournament_score(AfterRoundGameState, FinalGameState),
+    (is_game_over(AfterRoundGameState) ->
+    (update_tournament_score(AfterRoundGameState, FinalGameState),
     announce_tournament_scores(FinalGameState),
     (
         human_wants_to_play_again ->  
@@ -21,9 +22,9 @@ play_tournament(GameState) :-
                 set_starting_player(InitializedGameState, NewGameState),
                 play_tournament(NewGameState)
             );
-            announce_tournament_result(FinalGameState),
-            halt
-    ).
+            announce_tournament_result(FinalGameState)
+    )
+    ); true).
 
 
 
