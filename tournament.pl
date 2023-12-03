@@ -12,19 +12,30 @@
 play_tournament(GameState) :-
     announce_tournament_scores(GameState),
     conduct_round(GameState, AfterRoundGameState),
-    (is_game_over(AfterRoundGameState) ->
-    (update_tournament_score(AfterRoundGameState, FinalGameState),
+    handle_round_result(AfterRoundGameState).
+
+% handle_round_result(+GameState)
+% Predicate to handle the round result
+handle_round_result(AfterRoundGameState) :-
+    % If the game is over, update the tournament score and announce the tournament scores
+    is_game_over(AfterRoundGameState),
+    update_tournament_score(AfterRoundGameState, FinalGameState),
     announce_tournament_scores(FinalGameState),
-    (
-        human_wants_to_play_again ->  
-            (
-                initialize_round(FinalGameState, InitializedGameState), 
-                set_starting_player(InitializedGameState, NewGameState),
-                play_tournament(NewGameState)
-            );
-            announce_tournament_result(FinalGameState)
-    )
-    ); true).
+    handle_human_wants_to_play_again(FinalGameState).
+
+handle_round_result(AfterRoundGameState) :-
+    not(is_game_over(AfterRoundGameState)).
+
+% handle_human_wants_to_play_again(+GameState)
+% Predicate to handle the condition when asking the human if they want to play again
+handle_human_wants_to_play_again(AfterRoundGameState) :-
+    human_wants_to_play_again,
+    initialize_round(AfterRoundGameState, InitializedGameState),
+    set_starting_player(InitializedGameState, NewGameState),
+    play_tournament(NewGameState).
+
+handle_human_wants_to_play_again(AfterRoundGameState) :-
+    announce_tournament_result(AfterRoundGameState).
 
 
 
