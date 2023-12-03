@@ -321,7 +321,7 @@ is_sequence_winner(GameState, Winner):-
 is_game_drawn(GameState) :-
     get_board(GameState, Board),
     get_available_moves(Board, AvailableMoves),
-    (AvailableMoves = [] -> true ; false).
+    AvailableMoves = [].
 
 % Predicate to check if the game is over
 % Returns true if the game is over, false otherwise
