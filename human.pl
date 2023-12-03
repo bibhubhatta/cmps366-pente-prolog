@@ -146,18 +146,18 @@ ask_yes_no_question(Question, Response) :-
     format('~w (y/n): ', [Question]),
     read_line_to_string(user_input, HumanChoice),
     string_upper(HumanChoice, Choice),
-    handle_choice(Choice, Response).
+    handle_choice(Question, Choice, Response).
 
 % handle_choice(+Choice)
 % Handles the choice for different cases.
-handle_choice(Choice, Response) :-
+handle_choice(Question, Choice, Response) :-
     not(memberchk(Choice, ["Y", "N"])),
     writeln('Invalid input. Please try again.'),
-    ask_yes_no_question('Do you want to play again?', Response).
+    ask_yes_no_question(Question, Response).
 
-handle_choice("Y", Response) :-
+handle_choice(_, "Y", Response) :-
     Response = true.
-handle_choice("N", Response) :-
+handle_choice(_, "N", Response) :-
     Response = false.
 
 % load_game_state_from_human_input(-GameState)
