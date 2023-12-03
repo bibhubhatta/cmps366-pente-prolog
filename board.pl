@@ -312,12 +312,15 @@ get_neighboring_stones(Board, PositionString, NeighboringStones) :-
 % The up right diagonal is a list of atoms
 get_up_right_diagonal(Board, PositionString, UpRightDiagonal) :-
     up_right_position(PositionString, NewPositionString),
-    (valid_position(NewPositionString) ->
-        get_stone(Board, NewPositionString, Stone),
-        get_up_right_diagonal(Board, NewPositionString, RestOfDiagonal),
-        UpRightDiagonal = [Stone|RestOfDiagonal]
-    ;   UpRightDiagonal = []
-    ).
+    valid_position(NewPositionString),
+    get_stone(Board, NewPositionString, Stone),
+    get_up_right_diagonal(Board, NewPositionString, RestOfDiagonal),
+    UpRightDiagonal = [Stone|RestOfDiagonal].
+
+get_up_right_diagonal(Board, PositionString, UpRightDiagonal)  :-
+    up_right_position(PositionString, NewPositionString),
+    \+ valid_position(NewPositionString),
+    UpRightDiagonal = [].
 
 % get_up_left_diagonal(+Board, +PositionString, -UpLeftDiagonal)
 % Predicate to get all the stones on the up left diagonal of the given position
@@ -326,12 +329,16 @@ get_up_right_diagonal(Board, PositionString, UpRightDiagonal) :-
 % The up left diagonal is a list of atoms
 get_up_left_diagonal(Board, PositionString, UpLeftDiagonal) :-
     up_left_position(PositionString, NewPositionString),
-    (valid_position(NewPositionString) ->
-        get_stone(Board, NewPositionString, Stone),
-        get_up_left_diagonal(Board, NewPositionString, RestOfDiagonal),
-        UpLeftDiagonal = [Stone|RestOfDiagonal]
-    ;   UpLeftDiagonal = []
-    ).
+    valid_position(NewPositionString),
+    get_stone(Board, NewPositionString, Stone),
+    get_up_left_diagonal(Board, NewPositionString, RestOfDiagonal),
+    UpLeftDiagonal = [Stone|RestOfDiagonal].
+
+get_up_left_diagonal(Board, PositionString, UpLeftDiagonal)  :-
+    up_left_position(PositionString, NewPositionString),
+    \+ valid_position(NewPositionString),
+    UpLeftDiagonal = [].
+
 
 % get_down_right_diagonal(+Board, +PositionString, -DownRightDiagonal)
 % Predicate to get all the stones on the down right diagonal of the given position
@@ -340,12 +347,15 @@ get_up_left_diagonal(Board, PositionString, UpLeftDiagonal) :-
 % The down right diagonal is a list of atoms
 get_down_right_diagonal(Board, PositionString, DownRightDiagonal) :-
     down_right_position(PositionString, NewPositionString),
-    (valid_position(NewPositionString) ->
-        get_stone(Board, NewPositionString, Stone),
-        get_down_right_diagonal(Board, NewPositionString, RestOfDiagonal),
-        DownRightDiagonal = [Stone|RestOfDiagonal]
-    ;   DownRightDiagonal = []
-    ).
+    valid_position(NewPositionString),
+    get_stone(Board, NewPositionString, Stone),
+    get_down_right_diagonal(Board, NewPositionString, RestOfDiagonal),
+    DownRightDiagonal = [Stone|RestOfDiagonal].
+
+get_down_right_diagonal(Board, PositionString, DownRightDiagonal)  :-
+    down_right_position(PositionString, NewPositionString),
+    \+ valid_position(NewPositionString),
+    DownRightDiagonal = [].
 
 % get_down_left_diagonal(+Board, +PositionString, -DownLeftDiagonal)
 % Predicate to get all the stones on the down left diagonal of the given position
@@ -354,12 +364,14 @@ get_down_right_diagonal(Board, PositionString, DownRightDiagonal) :-
 % The down left diagonal is a list of atoms
 get_down_left_diagonal(Board, PositionString, DownLeftDiagonal) :-
     down_left_position(PositionString, NewPositionString),
-    (valid_position(NewPositionString) ->
-        get_stone(Board, NewPositionString, Stone),
-        get_down_left_diagonal(Board, NewPositionString, RestOfDiagonal),
-        DownLeftDiagonal = [Stone|RestOfDiagonal]
-    ;   DownLeftDiagonal = []
-    ).
+    valid_position(NewPositionString),
+    get_stone(Board, NewPositionString, Stone),
+    get_down_left_diagonal(Board, NewPositionString, RestOfDiagonal),
+    DownLeftDiagonal = [Stone|RestOfDiagonal].
+
+get_down_left_diagonal(Board, PositionString, DownLeftDiagonal)  :-
+    down_left_position(PositionString, NewPositionString),
+   DownLeftDiagonal = [].
 
 % get_positive_diagonal(+Board, +PositionString, -PositiveDiagonal)
 % Predicate to get all the stones on the positive diagonal of the given position
