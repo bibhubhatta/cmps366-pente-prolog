@@ -34,13 +34,24 @@
 get_human_move(GameState, HumanMove) :-
     format('Enter your move, e.g. A10, ask help (h): ~n', []),
     read_line_to_string(user_input, Input),
-    string_upper(Input, MoveString),
-    (
-    MoveString = "H" -> print_help(GameState), get_human_move(GameState, HumanMove);
+    handle_human_input(GameState, Input, HumanMove).
+
+% handle_human_input(+GameState, +HumanInput, -HumanMove)
+% Handles the human input for different cases.
+handle_human_input(GameState, HumanInput, HumanMove) :-
+    string_upper(HumanInput, MoveString),
+    MoveString = "H",
+    print_help(GameState),
+    get_human_move(GameState, HumanMove).
+
+handle_human_input(GameState, HumanInput, HumanMove) :-
+    string_upper(HumanInput, MoveString),
     atom_string(Move, MoveString),
-    is_available_move(GameState, Move) -> HumanMove = Move;
-    format('Invalid move. Please try again. ~n', []), get_human_move(GameState, HumanMove)
-    ).
+    is_available_move(GameState, Move), HumanMove = Move.
+
+handle_human_input(GameState, _, HumanMove) :-
+    format('Invalid move. Please try again. ~n', []),
+    get_human_move(GameState, HumanMove).
 
 % print_help(+GameState)
 % Prints the optimal move and rationale.

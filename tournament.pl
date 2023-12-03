@@ -49,9 +49,21 @@ announce_tournament_result(GameState) :-
     nl,
     announce_tournament_scores(GameState),
     nl,
-    (get_tournament_winner(GameState, Winner) ->  format('The tournament winner is ~w!~n', [Winner]);
-    writeln('The tournament is a tie!')),
+    (announce_winner(GameState) ; announce_draw(GameState)),
+    nl,
+    nl,
     writeln('------------------------------------------').
+
+
+% announce_winner(+GameState)
+% Predicate to announce the tournament winner
+announce_winner(GameState) :-
+    get_tournament_winner(GameState, Winner),
+    format('The tournament winner is ~w!~n', [Winner]).
+
+announce_draw(GameState) :- 
+    is_game_drawn(GameState),
+    writeln('The tournament is a draw!').
 
 % get_tournament_winner(+GameState, -Winner)
 % Predicate to get the tournament winner
