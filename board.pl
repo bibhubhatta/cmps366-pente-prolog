@@ -141,15 +141,19 @@ cartesian_board(UnmarkedBoard, MarkedBoard) :-
 % https://apps.nms.kcl.ac.uk/reactome-pengine/documentation/man?section=format
 print_board_cell(Cell) :-
     % if the cell is a number, it is a row marker, so print it as two digits for alignment
-    (   number(Cell) -> format('~|~` t~d~2+', Cell)
-    ;   % if the cell is ' ', it is the beginning of a row marker, so print two spaces for alignment
-        (   Cell = ' ' -> write('  ')
-        ;   % otherwise, print the character
-            write(Cell)
-        )
-    ),
-    % print a space for readability
+    number(Cell),
+    format('~|~` t~d~2+', Cell),
     write(' ').
+print_board_cell(Cell) :-
+    % if the cell is ' ', it is the beginning of a row marker, so print two spaces for alignment
+    Cell = ' ',
+    write('   ').
+print_board_cell(Cell) :-
+    % otherwise, print the character
+    write(Cell),
+    write(' ').
+
+
 
 % print_row(+Row)
 % Purpose: Print a row of the board
