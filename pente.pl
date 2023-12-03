@@ -10,13 +10,11 @@
 play_pente :-
     human_wants_to_load_game,
     load_game_state_from_human_input(GameState),
-    play_tournament(GameState);
-    true.
+    play_tournament(GameState).
 
 play_pente :-
     get_initial_state(GameState),
     set_starting_player(GameState, NewGameState),
-    play_tournament(NewGameState);
-    true.
+    play_tournament(NewGameState).
 
 :- play_pente.
