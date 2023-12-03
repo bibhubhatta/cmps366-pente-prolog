@@ -245,8 +245,8 @@ get_rationale_explanation(_, Explanation) :-
 
 % get_explanation_from_rationales(+Rationales, -Explanation)
 % Constructs a human readable explanation from the list of rationales
+get_explanation_from_rationales([], Explanation) :-
+    Explanation = "The move is a random move. ".
 get_explanation_from_rationales(Rationales, Explanation) :-
-    % If rationale is empty, then it is a random move, otherwise, it is a combination of rationales
-    Rationales = [] -> Explanation = "The move is a random move. ";
     maplist(get_rationale_explanation, Rationales, ExplanationList),
     atomic_list_concat(ExplanationList, Explanation).
