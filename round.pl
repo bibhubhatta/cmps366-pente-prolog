@@ -86,16 +86,32 @@ get_move(GameState, Move) :-
 set_starting_player(GameState, NewGameState) :-
     % Do nothing if the starting player is already set.
     get_current_player(GameState, CurrentPlayer),
-    not(CurrentPlayer = '_') -> NewGameState = GameState;
-    % Otherwise, set the starting player.
+    not(CurrentPlayer = '_'),
+    NewGameState = GameState.
+
+% Otherwise, set the starting player.
+set_starting_player(GameState, NewGameState) :-
     get_player_tournament_score(GameState, human, HumanScore),
     get_player_tournament_score(GameState, computer, ComputerScore),
-    (
-    HumanScore > ComputerScore -> set_current_player(GameState, human, NewGameState);
-    ComputerScore > HumanScore -> set_current_player(GameState, computer, NewGameState);
-    human_wins_toss -> set_current_player(GameState, human, NewGameState);
-    set_current_player(GameState, computer, NewGameState)
-    ).
+    HumanScore > ComputerScore,
+    set_current_player(GameState, human, NewGameState).
+
+set_starting_player(GameState, NewGameState) :-
+    get_player_tournament_score(GameState, human, HumanScore),
+    get_player_tournament_score(GameState, computer, ComputerScore),
+    ComputerScore > HumanScore,
+    set_current_player(GameState, computer, NewGameState).
+
+set_starting_player(GameState, NewGameState) :-
+    % If the scores are equal, toss a coin.
+    get_player_tournament_score(GameState, human, HumanScore),
+    get_player_tournament_score(GameState, computer, ComputerScore),
+    HumanScore = ComputerScore,
+    human_wins_toss,
+    set_current_player(GameState, human, NewGameState).
+
+set_starting_player(GameState, NewGameState) :-
+    set_current_player(GameState, computer, NewGameState).
 
 % print_round_state(+GameState)
 % Predicate to print the current state of the game.
