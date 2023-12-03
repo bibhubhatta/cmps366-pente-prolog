@@ -67,11 +67,11 @@ announce_draw(GameState) :-
 
 % get_tournament_winner(+GameState, -Winner)
 % Predicate to get the tournament winner
-get_tournament_winner(GameState, Winner) :-
+get_tournament_winner(GameState, human) :-
     get_player_tournament_score(GameState, human, HumanScore),
     get_player_tournament_score(GameState, computer, ComputerScore),
-    (
-    HumanScore > ComputerScore ->  Winner = human;
-    ComputerScore > HumanScore ->  Winner = computer;
-    fail
-    ).
+    HumanScore > ComputerScore.
+get_tournament_winner(GameState, computer) :-
+    get_player_tournament_score(GameState, human, HumanScore),
+    get_player_tournament_score(GameState, computer, ComputerScore),
+    HumanScore < ComputerScore.
