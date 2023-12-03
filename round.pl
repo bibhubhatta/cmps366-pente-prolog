@@ -42,10 +42,7 @@ announce_round_result(GameState) :-
     nl,
     nl,
     format('---------- Round Results ----------~n'),
-    (
-    get_winner(GameState, Winner) -> format('~w wins the round!~n', [Winner]);
-    is_game_drawn(GameState) -> format('The round is drawn!~n')
-    ),
+    announce_win_or_draw(GameState),
     get_round_score(GameState, human, HumanScore),
     get_round_score(GameState, computer, ComputerScore),
     format('Human\'s round score: ~w~n', [HumanScore]),
@@ -53,6 +50,15 @@ announce_round_result(GameState) :-
     format('-----------------------------------~n'),
     nl,
     nl.
+
+% announce_win_or_draw(+GameState)
+% Predicate to announce whether the game was won or drawn.
+announce_win_or_draw(GameState) :-
+    get_winner(GameState, Winner),
+    format('~w wins the game!~n', [Winner]).
+announce_win_or_draw(GameState) :-
+    is_game_drawn(GameState),
+    format('The game is drawn!~n').
 
 % play_round(+GameState, -FinalGameState)
 % Predicate to play a round of the game.
