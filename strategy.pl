@@ -62,12 +62,18 @@ only_move(GameState, Move) :-
 % stone_in_list(+Stone, +List)
 % Checks if the stone is in the list
 % Assistance from https://stackoverflow.com/questions/20935671/member-predicate
-stone_in_list(Stone, List) :-
-(   Stone = 'white' -> member('w', List)
-;   Stone = 'black' -> member('b', List)
-;   Stone = 'empty' -> member('o', List)
-;   nonvar(List), memberchk(Stone, List)
-).
+stone_in_list(white, List) :-
+    member('w', List).
+stone_in_list(black, List) :-
+    member('b', List).
+stone_in_list(empty, List) :-
+    member('o', List).
+stone_in_list(b, List) :-
+    member('b', List).
+stone_in_list(w, List) :-
+    member('w', List).
+stone_in_list(o, List) :-
+    member('o', List).
 
 % sequence_making_move(+GameState, +Move)
 % Checks if the move creates a sequence
