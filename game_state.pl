@@ -327,8 +327,8 @@ is_game_drawn(GameState) :-
 % Returns true if the game is over, false otherwise
 % The game is over if there is a winner or if the game is drawn
 is_game_over(GameState) :-
-    findall(Winner, get_winner(GameState, Winner), Winners),
-    (Winners = [] -> is_game_drawn(GameState) ; true).
+    get_winner(GameState, _);
+    is_game_drawn(GameState).
 
 % get_round_score(+GameState, +Player, -Score)
 % Predicate to get the round score of a player
