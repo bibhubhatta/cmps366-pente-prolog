@@ -498,9 +498,7 @@ convert_board_sequences_to_stone_sequences(_, [], []).
 convert_board_sequences_to_stone_sequences(Board, [Head|Tail], StoneSequences) :-
     convert_to_sequences(Head, ConvertedHead),
     convert_board_sequences_to_stone_sequences(Board, Tail, ConvertedTail),
-    append(ConvertedHead, ConvertedTail, StoneSequences)
-    % .
-    , !.
+    append(ConvertedHead, ConvertedTail, StoneSequences).
 
 % get_all_stone_sequences(+Board, +Stone, -Sequences)
 % Predicate to get all the sequences of the board that contain the stone
