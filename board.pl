@@ -134,7 +134,7 @@ cartesian_board(UnmarkedBoard, MarkedBoard) :-
     length(MarkedColumnsBoard, NoRows),
     nth1(NoRows, MarkedColumnsBoard, LastRow),
     % Add a a blank space in the beginning of the last row
-    append([' '], LastRow, LastRowWithSpace),
+    append(['  '], LastRow, LastRowWithSpace),
     % Append the last row to the marked rows board
     append(MarkedRowsBoard, [LastRowWithSpace], MarkedBoard).
     
