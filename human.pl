@@ -146,16 +146,19 @@ ask_yes_no_question(Question, Response) :-
     format('~w (y/n): ', [Question]),
     read_line_to_string(user_input, HumanChoice),
     string_upper(HumanChoice, Choice),
-    (not(member(Choice, ["Y", "N"])) ->
-        write('Invalid input. Please try again.'),
-        nl,
-        ask_yes_no_question(Question, Response);
-    Choice = "Y" ->
-        Response = true;
-    Choice = "N" ->
-        Response = false
-    ).
+    handle_choice(Choice, Response).
 
+% handle_choice(+Choice)
+% Handles the choice for different cases.
+handle_choice(Choice, Response) :-
+    not(memberchk(Choice, ["Y", "N"])),
+    writeln('Invalid input. Please try again.'),
+    ask_yes_no_question('Do you want to play again?', Response).
+
+handle_choice("Y", Response) :-
+    Response = true.
+handle_choice("N", Response) :-
+    Response = false.
 
 % load_game_state_from_human_input(-GameState)
 % Asks the user for the file name to load the game from.
