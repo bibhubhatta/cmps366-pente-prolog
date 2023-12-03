@@ -65,7 +65,15 @@ is_available_move(GameState, Move) :-
 save_to_human_location(GameState) :-
     format('Enter the file name to save the game: ~n', []),
     read_line_to_string(user_input, FileName),
-    write_game_state(FileName, GameState).
+    catch(
+        write_game_state(FileName, GameState),
+        Error,
+        (
+            print_message(error, Error),
+            format('Could not save file. Please try again.~n', []),
+            save_to_human_location(GameState)
+        )
+    ).
 
 % human_wins_toss
 % True if human wins the toss, false otherwise.
