@@ -21,9 +21,16 @@
 conduct_round(GameState, FinalGameState) :-
     print_round_state(GameState),
     play_round(GameState, FinalGameState),
-    (
-        is_game_over(FinalGameState) -> announce_round_result(FinalGameState); true
-    ).
+    handle_final_round_state(FinalGameState).
+
+% handle_final_round_state(+GameState)
+% Predicate to handle the final state of the round.
+handle_final_round_state(GameState) :-
+    is_game_over(GameState),
+    announce_round_result(GameState).
+
+handle_final_round_state(GameState) :-
+    not(is_game_over(GameState)).
 
 % announce_round_result(+GameState)
 % Predicate to announce the result of a round.
