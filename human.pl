@@ -34,13 +34,24 @@
 get_human_move(GameState, HumanMove) :-
     format('Enter your move, e.g. A10, ask help (h): ~n', []),
     read_line_to_string(user_input, Input),
-    string_upper(Input, MoveString),
-    (
-    MoveString = "H" -> print_help(GameState), get_human_move(GameState, HumanMove);
+    handle_human_input(GameState, Input, HumanMove).
+
+% handle_human_input(+GameState, +HumanInput, -HumanMove)
+% Handles the human input for different cases.
+handle_human_input(GameState, HumanInput, HumanMove) :-
+    string_upper(HumanInput, MoveString),
+    MoveString = "H",
+    print_help(GameState),
+    get_human_move(GameState, HumanMove).
+
+handle_human_input(GameState, HumanInput, HumanMove) :-
+    string_upper(HumanInput, MoveString),
     atom_string(Move, MoveString),
-    is_available_move(GameState, Move) -> HumanMove = Move;
-    format('Invalid move. Please try again. ~n', []), get_human_move(GameState, HumanMove)
-    ).
+    is_available_move(GameState, Move), HumanMove = Move.
+
+handle_human_input(GameState, _, HumanMove) :-
+    format('Invalid move. Please try again. ~n', []),
+    get_human_move(GameState, HumanMove).
 
 % print_help(+GameState)
 % Prints the optimal move and rationale.
@@ -83,17 +94,31 @@ human_wins_toss :-
     writeln('Heads or tails? (h/t): '),
     read_line_to_string(user_input, HumanChoice),
     string_upper(HumanChoice, Choice),
-    random(0, 2, CoinToss),
-    (not(member(Choice, ["H", "T"])) ->
-        writeln('Invalid input. Please try again.'),
-        human_wins_toss;
-    CoinToss = 1 ->
-        writeln('You won the toss! You will be playing the first turn as white.'),
-        true;
-    CoinToss = 0 ->
-        writeln('You lost the toss! You will be playing the second turn as black.'),
-        false
-    ).
+    handle_human_choice(Choice).
+
+% handle_human_choice(+Choice)
+% Handles the human choice for different cases.
+handle_human_choice(Choice) :-
+    not(memberchk(Choice, ["H", "T"])),
+    writeln('Invalid input. Please try again.'),
+    human_wins_toss.
+
+handle_human_choice(_) :-
+    random(0, 2, RandomNum),
+    handle_toss_result(RandomNum).
+
+% handle_toss_result(+RandomNum)
+% Handles the toss result for different cases.
+handle_toss_result(0) :-
+    writeln('You won the toss! You will be playing first as white.'),
+    nl,
+    nl,
+    true.
+handle_toss_result(1) :-
+    writeln('You lost the toss! You will be playing second as black.'),
+    nl,
+    nl,
+    false.
 
 % human_wants_to_play_again
 % True if human wants to play again, false otherwise.
@@ -121,16 +146,19 @@ ask_yes_no_question(Question, Response) :-
     format('~w (y/n): ', [Question]),
     read_line_to_string(user_input, HumanChoice),
     string_upper(HumanChoice, Choice),
-    (not(member(Choice, ["Y", "N"])) ->
-        write('Invalid input. Please try again.'),
-        nl,
-        ask_yes_no_question(Question, Response);
-    Choice = "Y" ->
-        Response = true;
-    Choice = "N" ->
-        Response = false
-    ).
+    handle_choice(Question, Choice, Response).
 
+% handle_choice(+Choice)
+% Handles the choice for different cases.
+handle_choice(Question, Choice, Response) :-
+    not(memberchk(Choice, ["Y", "N"])),
+    writeln('Invalid input. Please try again.'),
+    ask_yes_no_question(Question, Response).
+
+handle_choice(_, "Y", Response) :-
+    Response = true.
+handle_choice(_, "N", Response) :-
+    Response = false.
 
 % load_game_state_from_human_input(-GameState)
 % Asks the user for the file name to load the game from.

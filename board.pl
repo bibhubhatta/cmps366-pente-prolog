@@ -95,11 +95,10 @@ get_col(Board, ColChar, Col) :-
 % Predicate to get a list of characters for the bottom of the board
 % get_char_list(+NoCols, -CharList)
 % Assistance: https://stackoverflow.com/questions/40711908/what-is-a-test-succeeded-with-choicepoint-warning-in-pl-unit-and-how-do-i-fix
+get_char_list(NoCols, CharList):-
+    NoCols =< 0,
+    CharList = [].
 get_char_list(NoCols, CharList) :-
-    % Base case
-    % get_char_list(0, []) is not used because it would make it non-deterministic
-    % even if it is deterministic
-    NoCols =:= 0 -> CharList = [];
     NoCols > 0,
     NoCols1 is NoCols - 1,
     get_char_list(NoCols1, CharList1),
@@ -120,7 +119,9 @@ mark_columns(Board, NewBoard) :-
 % mark_rows(+Board, -MarkedBoard)
 mark_rows([], []).
 mark_rows([Head|Tail], [[N|Head]|MarkedTail]) :-
-    length([Head|Tail], N),
+    length([Head|Tail], NTemp),
+    % Convert NTemp to a string with 2 digits
+    format(atom(N), '~|~` t~d~2+', NTemp),
     mark_rows(Tail, MarkedTail).
 
 % cartesian_board(+UnmarkedBoard, -MarkedBoard)
@@ -133,7 +134,7 @@ cartesian_board(UnmarkedBoard, MarkedBoard) :-
     length(MarkedColumnsBoard, NoRows),
     nth1(NoRows, MarkedColumnsBoard, LastRow),
     % Add a a blank space in the beginning of the last row
-    append([' '], LastRow, LastRowWithSpace),
+    append(['  '], LastRow, LastRowWithSpace),
     % Append the last row to the marked rows board
     append(MarkedRowsBoard, [LastRowWithSpace], MarkedBoard).
     
@@ -141,15 +142,8 @@ cartesian_board(UnmarkedBoard, MarkedBoard) :-
 % Purpose: Print a cell of the board
 % https://apps.nms.kcl.ac.uk/reactome-pengine/documentation/man?section=format
 print_board_cell(Cell) :-
-    % if the cell is a number, it is a row marker, so print it as two digits for alignment
-    (   number(Cell) -> format('~|~` t~d~2+', Cell)
-    ;   % if the cell is ' ', it is the beginning of a row marker, so print two spaces for alignment
-        (   Cell = ' ' -> write('  ')
-        ;   % otherwise, print the character
-            write(Cell)
-        )
-    ),
-    % print a space for readability
+    % otherwise, print the character
+    write(Cell),
     write(' ').
 
 % print_row(+Row)
@@ -318,12 +312,15 @@ get_neighboring_stones(Board, PositionString, NeighboringStones) :-
 % The up right diagonal is a list of atoms
 get_up_right_diagonal(Board, PositionString, UpRightDiagonal) :-
     up_right_position(PositionString, NewPositionString),
-    (valid_position(NewPositionString) ->
-        get_stone(Board, NewPositionString, Stone),
-        get_up_right_diagonal(Board, NewPositionString, RestOfDiagonal),
-        UpRightDiagonal = [Stone|RestOfDiagonal]
-    ;   UpRightDiagonal = []
-    ).
+    valid_position(NewPositionString),
+    get_stone(Board, NewPositionString, Stone),
+    get_up_right_diagonal(Board, NewPositionString, RestOfDiagonal),
+    UpRightDiagonal = [Stone|RestOfDiagonal].
+
+get_up_right_diagonal(Board, PositionString, UpRightDiagonal)  :-
+    up_right_position(PositionString, NewPositionString),
+    \+ valid_position(NewPositionString),
+    UpRightDiagonal = [].
 
 % get_up_left_diagonal(+Board, +PositionString, -UpLeftDiagonal)
 % Predicate to get all the stones on the up left diagonal of the given position
@@ -332,12 +329,16 @@ get_up_right_diagonal(Board, PositionString, UpRightDiagonal) :-
 % The up left diagonal is a list of atoms
 get_up_left_diagonal(Board, PositionString, UpLeftDiagonal) :-
     up_left_position(PositionString, NewPositionString),
-    (valid_position(NewPositionString) ->
-        get_stone(Board, NewPositionString, Stone),
-        get_up_left_diagonal(Board, NewPositionString, RestOfDiagonal),
-        UpLeftDiagonal = [Stone|RestOfDiagonal]
-    ;   UpLeftDiagonal = []
-    ).
+    valid_position(NewPositionString),
+    get_stone(Board, NewPositionString, Stone),
+    get_up_left_diagonal(Board, NewPositionString, RestOfDiagonal),
+    UpLeftDiagonal = [Stone|RestOfDiagonal].
+
+get_up_left_diagonal(Board, PositionString, UpLeftDiagonal)  :-
+    up_left_position(PositionString, NewPositionString),
+    \+ valid_position(NewPositionString),
+    UpLeftDiagonal = [].
+
 
 % get_down_right_diagonal(+Board, +PositionString, -DownRightDiagonal)
 % Predicate to get all the stones on the down right diagonal of the given position
@@ -346,12 +347,15 @@ get_up_left_diagonal(Board, PositionString, UpLeftDiagonal) :-
 % The down right diagonal is a list of atoms
 get_down_right_diagonal(Board, PositionString, DownRightDiagonal) :-
     down_right_position(PositionString, NewPositionString),
-    (valid_position(NewPositionString) ->
-        get_stone(Board, NewPositionString, Stone),
-        get_down_right_diagonal(Board, NewPositionString, RestOfDiagonal),
-        DownRightDiagonal = [Stone|RestOfDiagonal]
-    ;   DownRightDiagonal = []
-    ).
+    valid_position(NewPositionString),
+    get_stone(Board, NewPositionString, Stone),
+    get_down_right_diagonal(Board, NewPositionString, RestOfDiagonal),
+    DownRightDiagonal = [Stone|RestOfDiagonal].
+
+get_down_right_diagonal(Board, PositionString, DownRightDiagonal)  :-
+    down_right_position(PositionString, NewPositionString),
+    \+ valid_position(NewPositionString),
+    DownRightDiagonal = [].
 
 % get_down_left_diagonal(+Board, +PositionString, -DownLeftDiagonal)
 % Predicate to get all the stones on the down left diagonal of the given position
@@ -360,12 +364,14 @@ get_down_right_diagonal(Board, PositionString, DownRightDiagonal) :-
 % The down left diagonal is a list of atoms
 get_down_left_diagonal(Board, PositionString, DownLeftDiagonal) :-
     down_left_position(PositionString, NewPositionString),
-    (valid_position(NewPositionString) ->
-        get_stone(Board, NewPositionString, Stone),
-        get_down_left_diagonal(Board, NewPositionString, RestOfDiagonal),
-        DownLeftDiagonal = [Stone|RestOfDiagonal]
-    ;   DownLeftDiagonal = []
-    ).
+    valid_position(NewPositionString),
+    get_stone(Board, NewPositionString, Stone),
+    get_down_left_diagonal(Board, NewPositionString, RestOfDiagonal),
+    DownLeftDiagonal = [Stone|RestOfDiagonal].
+
+get_down_left_diagonal(Board, PositionString, DownLeftDiagonal)  :-
+    down_left_position(PositionString, NewPositionString),
+   DownLeftDiagonal = [].
 
 % get_positive_diagonal(+Board, +PositionString, -PositiveDiagonal)
 % Predicate to get all the stones on the positive diagonal of the given position
@@ -548,13 +554,15 @@ is_third_move(Board) :-
 % Returns the available moves -- a list of positions
 get_available_moves(Board, Moves) :-
     get_no_stones_on_board(Board, TotalStones),
-    (   TotalStones =:= 0
-    ->  get_center(Board, Center),
-        Moves = [Center]
-    ;   TotalStones =:= 2
-    ->  get_positions_3_or_more_away_from_center(Board, Moves)
-    ;   get_empty_positions(Board, Moves)
-    ).
+    TotalStones =:= 0,
+    get_center(Board, Center),
+    Moves = [Center].
+get_available_moves(Board, Moves) :-
+    get_no_stones_on_board(Board, TotalStones),
+    TotalStones =:= 2,
+    get_positions_3_or_more_away_from_center(Board, Moves).
+get_available_moves(Board, Moves) :-
+    get_empty_positions(Board, Moves).
 
 % get_positions_3_or_more_away_from_center(+Board, -Positions)
 % Predicate to get all the positions that are 3 or more away from the center
@@ -656,14 +664,12 @@ get_negative_diagonal_stone_sequence(Board, Position, Sequence) :-
 get_stone_sequence_in_direction(Board, Position, DirectionFunction, Sequence) :-
     call(DirectionFunction, Position, PositionInDirection),
     get_stone(Board, Position, CurrentStone),
-    (
-        valid_position(Board, PositionInDirection),  
-        get_stone(Board, PositionInDirection, NextStone),
-        CurrentStone = NextStone
-    ) ->
-        (
-            get_stone_sequence_in_direction(Board, PositionInDirection, DirectionFunction, RestOfSequence),
-            Sequence = [CurrentStone|RestOfSequence]
-        );
+    valid_position(Board, PositionInDirection),  
+    get_stone(Board, PositionInDirection, NextStone),
+    CurrentStone = NextStone,
+    get_stone_sequence_in_direction(Board, PositionInDirection, DirectionFunction, RestOfSequence),
+    Sequence = [CurrentStone|RestOfSequence].
+
+get_stone_sequence_in_direction(_, _, _, Sequence):-
         Sequence = [].
     

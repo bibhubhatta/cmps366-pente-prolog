@@ -21,9 +21,16 @@
 conduct_round(GameState, FinalGameState) :-
     print_round_state(GameState),
     play_round(GameState, FinalGameState),
-    (
-        is_game_over(FinalGameState) -> announce_round_result(FinalGameState); true
-    ).
+    handle_final_round_state(FinalGameState).
+
+% handle_final_round_state(+GameState)
+% Predicate to handle the final state of the round.
+handle_final_round_state(GameState) :-
+    is_game_over(GameState),
+    announce_round_result(GameState).
+
+handle_final_round_state(GameState) :-
+    not(is_game_over(GameState)).
 
 % announce_round_result(+GameState)
 % Predicate to announce the result of a round.
@@ -35,10 +42,7 @@ announce_round_result(GameState) :-
     nl,
     nl,
     format('---------- Round Results ----------~n'),
-    (
-    get_winner(GameState, Winner) -> format('~w wins the round!~n', [Winner]);
-    is_game_drawn(GameState) -> format('The round is drawn!~n')
-    ),
+    announce_win_or_draw(GameState),
     get_round_score(GameState, human, HumanScore),
     get_round_score(GameState, computer, ComputerScore),
     format('Human\'s round score: ~w~n', [HumanScore]),
@@ -46,6 +50,15 @@ announce_round_result(GameState) :-
     format('-----------------------------------~n'),
     nl,
     nl.
+
+% announce_win_or_draw(+GameState)
+% Predicate to announce whether the game was won or drawn.
+announce_win_or_draw(GameState) :-
+    get_winner(GameState, Winner),
+    format('~w wins the game!~n', [Winner]).
+announce_win_or_draw(GameState) :-
+    is_game_drawn(GameState),
+    format('The game is drawn!~n').
 
 % play_round(+GameState, -FinalGameState)
 % Predicate to play a round of the game.
@@ -86,16 +99,32 @@ get_move(GameState, Move) :-
 set_starting_player(GameState, NewGameState) :-
     % Do nothing if the starting player is already set.
     get_current_player(GameState, CurrentPlayer),
-    not(CurrentPlayer = '_') -> NewGameState = GameState;
-    % Otherwise, set the starting player.
+    not(CurrentPlayer = '_'),
+    NewGameState = GameState.
+
+% Otherwise, set the starting player.
+set_starting_player(GameState, NewGameState) :-
     get_player_tournament_score(GameState, human, HumanScore),
     get_player_tournament_score(GameState, computer, ComputerScore),
-    (
-    HumanScore > ComputerScore -> set_current_player(GameState, human, NewGameState);
-    ComputerScore > HumanScore -> set_current_player(GameState, computer, NewGameState);
-    human_wins_toss -> set_current_player(GameState, human, NewGameState);
-    set_current_player(GameState, computer, NewGameState)
-    ).
+    HumanScore > ComputerScore,
+    set_current_player(GameState, human, NewGameState).
+
+set_starting_player(GameState, NewGameState) :-
+    get_player_tournament_score(GameState, human, HumanScore),
+    get_player_tournament_score(GameState, computer, ComputerScore),
+    ComputerScore > HumanScore,
+    set_current_player(GameState, computer, NewGameState).
+
+set_starting_player(GameState, NewGameState) :-
+    % If the scores are equal, toss a coin.
+    get_player_tournament_score(GameState, human, HumanScore),
+    get_player_tournament_score(GameState, computer, ComputerScore),
+    HumanScore = ComputerScore,
+    human_wins_toss,
+    set_current_player(GameState, human, NewGameState).
+
+set_starting_player(GameState, NewGameState) :-
+    set_current_player(GameState, computer, NewGameState).
 
 % print_round_state(+GameState)
 % Predicate to print the current state of the game.

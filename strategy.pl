@@ -62,12 +62,18 @@ only_move(GameState, Move) :-
 % stone_in_list(+Stone, +List)
 % Checks if the stone is in the list
 % Assistance from https://stackoverflow.com/questions/20935671/member-predicate
-stone_in_list(Stone, List) :-
-(   Stone = 'white' -> member('w', List)
-;   Stone = 'black' -> member('b', List)
-;   Stone = 'empty' -> member('o', List)
-;   nonvar(List), memberchk(Stone, List)
-).
+stone_in_list(white, List) :-
+    member('w', List).
+stone_in_list(black, List) :-
+    member('b', List).
+stone_in_list(empty, List) :-
+    member('o', List).
+stone_in_list(b, List) :-
+    member('b', List).
+stone_in_list(w, List) :-
+    member('w', List).
+stone_in_list(o, List) :-
+    member('o', List).
 
 % sequence_making_move(+GameState, +Move)
 % Checks if the move creates a sequence
@@ -239,8 +245,8 @@ get_rationale_explanation(_, Explanation) :-
 
 % get_explanation_from_rationales(+Rationales, -Explanation)
 % Constructs a human readable explanation from the list of rationales
+get_explanation_from_rationales([], Explanation) :-
+    Explanation = "The move is a random move. ".
 get_explanation_from_rationales(Rationales, Explanation) :-
-    % If rationale is empty, then it is a random move, otherwise, it is a combination of rationales
-    Rationales = [] -> Explanation = "The move is a random move. ";
     maplist(get_rationale_explanation, Rationales, ExplanationList),
     atomic_list_concat(ExplanationList, Explanation).

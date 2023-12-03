@@ -111,18 +111,34 @@ other_player('computer', 'human').
 get_stone_from_player(GameState, Player, Stone) :-
     get_current_player(GameState, CurrentPlayer),
     get_current_player_stone(GameState, CurrentPlayerStone),
-    (Player = CurrentPlayer -> Stone = CurrentPlayerStone ; other_stone(CurrentPlayerStone, Stone)).
+    Player = CurrentPlayer,
+    Stone = CurrentPlayerStone.
+
+get_stone_from_player(GameState, Player, Stone) :-
+    get_current_player(GameState, CurrentPlayer),
+    get_current_player_stone(GameState, CurrentPlayerStone),
+    Player \= CurrentPlayer,
+    other_stone(CurrentPlayerStone, Stone).
 
 % Predicate to get the player that is playing the stone
 get_player_from_stone(GameState, Stone, Player) :-
     get_current_player(GameState, CurrentPlayer),
     get_current_player_stone(GameState, CurrentPlayerStone),
-    (Stone = CurrentPlayerStone -> Player = CurrentPlayer ; other_player(CurrentPlayer, Player)).
+    Stone = CurrentPlayerStone,
+    Player = CurrentPlayer.
+    
+get_player_from_stone(GameState, Stone, Player) :-
+    get_current_player(GameState, CurrentPlayer),
+    get_current_player_stone(GameState, CurrentPlayerStone),
+    Stone \= CurrentPlayerStone,
+    other_player(CurrentPlayer, Player).
 
 
 % Predicate to get the tournament score of a player
-get_player_tournament_score(GameState, Player, TournamentScore) :-
-    (Player = 'human' -> get_human_tournament_score(GameState, TournamentScore) ; get_computer_tournament_score(GameState, TournamentScore)).
+get_player_tournament_score(GameState, human, TournamentScore) :-
+    get_human_tournament_score(GameState, TournamentScore).
+get_player_tournament_score(GameState, computer, TournamentScore) :-
+    get_computer_tournament_score(GameState, TournamentScore).
 
 % Predicates to check if the stone is a valid stone
 is_stone('w').
@@ -131,8 +147,10 @@ is_stone('white').
 is_stone('black').
 
 % Predicate to get the no. captures of a player
-get_player_captures(GameState, Player, Captures) :-
-    (Player = 'human' -> get_human_captures(GameState, Captures) ; get_computer_captures(GameState, Captures)).
+get_player_captures(GameState, human, Captures) :-
+    get_human_captures(GameState, Captures).
+get_player_captures(GameState, computer, Captures) :-
+    get_computer_captures(GameState, Captures).
 
 % Predicate to set the number of captures of the human player
 set_human_captures([Board, _, HumanTournamentScore, ComputerCaptures, ComputerTournamentScore, CurrentPlayer, CurrentPlayerStone], Captures, [Board, Captures, HumanTournamentScore, ComputerCaptures, ComputerTournamentScore, CurrentPlayer, CurrentPlayerStone]).
@@ -146,12 +164,16 @@ set_computer_tournament_score([Board, HumanCaptures, HumanTournamentScore, Compu
 
 
 % Predicate to set the no. captures of a player
-set_player_captures(GameState, Player, Captures, NewGameState) :-
-    (Player = 'human' -> set_human_captures(GameState, Captures, NewGameState) ; set_computer_captures(GameState, Captures, NewGameState)).
+set_player_captures(GameState, human, Captures, NewGameState) :-
+    set_human_captures(GameState, Captures, NewGameState).
+set_player_captures(GameState, computer, Captures, NewGameState) :-
+    set_computer_captures(GameState, Captures, NewGameState).
 
 % Predicate to set the tournament score of a player
-set_player_tournament_score(GameState, Player, TournamentScore, NewGameState) :-
-    (Player = 'human' -> set_human_tournament_score(GameState, TournamentScore, NewGameState) ; set_computer_tournament_score(GameState, TournamentScore, NewGameState)).
+set_player_tournament_score(GameState, human, TournamentScore, NewGameState) :-
+    set_human_tournament_score(GameState, TournamentScore, NewGameState).
+set_player_tournament_score(GameState, computer, TournamentScore, NewGameState) :-
+    set_computer_tournament_score(GameState, TournamentScore, NewGameState).
 
 % update_tournament_score(+GameState, -NewGameState)
 % Predicate to update the tournament score of the game state
@@ -207,8 +229,7 @@ get_capture_sequence(Stone, CaptureSequence) :-
 % handle_capture_in_direction(+GameState, +Move, +DirectionFunction, -NewGameState)
 % Predicate to handle the capture in a direction
 handle_capture_in_direction(GameState, Move, DirectionFunction, NewGameState) :-
-    % capture happens -> update the board and the captures
-    (get_board(GameState, Board),
+    get_board(GameState, Board),
     get_current_player_stone(GameState, CurrentPlayerStone),
     get_capture_sequence(CurrentPlayerStone, CaptureSequence),
     % Get the cells in the direction
@@ -221,19 +242,20 @@ handle_capture_in_direction(GameState, Move, DirectionFunction, NewGameState) :-
     get_stone(Board, TwoAwayCell, TwoAwayCellStone),
     get_stone(Board, ThreeAwayCell, ThreeAwayCellStone),
     Sequence = [ZeroAwayCellStone, OneAwayCellStone, TwoAwayCellStone, ThreeAwayCellStone],
-    Sequence = CaptureSequence) ->
-                                    (% % Update the board
-                                    set_stone(Board, OneAwayCell, 'o', NewBoard),
-                                    set_stone(NewBoard, TwoAwayCell, 'o', NewNewBoard),
-                                    set_board(GameState, NewNewBoard, BoardUpdatedGameState),
-                                    % % Calculate the new captures
-                                    get_player_from_stone(GameState, ZeroAwayCellStone, Player),
-                                    get_player_captures(GameState, Player, Captures),
-                                    NewCaptures is Captures + 1,
-                                    set_player_captures(BoardUpdatedGameState, Player, NewCaptures, NewGameState)) ;
+    Sequence = CaptureSequence,
+    % % Update the board
+    set_stone(Board, OneAwayCell, 'o', NewBoard),
+    set_stone(NewBoard, TwoAwayCell, 'o', NewNewBoard),
+    set_board(GameState, NewNewBoard, BoardUpdatedGameState),
+    % % Calculate the new captures
+    get_player_from_stone(GameState, ZeroAwayCellStone, Player),
+    get_player_captures(GameState, Player, Captures),
+    NewCaptures is Captures + 1,
+    set_player_captures(BoardUpdatedGameState, Player, NewCaptures, NewGameState).
+
+handle_capture_in_direction(GameState, _, _, NewGameState) :-
     % No capture happened
-    NewGameState = GameState
-    .
+    NewGameState = GameState.
 
 % make_move(+GameState, +Move, -NewGameState)
 % Predicate to make a move
@@ -264,9 +286,10 @@ make_move(GameState, Move, NewGameState) :-
 % get_winner(+GameState, -Winner)
 % Predicate to get the winner of the game
 % Returns 'human' or 'computer', and fails if the game is not over
-get_winner(GameState, Winner):-
-    is_winner(GameState, human) -> Winner = human ;
-    is_winner(GameState, computer) -> Winner = computer.
+get_winner(GameState, human):-
+    is_winner(GameState, human).
+get_winner(GameState, computer):-
+    is_winner(GameState, computer).
 
 % is_winner(+GameState, +Winner)
 % Predicate to check if the winner is the player that captured 5 or more stones or has a sequence of 5 or more stones
@@ -298,14 +321,14 @@ is_sequence_winner(GameState, Winner):-
 is_game_drawn(GameState) :-
     get_board(GameState, Board),
     get_available_moves(Board, AvailableMoves),
-    (AvailableMoves = [] -> true ; false).
+    AvailableMoves = [].
 
 % Predicate to check if the game is over
 % Returns true if the game is over, false otherwise
 % The game is over if there is a winner or if the game is drawn
 is_game_over(GameState) :-
-    findall(Winner, get_winner(GameState, Winner), Winners),
-    (Winners = [] -> is_game_drawn(GameState) ; true).
+    get_winner(GameState, _);
+    is_game_drawn(GameState).
 
 % get_round_score(+GameState, +Player, -Score)
 % Predicate to get the round score of a player
