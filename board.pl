@@ -119,7 +119,9 @@ mark_columns(Board, NewBoard) :-
 % mark_rows(+Board, -MarkedBoard)
 mark_rows([], []).
 mark_rows([Head|Tail], [[N|Head]|MarkedTail]) :-
-    length([Head|Tail], N),
+    length([Head|Tail], NTemp),
+    % Convert NTemp to a string with 2 digits
+    format(atom(N), '~|~` t~d~2+', NTemp),
     mark_rows(Tail, MarkedTail).
 
 % cartesian_board(+UnmarkedBoard, -MarkedBoard)
@@ -140,20 +142,9 @@ cartesian_board(UnmarkedBoard, MarkedBoard) :-
 % Purpose: Print a cell of the board
 % https://apps.nms.kcl.ac.uk/reactome-pengine/documentation/man?section=format
 print_board_cell(Cell) :-
-    % if the cell is a number, it is a row marker, so print it as two digits for alignment
-    number(Cell),
-    format('~|~` t~d~2+', Cell),
-    write(' ').
-print_board_cell(Cell) :-
-    % if the cell is ' ', it is the beginning of a row marker, so print two spaces for alignment
-    Cell = ' ',
-    write('   ').
-print_board_cell(Cell) :-
     % otherwise, print the character
     write(Cell),
     write(' ').
-
-
 
 % print_row(+Row)
 % Purpose: Print a row of the board
