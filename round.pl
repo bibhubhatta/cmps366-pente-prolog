@@ -107,12 +107,18 @@ set_starting_player(GameState, NewGameState) :-
     get_player_tournament_score(GameState, human, HumanScore),
     get_player_tournament_score(GameState, computer, ComputerScore),
     HumanScore > ComputerScore,
+    writeln('Human has more points, so human will start as white.'),
+    nl,
+    nl,
     set_current_player(GameState, human, NewGameState).
 
 set_starting_player(GameState, NewGameState) :-
     get_player_tournament_score(GameState, human, HumanScore),
     get_player_tournament_score(GameState, computer, ComputerScore),
     ComputerScore > HumanScore,
+    writeln('Computer has more points, so computer will start as white.'),
+    nl,
+    nl,
     set_current_player(GameState, computer, NewGameState).
 
 set_starting_player(GameState, NewGameState) :-
