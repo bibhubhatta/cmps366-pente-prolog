@@ -317,7 +317,7 @@ get_up_right_diagonal(Board, PositionString, UpRightDiagonal) :-
     get_up_right_diagonal(Board, NewPositionString, RestOfDiagonal),
     UpRightDiagonal = [Stone|RestOfDiagonal].
 
-get_up_right_diagonal(Board, PositionString, UpRightDiagonal)  :-
+get_up_right_diagonal(_, PositionString, UpRightDiagonal)  :-
     up_right_position(PositionString, NewPositionString),
     \+ valid_position(NewPositionString),
     UpRightDiagonal = [].
@@ -334,7 +334,7 @@ get_up_left_diagonal(Board, PositionString, UpLeftDiagonal) :-
     get_up_left_diagonal(Board, NewPositionString, RestOfDiagonal),
     UpLeftDiagonal = [Stone|RestOfDiagonal].
 
-get_up_left_diagonal(Board, PositionString, UpLeftDiagonal)  :-
+get_up_left_diagonal(_, PositionString, UpLeftDiagonal)  :-
     up_left_position(PositionString, NewPositionString),
     \+ valid_position(NewPositionString),
     UpLeftDiagonal = [].
@@ -352,7 +352,7 @@ get_down_right_diagonal(Board, PositionString, DownRightDiagonal) :-
     get_down_right_diagonal(Board, NewPositionString, RestOfDiagonal),
     DownRightDiagonal = [Stone|RestOfDiagonal].
 
-get_down_right_diagonal(Board, PositionString, DownRightDiagonal)  :-
+get_down_right_diagonal(_, PositionString, DownRightDiagonal)  :-
     down_right_position(PositionString, NewPositionString),
     \+ valid_position(NewPositionString),
     DownRightDiagonal = [].
@@ -369,8 +369,9 @@ get_down_left_diagonal(Board, PositionString, DownLeftDiagonal) :-
     get_down_left_diagonal(Board, NewPositionString, RestOfDiagonal),
     DownLeftDiagonal = [Stone|RestOfDiagonal].
 
-get_down_left_diagonal(Board, PositionString, DownLeftDiagonal)  :-
-    down_left_position(PositionString, NewPositionString),
+get_down_left_diagonal(_, PositionString, DownLeftDiagonal)  :-
+   down_left_position(PositionString, NewPositionString),
+    \+ valid_position(NewPositionString),
    DownLeftDiagonal = [].
 
 % get_positive_diagonal(+Board, +PositionString, -PositiveDiagonal)
