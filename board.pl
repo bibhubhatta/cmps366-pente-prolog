@@ -563,6 +563,9 @@ get_available_moves(Board, Moves) :-
     TotalStones =:= 2,
     get_positions_3_or_more_away_from_center(Board, Moves).
 get_available_moves(Board, Moves) :-
+    get_no_stones_on_board(Board, TotalStones),
+    TotalStones \= 0,
+    TotalStones \= 2,
     get_empty_positions(Board, Moves).
 
 % get_positions_3_or_more_away_from_center(+Board, -Positions)
