@@ -73,7 +73,9 @@ announce_winner(GameState) :-
     format('The tournament winner is ~w!~n', [Winner]).
 
 announce_draw(GameState) :- 
-    is_game_drawn(GameState),
+    get_player_tournament_score(GameState, human, HumanScore),
+    get_player_tournament_score(GameState, computer, ComputerScore),
+    HumanScore =:= ComputerScore,
     writeln('The tournament is a draw!').
 
 % get_tournament_winner(+GameState, -Winner)
