@@ -49,8 +49,11 @@ handle_human_input(GameState, HumanInput, HumanMove) :-
     atom_string(Move, MoveString),
     is_available_move(GameState, Move), HumanMove = Move.
 
-handle_human_input(GameState, _, HumanMove) :-
-    format('Invalid move. Please try again. ~n', []),
+handle_human_input(GameState, HumanInput, HumanMove) :-
+    string_upper(HumanInput, MoveString),
+    atom_string(Move, MoveString),
+    not(is_available_move(GameState, Move)),
+    format('~w is not a valid move. Please try again. ~n', [MoveString]),
     get_human_move(GameState, HumanMove).
 
 % print_help(+GameState)
