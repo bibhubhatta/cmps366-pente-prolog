@@ -93,3 +93,46 @@ Total: 3.0
 - Make the computer play random moves 0.25
 - Enable playing tournament 0.75
 - Copy Lisp un-optimized algorithm 2.0
+
+Total: 7.0
+
+## Nov 28, 2023
+
+- Implement get_best_move 2.5
+  - Uses the same algorithm as in C++, Lisp, and Java: Calculates a pseudo score for each move and then picks the move with the highest score
+    The pseudo score is calculated by CurrentPlayerScore x 10000 + OpponentScore x 10000 + CurrentPlayerCaptures x 1500 + OpponentCaptures x 1000 + CurrentPlayerSequencePseudoScore x 15 + OpponentSequencePseudoScore x 10 - DistanceFromCenter. The sequence pseudo score is the lengths of the sequences created by placing the stone on the intersection cubed.
+
+Total: 2.5
+
+## Nov 29, 2023
+
+- Test and implement predicate to check if a move is a winning move 0.5
+- Test and implement predicate to check if a move is a win-blocking move 0.5
+- Test and implement predicate to check if a move is a capture move 0.5
+- Test and implement predicate to check if a move is a capture blocking move 0.5
+- Test and implement predicate to check if a move is a sequence move 0.5
+- Test and implement predicate to check if a move is a sequence blocking move 0.5
+- Test and implement predicate to check if a move is the only available move 0.25
+- Enable getting help and showing the rationale for the computer's move 1.5
+- Try memoizing the code using table predicate 3.5
+  - Did not optimize much -- it seems the table predicate itself backtracks, so it did not improve the execution time
+
+Total: 8.25
+
+## Nov 30, 2023
+
+- Optimize predicate that calculates pseudo score by using localized round score instead of using the whole board 1.5
+
+Total: 1.5
+
+## Dec 1, 2023
+
+- Test demo serialization files 1.5
+
+Total: 1.5
+
+## Dec 2, 2023
+
+- Remove halts and let the predicates backtrack to quit to the interpreter 2.0
+
+Total: 2.0
