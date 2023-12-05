@@ -90,6 +90,7 @@ get_current_player(GameState, CurrentPlayer) :-
     nth0(5, GameState, CurrentPlayer).
 
 % Predicate to get the current player stone from the game state
+% Assistance: https://www.swi-prolog.org/pldoc/man?predicate=atom_chars/2
 get_current_player_stone(GameState, CurrentPlayerStone) :-
     % The stone is only the first letter of the stone name in the game state
     nth0(6, GameState, CurrentPlayerStoneString),

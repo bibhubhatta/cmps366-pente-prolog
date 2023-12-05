@@ -109,7 +109,7 @@ get_pseudo_sequence_score(GameState, Player, Score) :-
 
 % get_pseudo_sequence_score_optimized(+GameState, +Position, -Score)
 % Calculates the pseudo score for the given player's sequences
-% The pseudo score is calculated by summing the square of the length of sequences that are longer than 1
+% The pseudo score is calculated by summing the cubing of the length of sequences that are longer than 1
 get_pseudo_sequence_score_optimized(GameState, Position, Score) :-
     get_board(GameState, Board),
     get_all_stone_sequences_localized(Board, Position, Sequences),
@@ -147,7 +147,7 @@ get_round_score_optimized(GameState, Position, Score) :-
 
 % get_pseudo_score(+GameState, +Move, -Score)
 % Calculates the pseudo score for the given move
-% The pseudo score is calculated by adding the score for the player and the opponent if the move is played by both
+% The pseudo score is calculated by adding the scores and captures with different weights for the player and the opponent if the move is played by both
 get_pseudo_score(GameState, Move, Score) :-
     get_current_player(GameState, CurrentPlayer),
     other_player(CurrentPlayer, Opponent),
